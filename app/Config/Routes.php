@@ -28,9 +28,15 @@ $routes->group('admin', function ($routes) {
     $routes->get('beranda/hapus/(:num)', 'Admin::beranda_hapus/$1');
     $routes->get('beranda/edit/(:num)', 'Admin::beranda_edit/$1');
     $routes->post('beranda/update/(:num)', 'Admin::beranda_update/$1');
+    $routes->get('testimoni', 'AdminTestimoniController::index');
+    $routes->get('testimoni/approve/(:num)', 'AdminTestimoniController::approve/$1');
+    $routes->get('testimoni/reject/(:num)', 'AdminTestimoniController::reject/$1');
+    $routes->get('testimoni/delete/(:num)', 'AdminTestimoniController::delete/$1');
 });
 // --- ROUTES PROFIL ---
 $routes->group('profil', function ($routes) {
     $routes->get('madrasah', 'Profil::madrasah');
     $routes->get('struktur', 'Profil::struktur');
+    $routes->get('testimoni', 'TestimoniController::index');
+    $routes->post('testimoni/simpan', 'TestimoniController::simpan');
 });

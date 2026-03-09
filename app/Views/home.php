@@ -216,7 +216,7 @@ if ($isBuka) {
                 </ul>
 
                 <div class="border-t border-gray-200 pt-8 mt-8">
-                    <a href="/profil" class="group inline-flex items-center justify-center px-6 py-3.5 border border-transparent text-base font-bold rounded-xl text-white bg-[#0B4A2D] hover:bg-[#00A859] transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1">
+                    <a href="/profil/madrasah" class="group inline-flex items-center justify-center px-6 py-3.5 border border-transparent text-base font-bold rounded-xl text-white bg-[#0B4A2D] hover:bg-[#00A859] transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1">
                         Lihat Profil Selengkapnya
                         <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                     </a>
@@ -629,71 +629,7 @@ if ($isBuka) {
         </div>
     </div>
 </section>
-<!-- CTA -->
-<section class="py-16 md:py-24 bg-white relative overflow-hidden border-t border-gray-100">
-    <div class="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-green-50 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
-    <div class="absolute bottom-0 left-0 -mb-10 -ml-10 w-64 h-64 bg-green-50 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
 
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="bg-gray-50 rounded-3xl p-8 md:p-16 border border-gray-100 shadow-xl text-center relative overflow-hidden">
-
-            <i class="fa-solid fa-bullhorn absolute top-4 right-8 text-9xl text-[#00A859] opacity-5 -rotate-12 pointer-events-none"></i>
-
-            <h2 class="text-3xl md:text-5xl font-extrabold text-[#0B4A2D] mb-6 leading-tight relative z-10">
-                Siap Mewujudkan Masa Depan <span class="text-[#00A859]">Gemilang?</span>
-            </h2>
-
-            <p class="text-gray-600 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed relative z-10">
-                Pendaftaran Peserta Didik Baru (PPDB) tahun ajaran ini telah dibuka. Kuota terbatas! Segera daftarkan putra-putri Anda atau konsultasikan program pendidikan kami sekarang juga.
-            </p>
-
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 relative z-10">
-
-                <a href="<?= $linkDaftar ?>" <?= $targetDaftar ?> <?= $onclickDaftar ?> class="w-full sm:w-auto inline-flex justify-center items-center gap-3 px-8 py-4 bg-[#00A859] text-white font-bold text-lg rounded-full shadow-lg hover:shadow-xl hover:bg-[#0B4A2D] hover:-translate-y-1 transition-all duration-300 group">
-                    <i class="fa-solid fa-user-plus group-hover:scale-110 transition-transform"></i>
-                    Daftar Sekarang
-                </a>
-
-                <a href="<?= $pengaturan['link_whatsapp'] ?? '#' ?>" target="_blank" class="w-full sm:w-auto inline-flex justify-center items-center gap-3 px-8 py-4 bg-white border-2 border-gray-200 text-[#0B4A2D] font-bold text-lg rounded-full shadow-sm hover:border-[#00A859] hover:text-[#00A859] hover:-translate-y-1 transition-all duration-300 group">
-                    <i class="fa-brands fa-whatsapp text-2xl text-[#00A859] group-hover:scale-110 transition-transform"></i>
-                    Konsultasi Program
-                </a>
-                <?php if (!$isBuka): ?>
-                    <div id="modalTutup" class="fixed inset-0 z-9999 hidden bg-black/70 items-center justify-center p-4">
-                        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-8 text-center animate__animated animate__zoomIn">
-
-                            <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-5">
-                                <i class="fa-solid fa-lock text-red-500 text-4xl"></i>
-                            </div>
-
-                            <?php
-                            // Logika default jika kosong
-                            $pesanTutup = !empty($ppdb['pesan_tutup']) ? $ppdb['pesan_tutup'] : 'Mohon maaf, pendaftaran siswa baru saat ini belum dibuka / telah ditutup. Untuk informasi lebih lanjut, silakan hubungi admin kami.';
-
-                            // Prioritaskan WA PPDB, jika kosong pakai WA Utama
-                            $linkAdminPPDB = !empty($ppdb['link_admin_ppdb']) ? $ppdb['link_admin_ppdb'] : ($pengaturan['link_whatsapp'] ?? '#');
-                            ?>
-
-                            <h3 class="text-2xl font-bold text-gray-800 mb-2">Pendaftaran Ditutup</h3>
-                            <p class="text-gray-600 mb-8 leading-relaxed text-sm"><?= esc($pesanTutup) ?></p>
-
-                            <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                                <a href="<?= esc($linkAdminPPDB) ?>" target="_blank" class="bg-[#00A859] hover:bg-green-600 text-white px-5 py-2.5 rounded-lg font-semibold transition flex items-center justify-center gap-2">
-                                    <i class="fa-brands fa-whatsapp text-lg"></i> Hubungi Admin
-                                </a>
-
-                                <button onclick="document.getElementById('modalTutup').classList.add('hidden'); document.getElementById('modalTutup').classList.remove('flex');" class="bg-gray-100 hover:bg-gray-200 text-gray-800 px-5 py-2.5 rounded-lg font-semibold transition">
-                                    Kembali
-                                </button>
-                            </div>
-
-                        </div>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </div>
-    </div>
-</section>
 
 <?= $this->endSection() ?>
 

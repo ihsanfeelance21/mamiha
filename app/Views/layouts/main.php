@@ -118,6 +118,7 @@ if ($isBuka) {
 
                 <div class="hidden md:flex items-center gap-6 lg:gap-8">
                     <a href="<?= base_url() ?>" class="text-[#0B4A2D] font-bold text-sm lg:text-base border-b-2 border-[#00A859] pb-1 hover:text-[#00A859] transition">Beranda</a>
+
                     <div class="relative group">
                         <button class="flex items-center gap-1 text-gray-600 font-semibold text-sm lg:text-base hover:text-[#00A859] transition py-2">
                             Profil <i class="fa-solid fa-chevron-down text-[10px] mt-0.5 group-hover:rotate-180 transition-transform duration-300"></i>
@@ -126,11 +127,15 @@ if ($isBuka) {
                             <a href="<?= base_url('profil/madrasah') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] border-b border-gray-50 transition-colors">
                                 <i class="fa-solid fa-school mr-2 text-gray-400"></i> Profil Madrasah
                             </a>
-                            <a href="<?= base_url('profil/struktur') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] transition-colors">
+                            <a href="<?= base_url('profil/struktur') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] border-b border-gray-50 transition-colors">
                                 <i class="fa-solid fa-sitemap mr-2 text-gray-400"></i> Struktur Organisasi
+                            </a>
+                            <a href="<?= base_url('profil/testimoni') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] transition-colors">
+                                <i class="fa-solid fa-comments mr-2 text-gray-400"></i> Testimoni
                             </a>
                         </div>
                     </div>
+
                     <a href="<?= base_url('kegiatan') ?>" class="text-gray-600 font-semibold text-sm lg:text-base hover:text-[#00A859] transition">Berita</a>
 
                     <a href="<?= $linkDaftar ?>" <?= $targetDaftar ?> <?= $onclickDaftar ?> class="bg-[#00A859] hover:bg-green-600 text-white px-5 lg:px-6 py-2.5 rounded-lg font-bold text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 ml-2">
@@ -151,16 +156,16 @@ if ($isBuka) {
                     <div x-show="openProfil" class="pl-4 pr-2 py-2 space-y-1 bg-gray-50/50 rounded-b-md border-l-2 border-green-200 ml-2">
                         <a href="<?= base_url('profil/madrasah') ?>" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-[#00A859]">Profil Madrasah</a>
                         <a href="<?= base_url('profil/struktur') ?>" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-[#00A859]">Struktur Organisasi</a>
+                        <a href="<?= base_url('profil/testimoni') ?>" class="block px-4 py-2 hover:bg-green-50 hover:text-[#00A859] transition-colors">Testimoni</a>
+                    </div>
+                    <a href="<?= base_url('kegiatan') ?>" class="block px-3 py-3 rounded-md text-base font-semibold text-gray-600 hover:bg-gray-50 hover:text-[#00A859]">Berita</a>
+                    <div class="pt-4 pb-2">
+                        <a href="<?= $linkDaftar ?>" <?= $targetDaftar ?> <?= $onclickDaftar ?> class="block w-full text-center bg-[#00A859] hover:bg-green-600 text-white px-5 py-3 rounded-lg font-bold text-base shadow-md transition">
+                            Daftar Sekarang
+                        </a>
                     </div>
                 </div>
-                <a href="<?= base_url('kegiatan') ?>" class="block px-3 py-3 rounded-md text-base font-semibold text-gray-600 hover:bg-gray-50 hover:text-[#00A859]">Berita</a>
-                <div class="pt-4 pb-2">
-                    <a href="<?= $linkDaftar ?>" <?= $targetDaftar ?> <?= $onclickDaftar ?> class="block w-full text-center bg-[#00A859] hover:bg-green-600 text-white px-5 py-3 rounded-lg font-bold text-base shadow-md transition">
-                        Daftar Sekarang
-                    </a>
-                </div>
             </div>
-        </div>
     </nav>
 
     <main class="grow">
