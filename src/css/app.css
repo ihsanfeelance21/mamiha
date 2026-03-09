@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+/* Konfigurasi kustom Tailwind V4 menggunakan @theme */
+@theme {
+  --color-primary: #179300;
+  --color-primary-hover: #127500;
+  --color-accent: #f59e0b;
+  --color-surface: #f8fafc;
+  --color-text-main: #0f172a;
+  --color-text-muted: #475569;
+}
+/* --- GAYA CUSTOM SWIPER PAGINATION --- */
+.swiper-pagination-bullet {
+    background-color: transparent !important;
+    border: 1px solid #ffffff !important;
+    opacity: 0.7 !important;
+    width: 9px !important;
+    height: 9px !important;
+    transition: all 0.3s ease !important;
+    box-sizing: border-box !important;
+}
+
+.swiper-pagination-bullet-active {
+    background-color: #00A859 !important;
+    border: 1px solid #ffffff !important;
+    opacity: 1 !important;
+    width: 36px !important;
+    border-radius: 9999px !important;
+}
