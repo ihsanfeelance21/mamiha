@@ -25,15 +25,18 @@
         <?php else : ?>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
                 <?php foreach ($testimoni as $t) : ?>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow relative">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow relative flex flex-col h-full">
                         <i class="fa-solid fa-quote-right text-4xl text-green-50 absolute top-4 right-4"></i>
+
                         <div class="flex text-yellow-400 mb-4 text-sm">
                             <?php for ($i = 1; $i <= 5; $i++) : ?>
                                 <i class="fa-<?= $i <= $t['rating'] ? 'solid' : 'regular' ?> fa-star"></i>
                             <?php endfor; ?>
                         </div>
-                        <p class="text-gray-600 italic mb-6">"<?= esc($t['isi_testimoni']) ?>"</p>
-                        <div class="flex items-center gap-4 mt-auto">
+
+                        <p class="text-gray-600 italic mb-6 grow">"<?= esc($t['isi_testimoni']) ?>"</p>
+
+                        <div class="flex items-center gap-4 mt-auto pt-4 border-t border-gray-50">
                             <?php if ($t['foto']) : ?>
                                 <img src="<?= base_url('uploads/testimoni/' . $t['foto']) ?>" class="w-12 h-12 rounded-full object-cover border-2 border-[#00A859]">
                             <?php else : ?>
@@ -97,8 +100,11 @@
             </div>
 
             <div>
-                <label class="block text-sm font-bold text-gray-700 mb-1">Isi Testimoni</label>
-                <textarea name="isi_testimoni" rows="4" required class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A859] focus:border-[#00A859] outline-none transition-all resize-none"></textarea>
+                <div class="flex justify-between items-end mb-1">
+                    <label class="block text-sm font-bold text-gray-700">Isi Testimoni</label>
+                    <span class="text-xs text-gray-500"><span id="charCount">0</span>/250 karakter</span>
+                </div>
+                <textarea id="inputTestimoni" name="isi_testimoni" rows="4" maxlength="250" required oninput="hitungKarakter()" class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A859] focus:border-[#00A859] outline-none transition-all resize-none"></textarea>
             </div>
 
             <div>
@@ -114,11 +120,27 @@
 </div>
 
 <script>
+    // Fungsi buka tutup modal
     function toggleModal(modalID) {
         const modal = document.getElementById(modalID);
-        // Tukar status hidden dan flex secara bersamaan
         modal.classList.toggle("hidden");
         modal.classList.toggle("flex");
+    }
+
+    // Fungsi hitung karakter live
+    function hitungKarakter() {
+        const textarea = document.getElementById("inputTestimoni");
+        const countSpan = document.getElementById("charCount");
+        const panjangTeks = textarea.value.length;
+
+        countSpan.textContent = panjangTeks;
+
+        // Ubah warna indikator jadi merah kalau sudah mau penuh (misal > 230 karakter)
+        if (panjangTeks >= 230) {
+            countSpan.classList.add("text-red-500", "font-bold");
+        } else {
+            countSpan.classList.remove("text-red-500", "font-bold");
+        }
     }
 </script>
 

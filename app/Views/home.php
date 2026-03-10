@@ -18,7 +18,9 @@ if ($isBuka) {
     $onclickDaftar = 'onclick="event.preventDefault(); document.getElementById(\'modalTutup\').classList.remove(\'hidden\'); document.getElementById(\'modalTutup\').classList.add(\'flex\');"';
 }
 ?>
+
 <?= $this->section('content') ?>
+
 <!-- Hero Section -->
 <section class="relative w-full h-[85vh] min-h-125 bg-gray-900 overflow-hidden">
     <div class="swiper heroSwiper w-full h-full">
@@ -88,6 +90,7 @@ if ($isBuka) {
         <div class="swiper-pagination bottom-8!"></div>
     </div>
 </section>
+
 <!-- STATISTIK/Mengapa memilih kami -->
 <section class="relative z-20 bg-white pt-16 pb-20 md:pt-20 md:pb-24 -mt-7 md:-mt-7 rounded-t-4xl md:rounded-t-[3rrem] shadow-[0_-10px_40px_rgba(0,0,0,0.08)]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -160,6 +163,7 @@ if ($isBuka) {
 
     </div>
 </section>
+
 <!-- Tentang Kami -->
 <section class="py-20 md:py-28 bg-gray-50 overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -226,6 +230,7 @@ if ($isBuka) {
         </div>
     </div>
 </section>
+
 <!-- Program unggulan -->
 <section class="py-20 md:py-28 bg-white relative overflow-hidden">
     <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0 opacity-30 pointer-events-none">
@@ -545,6 +550,23 @@ if ($isBuka) {
 </section>
 
 <!-- Testimoni -->
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+<style>
+    /* KUNCI UTAMA: Memaksa semua card Swiper memiliki tinggi yang sama */
+    .testimoniSwiper .swiper-wrapper {
+        align-items: stretch;
+        /* Memaksa semua slide meregang mengikuti yang paling tinggi */
+    }
+
+    .testimoniSwiper .swiper-slide {
+        height: auto;
+        /* Slide mengikuti tinggi maksimal wrapper */
+        display: flex;
+        /* Membuat slide jadi flex agar card di dalamnya bisa stretch */
+    }
+</style>
 <section class="py-20 md:py-28 bg-[#0B4A2D] relative overflow-hidden">
     <div class="absolute top-0 right-0 -mr-20 -mt-20 w-72 h-72 rounded-full bg-white opacity-5 filter blur-3xl pointer-events-none"></div>
     <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 rounded-full bg-[#00A859] opacity-30 filter blur-3xl pointer-events-none"></div>
@@ -564,69 +586,61 @@ if ($isBuka) {
             </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <?php if (empty($testimoni_terbaru)) : ?>
+            <div class="text-center py-10">
+                <p class="text-green-100/60 italic">Belum ada testimoni untuk ditampilkan.</p>
+            </div>
+        <?php else : ?>
 
-            <div class="bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-8 relative hover:-translate-y-2 transition-transform duration-300 group">
-                <i class="fa-solid fa-quote-right absolute top-6 right-8 text-6xl text-white/5 group-hover:text-[#00A859]/20 transition-colors duration-300"></i>
+            <div class="swiper testimoniSwiper">
+                <div class="swiper-wrapper">
 
-                <div class="flex gap-1 text-yellow-400 text-sm mb-6">
-                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                </div>
+                    <?php foreach ($testimoni_terbaru as $t) : ?>
+                        <div class="swiper-slide">
+                            <div class="bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-8 relative hover:-translate-y-2 transition-transform duration-300 group w-full flex flex-col">
 
-                <p class="text-gray-200 leading-relaxed mb-8 relative z-10 italic">
-                    "Sekolah ini tidak hanya membekali anak saya dengan ilmu akademik yang luar biasa, tapi juga adab dan akhlak yang sangat baik. Terima kasih kepada seluruh ustadz dan ustadzah."
-                </p>
+                                <i class="fa-solid fa-quote-right absolute top-6 right-8 text-6xl text-white/5 group-hover:text-[#00A859]/20 transition-colors duration-300"></i>
 
-                <div class="flex items-center gap-4 mt-auto border-t border-white/10 pt-6">
-                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop" alt="Avatar" class="w-14 h-14 rounded-full object-cover border-2 border-[#00A859]">
-                    <div>
-                        <h4 class="font-bold text-white text-lg">Ibu Siti Aminah</h4>
-                        <p class="text-[#00A859] text-sm font-medium">Wali Murid Kelas XII</p>
-                    </div>
+                                <div class="flex gap-1 text-yellow-400 text-sm mb-6">
+                                    <?php for ($i = 1; $i <= 5; $i++) : ?>
+                                        <i class="fa-<?= $i <= $t['rating'] ? 'solid' : 'regular' ?> fa-star"></i>
+                                    <?php endfor; ?>
+                                </div>
+
+                                <p class="text-gray-200 leading-relaxed mb-8 relative z-10 italic flex-grow">
+                                    "<?= esc($t['isi_testimoni']) ?>"
+                                </p>
+
+                                <div class="flex items-center gap-4 mt-auto border-t border-white/10 pt-6">
+                                    <?php if ($t['foto']) : ?>
+                                        <img src="<?= base_url('uploads/testimoni/' . $t['foto']) ?>" alt="Avatar" class="w-14 h-14 rounded-full object-cover border-2 border-[#00A859]">
+                                    <?php else : ?>
+                                        <div class="w-14 h-14 rounded-full bg-white/10 flex items-center justify-center text-white/50 border-2 border-[#00A859]/50">
+                                            <i class="fa-solid fa-user text-xl"></i>
+                                        </div>
+                                    <?php endif; ?>
+
+                                    <div>
+                                        <h4 class="font-bold text-white text-lg"><?= esc($t['nama']) ?></h4>
+                                        <p class="text-[#00A859] text-sm font-medium"><?= esc($t['status_user']) ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+
                 </div>
             </div>
 
-            <div class="bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-8 relative hover:-translate-y-2 transition-transform duration-300 group">
-                <i class="fa-solid fa-quote-right absolute top-6 right-8 text-6xl text-white/5 group-hover:text-[#00A859]/20 transition-colors duration-300"></i>
-
-                <div class="flex gap-1 text-yellow-400 text-sm mb-6">
-                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                </div>
-
-                <p class="text-gray-200 leading-relaxed mb-8 relative z-10 italic">
-                    "Fasilitas lab komputernya sangat lengkap. Dari sinilah saya mulai menyukai coding dan berhasil diterima di jurusan Teknik Informatika Universitas impian saya."
-                </p>
-
-                <div class="flex items-center gap-4 mt-auto border-t border-white/10 pt-6">
-                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=200&auto=format&fit=crop" alt="Avatar" class="w-14 h-14 rounded-full object-cover border-2 border-[#00A859]">
-                    <div>
-                        <h4 class="font-bold text-white text-lg">Rizky Ramadhan</h4>
-                        <p class="text-[#00A859] text-sm font-medium">Alumni Angkatan 2022</p>
-                    </div>
-                </div>
+            <div class="text-center mt-12">
+                <a href="<?= base_url('profil/testimoni') ?>" class="inline-flex items-center gap-3 px-8 py-3 bg-transparent border-2 border-[#00A859] text-white font-bold rounded-full hover:bg-[#00A859] transition-all duration-300 group">
+                    Lihat Semua Testimoni
+                    <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                </a>
             </div>
 
-            <div class="bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-8 relative hover:-translate-y-2 transition-transform duration-300 group">
-                <i class="fa-solid fa-quote-right absolute top-6 right-8 text-6xl text-white/5 group-hover:text-[#00A859]/20 transition-colors duration-300"></i>
+        <?php endif; ?>
 
-                <div class="flex gap-1 text-yellow-400 text-sm mb-6">
-                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                </div>
-
-                <p class="text-gray-200 leading-relaxed mb-8 relative z-10 italic">
-                    "Lingkungan yang asri dan program ekstrakurikulernya sangat mendukung bakat anak. Anak saya yang awalnya pemalu kini sangat percaya diri mengikuti lomba pidato."
-                </p>
-
-                <div class="flex items-center gap-4 mt-auto border-t border-white/10 pt-6">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop" alt="Avatar" class="w-14 h-14 rounded-full object-cover border-2 border-[#00A859]">
-                    <div>
-                        <h4 class="font-bold text-white text-lg">Bpk. Hendra Wijaya</h4>
-                        <p class="text-[#00A859] text-sm font-medium">Wali Murid Kelas X</p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
     </div>
 </section>
 
@@ -634,6 +648,29 @@ if ($isBuka) {
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    var swiper = new Swiper(".testimoniSwiper", {
+        slidesPerView: 1,
+        spaceBetween: 24,
+        loop: true,
+        autoplay: {
+            delay: 4000,
+            disableOnInteraction: false,
+        },
+        breakpoints: {
+            768: {
+                slidesPerView: 2,
+            },
+            1024: {
+                slidesPerView: 3,
+                spaceBetween: 32,
+            },
+        },
+    });
+</script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Inisialisasi Hero Swiper (Dengan Transisi Super Halus)

@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\KegiatanModel; // Wajib ditambahkan agar bisa akses tabel kegiatan
+use App\Models\TestimoniModel; // Wajib ditambahkan agar bisa akses tabel testimoni
 
 class Home extends BaseController
 {
@@ -11,14 +12,19 @@ class Home extends BaseController
         // 1. Panggil model-model yang dibutuhkan di halaman beranda
         $kegiatanModel = new KegiatanModel();
         $heroModel = new \App\Models\HeroSliderModel();
+        $testimoniModel = new TestimoniModel(); // Inisialisasi model testimoni
 
         // 2. Kumpulkan semua data ke dalam satu array $data
         $data = [
-            'title'    => "Beranda | MA Mabadi'ul Ihsan",
+            'title'             => "Beranda | MA Mabadi'ul Ihsan",
             // Mengambil 3 data kegiatan terbaru berdasarkan tanggal dibuat
-            'kegiatan' => $kegiatanModel->orderBy('created_at', 'DESC')->findAll(3),
+            'kegiatan'          => $kegiatanModel->orderBy('created_at', 'DESC')->findAll(3),
             // Mengambil data slider dari database
-            'sliders'  => $heroModel->findAll(),
+            'sliders'           => $heroModel->findAll(),
+            // Mengambil 6 data testimoni terbaru yang statusnya sudah di-approve (1)
+            'testimoni_terbaru' => $testimoniModel->where('is_approved', 1)
+                ->orderBy('created_at', 'DESC')
+                ->findAll(6),
         ];
 
         // 3. Kirim data ke view home

@@ -1,0 +1,139 @@
+<!-- <section class="py-20 md:py-28 bg-[#0B4A2D] relative overflow-hidden">
+  <div
+    class="absolute top-0 right-0 -mr-20 -mt-20 w-72 h-72 rounded-full bg-white opacity-5 filter blur-3xl pointer-events-none"
+  ></div>
+  <div
+    class="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 rounded-full bg-[#00A859] opacity-30 filter blur-3xl pointer-events-none"
+  ></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <div
+        class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full mb-4"
+      >
+        <span class="w-2 h-2 rounded-full bg-[#00A859] animate-pulse"></span>
+        <span class="text-sm font-bold text-white tracking-widest uppercase"
+          >Kata Mereka</span
+        >
+      </div>
+      <h2
+        class="text-3xl md:text-4xl font-extrabold text-white leading-tight mb-4"
+      >
+        Cerita Sukses & Pengalaman
+      </h2>
+      <p class="text-green-100/80 md:text-lg leading-relaxed">
+        Kebanggaan terbesar kami adalah melihat kesuksesan alumni dan senyum
+        kepuasan orang tua yang telah mempercayakan pendidikan putra-putrinya di
+        sini.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div
+        class="bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-8 relative hover:-translate-y-2 transition-transform duration-300 group"
+      >
+        <i
+          class="fa-solid fa-quote-right absolute top-6 right-8 text-6xl text-white/5 group-hover:text-[#00A859]/20 transition-colors duration-300"
+        ></i>
+
+        <div class="flex gap-1 text-yellow-400 text-sm mb-6">
+          <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i
+          ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i
+          ><i class="fa-solid fa-star"></i>
+        </div>
+
+        <p class="text-gray-200 leading-relaxed mb-8 relative z-10 italic">
+          "Sekolah ini tidak hanya membekali anak saya dengan ilmu akademik yang
+          luar biasa, tapi juga adab dan akhlak yang sangat baik. Terima kasih
+          kepada seluruh ustadz dan ustadzah."
+        </p>
+
+        <div
+          class="flex items-center gap-4 mt-auto border-t border-white/10 pt-6"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop"
+            alt="Avatar"
+            class="w-14 h-14 rounded-full object-cover border-2 border-[#00A859]"
+          />
+          <div>
+            <h4 class="font-bold text-white text-lg">Ibu Siti Aminah</h4>
+            <p class="text-[#00A859] text-sm font-medium">
+              Wali Murid Kelas XII
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-8 relative hover:-translate-y-2 transition-transform duration-300 group"
+      >
+        <i
+          class="fa-solid fa-quote-right absolute top-6 right-8 text-6xl text-white/5 group-hover:text-[#00A859]/20 transition-colors duration-300"
+        ></i>
+
+        <div class="flex gap-1 text-yellow-400 text-sm mb-6">
+          <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i
+          ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i
+          ><i class="fa-solid fa-star"></i>
+        </div>
+
+        <p class="text-gray-200 leading-relaxed mb-8 relative z-10 italic">
+          "Fasilitas lab komputernya sangat lengkap. Dari sinilah saya mulai
+          menyukai coding dan berhasil diterima di jurusan Teknik Informatika
+          Universitas impian saya."
+        </p>
+
+        <div
+          class="flex items-center gap-4 mt-auto border-t border-white/10 pt-6"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=200&auto=format&fit=crop"
+            alt="Avatar"
+            class="w-14 h-14 rounded-full object-cover border-2 border-[#00A859]"
+          />
+          <div>
+            <h4 class="font-bold text-white text-lg">Rizky Ramadhan</h4>
+            <p class="text-[#00A859] text-sm font-medium">
+              Alumni Angkatan 2022
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-8 relative hover:-translate-y-2 transition-transform duration-300 group"
+      >
+        <i
+          class="fa-solid fa-quote-right absolute top-6 right-8 text-6xl text-white/5 group-hover:text-[#00A859]/20 transition-colors duration-300"
+        ></i>
+
+        <div class="flex gap-1 text-yellow-400 text-sm mb-6">
+          <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i
+          ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i
+          ><i class="fa-solid fa-star"></i>
+        </div>
+
+        <p class="text-gray-200 leading-relaxed mb-8 relative z-10 italic">
+          "Lingkungan yang asri dan program ekstrakurikulernya sangat mendukung
+          bakat anak. Anak saya yang awalnya pemalu kini sangat percaya diri
+          mengikuti lomba pidato."
+        </p>
+
+        <div
+          class="flex items-center gap-4 mt-auto border-t border-white/10 pt-6"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop"
+            alt="Avatar"
+            class="w-14 h-14 rounded-full object-cover border-2 border-[#00A859]"
+          />
+          <div>
+            <h4 class="font-bold text-white text-lg">Bpk. Hendra Wijaya</h4>
+            <p class="text-[#00A859] text-sm font-medium">Wali Murid Kelas X</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
