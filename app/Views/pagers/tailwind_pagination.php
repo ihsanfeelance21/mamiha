@@ -17,7 +17,7 @@
 
         <?php foreach ($pager->links() as $link) : ?>
             <li>
-                <a href="<?= $link['uri'] ?>" class="px-4 py-2 border rounded-lg transition-colors <?= $link['active'] ? 'bg-[#00A859] text-white border-[#00A859] font-bold shadow-sm' : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-[#00A859]' ?>">
+                <a href="<?= $link['uri'] ?>" class="px-4 py-2 border rounded-lg transition-colors <?= $link['active'] ? 'bg-[#00A859] text-white border-[#00A859] font-bold shadow-sm' : 'bg-white hover:bg-gray-50 hover:text-[#00A859]' ?>">
                     <?= $link['title'] ?>
                 </a>
             </li>
