@@ -44,6 +44,9 @@ $pengaturan = (new \App\Models\PengaturanModel())->first();
                     <a href="<?= base_url('admin/kegiatan') ?>" class="text-sm text-gray-400 hover:text-white py-2 block transition">
                         <i class="fa-regular fa-newspaper mr-2 text-xs"></i> Kegiatan Sekolah
                     </a>
+                    <a href="<?= base_url('admin/testimoni') ?>" class="text-sm text-gray-400 hover:text-white py-2 block transition">
+                        <i class="fa-regular fa-newspaper mr-2 text-xs"></i> Testimoni
+                    </a>
                 </div>
             </div>
 

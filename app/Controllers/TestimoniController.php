@@ -16,9 +16,17 @@ class TestimoniController extends BaseController
 
     public function index()
     {
-        // Hanya ambil testimoni yang sudah di-approve (is_approved = 1)
-        $data['testimoni'] = $this->testimoniModel->where('is_approved', 1)->orderBy('created_at', 'DESC')->findAll();
-        
+        // PENTING: Gunakan $this->testimoniModel dan hapus baris findAll() yang lama
+
+        // Ambil data testimoni dengan pagination (12 per halaman)
+        $data['testimoni'] = $this->testimoniModel->where('is_approved', 1)
+            ->orderBy('created_at', 'DESC')
+            ->paginate(12, 'testimoni');
+
+        // Tambahkan variabel pager untuk dikirim ke View (Wajib pakai $this-> juga)
+        $data['pager'] = $this->testimoniModel->pager;
+
+        // Kirim ke view
         return view('profil/testimoni', $data);
     }
 
@@ -44,6 +52,6 @@ class TestimoniController extends BaseController
         ]);
 
         // Kembali ke halaman testimoni dengan pesan sukses
-        return redirect()->to('/testimoni')->with('pesan', 'Terima kasih! Telah memberikan Testimoni Anda.');
+        return redirect()->to('profil/testimoni')->with('pesan', 'Terima kasih! Telah memberikan Testimoni Anda.');
     }
 }

@@ -607,7 +607,7 @@ if ($isBuka) {
                                     <?php endfor; ?>
                                 </div>
 
-                                <p class="text-gray-200 leading-relaxed mb-8 relative z-10 italic flex-grow">
+                                <p class="text-gray-200 leading-relaxed mb-8 relative z-10 italic grow">
                                     "<?= esc($t['isi_testimoni']) ?>"
                                 </p>
 
