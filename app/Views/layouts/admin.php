@@ -41,6 +41,12 @@ $pengaturan = (new \App\Models\PengaturanModel())->first();
                     <a href="<?= base_url('admin/beranda') ?>" class="text-sm text-gray-400 hover:text-white py-2 block transition">
                         <i class="fa-regular fa-image mr-2 text-xs"></i> Slider Beranda
                     </a>
+                    <a href="<?= base_url('admin/profil') ?>" class="text-sm text-gray-400 hover:text-white py-2 block transition">
+                        <i class="fa-regular fa-newspaper mr-2 text-xs"></i> Profil Madrasah
+                    </a>
+                    <a href="<?= base_url('admin/guru') ?>" class="text-sm text-gray-400 hover:text-white py-2 block transition">
+                        <i class="fa-regular fa-newspaper mr-2 text-xs"></i> Data Guru & Staff
+                    </a>
                     <a href="<?= base_url('admin/kegiatan') ?>" class="text-sm text-gray-400 hover:text-white py-2 block transition">
                         <i class="fa-regular fa-newspaper mr-2 text-xs"></i> Kegiatan Sekolah
                     </a>

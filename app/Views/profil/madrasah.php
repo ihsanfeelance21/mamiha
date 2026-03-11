@@ -20,60 +20,57 @@
     </div>
 </section>
 <!-- Sambutan Kepala -->
-<section class="py-20 md:py-24 bg-gray-50 overflow-hidden">
+<section class="py-20 bg-white overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
 
-            <div class="w-full max-w-md lg:max-w-full lg:w-5/12 relative z-10 mx-auto">
-                <div class="absolute -top-10 -left-10 w-40 h-40 bg-green-200 rounded-full mix-blend-multiply filter blur-2xl opacity-50"></div>
-                <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-yellow-200 rounded-full mix-blend-multiply filter blur-2xl opacity-50"></div>
+        <?php if (!empty($pimpinan)): ?>
+            <div class="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start justify-between">
 
-                <div class="relative rounded-4xl overflow-hidden shadow-xl border-4 border-white bg-gray-200 aspect-3/4">
-                    <img
-                        src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=600&auto=format&fit=crop"
-                        alt="Kepala Madrasah"
-                        class="w-full h-full object-cover hover:scale-105 transition-transform duration-700 ease-out" />
-                </div>
+                <div class="relative w-full mx-auto lg:mx-0 shrink-0" style="max-width: 300px;">
+                    <div class="absolute -top-10 -left-10 w-48 h-48 bg-green-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 z-0"></div>
+                    <div class="absolute -bottom-10 -right-10 w-48 h-48 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 z-0"></div>
 
-                <div class="absolute -bottom-6 right-4 bg-white p-4 md:p-5 rounded-2xl shadow-lg border-b-4 border-[#00A859] flex items-center gap-3 z-20">
-                    <div class="w-10 h-10 md:w-12 md:h-12 bg-green-50 text-[#00A859] rounded-full flex items-center justify-center text-xl font-bold">
-                        <i class="fa-solid fa-medal"></i>
-                    </div>
-                    <div>
-                        <p class="text-xl md:text-2xl font-extrabold text-[#0B4A2D]">20+</p>
-                        <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider">Tahun Dedikasi</p>
+                    <div class="relative z-10 rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-gray-200">
+                        <?php $fotoPimpinan = !empty($pimpinan['foto']) ? base_url('uploads/guru/' . $pimpinan['foto']) : 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=600'; ?>
+                        <img
+                            src="<?= $fotoPimpinan ?>"
+                            alt="<?= esc($pimpinan['nama']) ?>"
+                            class="w-full object-cover hover:scale-105 transition-transform duration-700 ease-out"
+                            style="aspect-ratio: 3/4;" />
                     </div>
                 </div>
+
+                <div class="w-full lg:w-7/12 relative z-20">
+
+                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-green-50 rounded-full mb-4">
+                        <span class="w-2 h-2 rounded-full bg-[#00A859] animate-pulse"></span>
+                        <span class="text-xs font-bold text-[#00A859] tracking-widest uppercase">Sambutan <?= esc($pimpinan['jabatan']) ?></span>
+                    </div>
+
+                    <h2 class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 leading-snug mb-5">
+                        Mencetak Generasi Unggul Berwawasan <span class="text-[#00A859]">Global</span>
+                    </h2>
+
+                    <p class="text-gray-600 text-base md:text-lg leading-relaxed mb-5 italic border-l-4 border-[#00A859] pl-4">
+                        "<?= esc($pimpinan['sambutan'] ?? 'Pendidikan bukan sekadar mengisi pikiran, tetapi menyalakan api keingintahuan dan membentuk akhlak yang mulia.') ?>"
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-t border-gray-200 pt-6 mt-2 gap-4">
+                        <div>
+                            <h4 class="text-lg md:text-2xl font-bold text-gray-800">
+                                <?= esc($pimpinan['nama']) ?>
+                            </h4>
+                            <p class="text-[#00A859] font-medium text-xl"><?= esc($pimpinan['jabatan']) ?></p>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
+        <?php else: ?>
+            <p class="text-center text-gray-400">Data pimpinan belum ditambahkan.</p>
+        <?php endif; ?>
 
-            <div class="w-full lg:w-7/12 relative z-20">
-                <div class="inline-flex items-center gap-2 px-4 py-2 bg-green-50 rounded-full mb-4">
-                    <span class="w-2 h-2 rounded-full bg-[#00A859] animate-pulse"></span>
-                    <span class="text-xs font-bold text-[#00A859] tracking-widest uppercase">Sambutan Kepala Madrasah</span>
-                </div>
-
-                <h2 class="text-3xl md:text-4xl font-extrabold text-[#0B4A2D] leading-tight mb-5">
-                    Mencetak Generasi Unggul Berwawasan <span class="text-[#00A859]">Global</span>
-                </h2>
-
-                <p class="text-gray-600 text-base md:text-lg leading-relaxed mb-5 font-medium italic border-l-4 border-[#00A859] pl-4">
-                    "Pendidikan bukan sekadar mengisi pikiran, tetapi menyalakan api keingintahuan dan membentuk akhlak yang mulia."
-                </p>
-
-                <p class="text-gray-600 text-sm md:text-base leading-relaxed mb-8 text-justify">
-                    Selamat datang di sekolah kami. Kami berkomitmen untuk menyediakan lingkungan belajar yang inspiratif, didukung oleh tenaga pendidik profesional dan fasilitas modern. Kami percaya bahwa setiap anak memiliki potensi unik yang siap untuk dikembangkan demi menyongsong masa depan yang cerah.
-                </p>
-
-                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-t border-gray-200 pt-6 mt-2 gap-4">
-                    <div>
-                        <h4 class="text-lg md:text-xl font-bold text-gray-800">
-                            Bpk. Glen Ega Ahmad Andhika, S.Pd.
-                        </h4>
-                        <p class="text-[#00A859] font-medium text-sm">Kepala Madrasah</p>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </section>
 <!-- Kilas Balik -->

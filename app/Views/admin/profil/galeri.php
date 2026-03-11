@@ -42,7 +42,7 @@
         </div>
 
         <div class="md:col-span-2">
-            <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm min-h-[300px]">
+            <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm min-h-75">
                 <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Daftar Foto Galeri</h3>
 
                 <?php if (empty($galeri)): ?>

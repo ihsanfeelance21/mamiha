@@ -48,3 +48,11 @@ $routes->group('profil', function ($routes) {
     $routes->get('testimoni', 'TestimoniController::index');
     $routes->post('testimoni/simpan', 'TestimoniController::simpan');
 });
+$routes->group('admin/guru', function ($routes) {
+    $routes->get('/', 'AdminGuru::index');
+    $routes->get('tambah', 'AdminGuru::tambah');
+    $routes->post('simpan', 'AdminGuru::simpan');
+    $routes->get('edit/(:num)', 'AdminGuru::edit/$1');
+    $routes->post('update/(:num)', 'AdminGuru::update/$1');
+    $routes->get('hapus/(:num)', 'AdminGuru::hapus/$1');
+});
