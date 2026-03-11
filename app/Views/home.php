@@ -173,10 +173,21 @@ if ($isBuka) {
                 <div class="absolute -top-10 -left-10 w-40 h-40 bg-green-200 rounded-full mix-blend-multiply filter blur-2xl opacity-50"></div>
                 <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-yellow-200 rounded-full mix-blend-multiply filter blur-2xl opacity-50"></div>
 
+                <?php
+                $videoUrl = isset($profil['tentang_kami_video']) ? $profil['tentang_kami_video'] : '';
+                if (strpos($videoUrl, 'watch?v=') !== false) {
+                    $videoUrl = str_replace('watch?v=', 'embed/', $videoUrl);
+                    $videoUrl = explode('&', $videoUrl)[0];
+                } elseif (strpos($videoUrl, 'youtu.be/') !== false) {
+                    $videoUrl = str_replace('youtu.be/', 'youtube.com/embed/', $videoUrl);
+                    $videoUrl = explode('?', $videoUrl)[0];
+                }
+                ?>
+
                 <div class="relative w-full aspect-video rounded-4xl overflow-hidden shadow-2xl border-4 border-white bg-gray-800 z-20 transition-transform duration-500 group-hover:scale-[1.02]">
                     <iframe class="absolute top-0 left-0 w-full h-full"
-                        src="https://www.youtube.com/embed/aqz-KE-bpKQ?si=placeholder"
-                        title="Video Profil Sekolah"
+                        src="<?= esc($videoUrl) ?>"
+                        title="<?= esc($profil['tentang_kami_judul'] ?? 'Video Profil Sekolah') ?>"
                         frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         allowfullscreen>
@@ -191,36 +202,15 @@ if ($isBuka) {
                 </div>
 
                 <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0B4A2D] leading-tight mb-6">
-                    Menjelajahi Lingkungan Belajar yang <span class="text-[#00A859]">Inspiratif</span>
+                    <?= esc($profil['tentang_kami_judul'] ?? 'Judul Tentang Kami') ?>
                 </h2>
 
                 <p class="text-gray-600 text-lg leading-relaxed mb-6">
-                    Kami tidak hanya mengajarkan ilmu pengetahuan, tetapi juga menanamkan nilai-nilai karakter yang kuat. Melalui fasilitas yang memadai dan tenaga pendidik yang berdedikasi, kami siap mendampingi setiap langkah siswa menuju kesuksesan.
+                    <?= nl2br(esc($profil['tentang_kami_deskripsi'] ?? 'Deskripsi tentang kami belum tersedia.')) ?>
                 </p>
 
-                <ul class="space-y-4 mb-8">
-                    <li class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-green-100 text-[#00A859] flex items-center justify-center shrink-0 shadow-sm">
-                            <i class="fa-solid fa-check text-sm"></i>
-                        </div>
-                        <span class="text-gray-700 font-medium">Lingkungan Belajar Nyaman & Kondusif</span>
-                    </li>
-                    <li class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-green-100 text-[#00A859] flex items-center justify-center shrink-0 shadow-sm">
-                            <i class="fa-solid fa-check text-sm"></i>
-                        </div>
-                        <span class="text-gray-700 font-medium">Kurikulum Adaptif & Berbasis Teknologi</span>
-                    </li>
-                    <li class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-green-100 text-[#00A859] flex items-center justify-center shrink-0 shadow-sm">
-                            <i class="fa-solid fa-check text-sm"></i>
-                        </div>
-                        <span class="text-gray-700 font-medium">Pembinaan Karakter & Kepemimpinan</span>
-                    </li>
-                </ul>
-
                 <div class="border-t border-gray-200 pt-8 mt-8">
-                    <a href="/profil/madrasah" class="group inline-flex items-center justify-center px-6 py-3.5 border border-transparent text-base font-bold rounded-xl text-white bg-[#0B4A2D] hover:bg-[#00A859] transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1">
+                    <a href="<?= base_url('profil/madrasah') ?>" class="group inline-flex items-center justify-center px-6 py-3.5 border border-transparent text-base font-bold rounded-xl text-white bg-[#0B4A2D] hover:bg-[#00A859] transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1">
                         Lihat Profil Selengkapnya
                         <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                     </a>

@@ -32,6 +32,14 @@ $routes->group('admin', function ($routes) {
     $routes->get('testimoni/approve/(:num)', 'AdminTestimoniController::approve/$1');
     $routes->get('testimoni/reject/(:num)', 'AdminTestimoniController::reject/$1');
     $routes->get('testimoni/delete/(:num)', 'AdminTestimoniController::delete/$1');
+    $routes->get('profil', 'Admin\ProfilController::index');
+    $routes->post('profil/update-umum', 'Admin\ProfilController::updateUmum');
+    $routes->post('profil/fasilitas/simpan', 'Admin\ProfilController::simpanFasilitas');
+    $routes->post('profil/fasilitas/update/(:num)', 'Admin\ProfilController::updateFasilitas/$1');
+    $routes->get('profil/fasilitas/hapus/(:num)', 'Admin\ProfilController::hapusFasilitas/$1');
+    $routes->get('profil/fasilitas/galeri/(:num)', 'Admin\ProfilController::galeriFasilitas/$1');
+    $routes->post('profil/fasilitas/galeri/simpan', 'Admin\ProfilController::simpanGaleri');
+    $routes->get('profil/fasilitas/galeri/hapus/(:num)', 'Admin\ProfilController::hapusGaleri/$1');
 });
 // --- ROUTES PROFIL ---
 $routes->group('profil', function ($routes) {

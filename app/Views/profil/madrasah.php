@@ -19,7 +19,7 @@
         </nav>
     </div>
 </section>
-
+<!-- Sambutan Kepala -->
 <section class="py-20 md:py-24 bg-gray-50 overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
@@ -76,7 +76,7 @@
         </div>
     </div>
 </section>
-
+<!-- Kilas Balik -->
 <section class="py-16 md:py-24 bg-white relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
@@ -92,12 +92,7 @@
                 </h2>
 
                 <div class="prose prose-base md:prose-lg text-gray-600">
-                    <p class="mb-4 text-justify">
-                        Madrasah ini didirikan pada tahun 2005 dengan semangat untuk mencetak generasi yang tidak hanya unggul dalam ilmu pengetahuan umum (IPTEK), tetapi juga memiliki kedalaman iman dan takwa (IMTAK). Berawal dari sebuah gedung sederhana dengan puluhan siswa, kini kami telah berkembang menjadi salah satu institusi pendidikan Islam rujukan di daerah ini.
-                    </p>
-                    <p class="text-justify">
-                        Seiring berjalannya waktu, berbagai inovasi kurikulum dan perbaikan fasilitas terus dilakukan. Kami berkomitmen untuk terus beradaptasi dengan kemajuan teknologi tanpa meninggalkan tradisi keilmuan pesantren yang menjunjung tinggi akhlakul karimah.
-                    </p>
+                    <p><?= nl2br(esc($profil['kilas_balik_deskripsi'])) ?></p>
                 </div>
             </div>
 
@@ -105,7 +100,7 @@
                 <div class="absolute -inset-4 bg-green-50 rounded-3xl transform rotate-3 -z-10"></div>
                 <div class="absolute -inset-4 bg-[#0B4A2D] rounded-3xl transform -rotate-2 -z-20 opacity-10"></div>
 
-                <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=800&auto=format&fit=crop" alt="Gedung Madrasah" class="w-full h-80 md:h-88 object-cover rounded-2xl shadow-lg border-4 border-white">
+                <img src="<?= base_url('uploads/profil/' . $profil['kilas_balik_foto']) ?>" alt="Kilas Balik" class="w-full h-80 md:h-88 object-cover rounded-2xl shadow-lg border-4 border-white">
 
                 <div class="absolute -bottom-6 -left-6 bg-green-100 text-[#0B4A2D] p-5 rounded-full shadow-xl border-4 border-white flex flex-col items-center justify-center w-28 h-28 transform hover:scale-105 transition-transform">
                     <span class="text-xs font-bold uppercase tracking-wider mb-1">Sejak</span>
@@ -117,6 +112,7 @@
     </div>
 </section>
 
+<!-- Visi & misi -->
 <section class="py-16 md:py-24 bg-gray-50 border-y border-gray-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -167,8 +163,10 @@
     </div>
 </section>
 
-<section class="py-16 md:py-24 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+<section class="py-16 md:py-24 bg-white" x-data="lightbox()">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
 
         <div class="text-center max-w-2xl mx-auto mb-12">
             <h2 class="text-3xl md:text-4xl font-extrabold text-[#0B4A2D] mb-4">Fasilitas Madrasah</h2>
@@ -176,114 +174,163 @@
             <p class="text-gray-500 text-sm md:text-base">Sarana dan prasarana pendukung yang memadai untuk menciptakan lingkungan belajar yang optimal dan menyenangkan.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="hidden md:flex absolute top-1/2 -left-4 z-10 -translate-y-1/2 w-12 h-12 bg-white text-[#0B4A2D] rounded-full shadow-lg items-center justify-center cursor-pointer hover:bg-[#00A859] hover:text-white transition-colors swiper-button-prev-fasilitas">
+            <i class="fa-solid fa-chevron-left"></i>
+        </div>
+        <div class="hidden md:flex absolute top-1/2 -right-4 z-10 -translate-y-1/2 w-12 h-12 bg-white text-[#0B4A2D] rounded-full shadow-lg items-center justify-center cursor-pointer hover:bg-[#00A859] hover:text-white transition-colors swiper-button-next-fasilitas">
+            <i class="fa-solid fa-chevron-right"></i>
+        </div>
 
-            <div class="relative overflow-hidden rounded-2xl group min-h-64 shadow-md hover:shadow-xl transition-all duration-300">
-                <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=800&auto=format&fit=crop" alt="Ruang Kelas" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                <div class="absolute inset-0 bg-linear-to-t from-[#0B4A2D]/95 via-[#0B4A2D]/60 to-transparent opacity-90 transition-opacity group-hover:opacity-100"></div>
+        <div class="swiper fasilitasSwiper pb-12!">
+            <div class="swiper-wrapper">
 
-                <div class="relative z-10 h-full p-6 flex flex-col justify-end">
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 shrink-0 bg-white/20 backdrop-blur-sm border border-white/30 text-white rounded-xl flex items-center justify-center text-xl group-hover:bg-[#00A859] group-hover:border-[#00A859] transition-colors duration-300">
-                            <i class="fa-solid fa-chalkboard-user"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold text-white mb-1">Ruang Kelas Nyaman</h4>
-                            <p class="text-sm text-gray-200 leading-snug">Dilengkapi pendingin ruangan, proyektor, dan tata letak yang mendukung interaksi aktif.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                <?php foreach ($fasilitas as $f) : ?>
+                    <?php
+                    // Siapkan array foto untuk dikirim ke Javascript
+                    $fotoGaleri = [];
+                    if (!empty($f['galeri'])) {
+                        foreach ($f['galeri'] as $g) {
+                            $fotoGaleri[] = base_url('uploads/fasilitas/galeri/' . $g['foto']);
+                        }
+                    } else {
+                        // Jika galeri kosong, pakai foto cover saja
+                        $cover = $f['foto_cover'] ? base_url('uploads/fasilitas/' . $f['foto_cover']) : 'https://placehold.co/800x600?text=No+Image';
+                        $fotoGaleri[] = $cover;
+                    }
+                    ?>
 
-            <div class="relative overflow-hidden rounded-2xl group min-h-64 shadow-md hover:shadow-xl transition-all duration-300">
-                <img src="https://images.unsplash.com/photo-1517433670267-08bbd4be890f?q=80&w=800&auto=format&fit=crop" alt="Lab Komputer" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                <div class="absolute inset-0 bg-linear-to-t from-[#0B4A2D]/95 via-[#0B4A2D]/60 to-transparent opacity-90 transition-opacity group-hover:opacity-100"></div>
+                    <div class="swiper-slide h-auto">
 
-                <div class="relative z-10 h-full p-6 flex flex-col justify-end">
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 shrink-0 bg-white/20 backdrop-blur-sm border border-white/30 text-white rounded-xl flex items-center justify-center text-xl group-hover:bg-[#00A859] group-hover:border-[#00A859] transition-colors duration-300">
-                            <i class="fa-solid fa-computer"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold text-white mb-1">Laboratorium Komputer</h4>
-                            <p class="text-sm text-gray-200 leading-snug">Perangkat modern dengan koneksi internet berkecepatan tinggi untuk praktik digital.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                        <div class="relative overflow-hidden rounded-2xl group min-h-64 md:min-h-80 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer">
 
-            <div class="relative overflow-hidden rounded-2xl group min-h-64 shadow-md hover:shadow-xl transition-all duration-300">
-                <img src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=800&auto=format&fit=crop" alt="Perpustakaan" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                <div class="absolute inset-0 bg-linear-to-t from-[#0B4A2D]/95 via-[#0B4A2D]/60 to-transparent opacity-90 transition-opacity group-hover:opacity-100"></div>
+                            <img src="<?= $fotoGaleri[0] ?>" alt="<?= esc($f['judul']) ?>" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
 
-                <div class="relative z-10 h-full p-6 flex flex-col justify-end">
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 shrink-0 bg-white/20 backdrop-blur-sm border border-white/30 text-white rounded-xl flex items-center justify-center text-xl group-hover:bg-[#00A859] group-hover:border-[#00A859] transition-colors duration-300">
-                            <i class="fa-solid fa-book-bookmark"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold text-white mb-1">Perpustakaan Digital</h4>
-                            <p class="text-sm text-gray-200 leading-snug">Koleksi ribuan buku fisik dan e-book pendukung kurikulum serta literatur keislaman.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                            <div class="absolute inset-0 bg-linear-to-t from-[#0B4A2D]/95 via-[#0B4A2D]/60 to-transparent opacity-90 transition-opacity group-hover:opacity-100"></div>
 
-            <div class="relative overflow-hidden rounded-2xl group min-h-64 shadow-md hover:shadow-xl transition-all duration-300">
-                <img src="https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?q=80&w=800&auto=format&fit=crop" alt="Masjid" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                <div class="absolute inset-0 bg-linear-to-t from-[#0B4A2D]/95 via-[#0B4A2D]/60 to-transparent opacity-90 transition-opacity group-hover:opacity-100"></div>
+                            <div class="absolute inset-0 z-10 p-6 flex flex-col justify-end pointer-events-none">
+                                <div class="flex items-start gap-4">
+                                    <div class="w-12 h-12 shrink-0 bg-white/20 backdrop-blur-sm border border-white/30 text-white rounded-xl flex items-center justify-center text-xl group-hover:bg-[#00A859] group-hover:border-[#00A859] transition-colors duration-300">
+                                        <i class="<?= esc($f['icon']) ?>"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-lg font-bold text-white mb-1"><?= esc($f['judul']) ?></h4>
+                                        <p class="text-sm text-gray-200 leading-snug line-clamp-2"><?= esc($f['deskripsi']) ?></p>
+                                    </div>
+                                </div>
+                            </div>
 
-                <div class="relative z-10 h-full p-6 flex flex-col justify-end">
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 shrink-0 bg-white/20 backdrop-blur-sm border border-white/30 text-white rounded-xl flex items-center justify-center text-xl group-hover:bg-[#00A859] group-hover:border-[#00A859] transition-colors duration-300">
-                            <i class="fa-solid fa-mosque"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold text-white mb-1">Masjid Raya</h4>
-                            <p class="text-sm text-gray-200 leading-snug">Pusat kegiatan ibadah harian, shalat berjamaah, dan pembinaan karakter rohani siswa.</p>
+                            <div @click="bukaLightbox(<?= htmlspecialchars(json_encode($fotoGaleri)) ?>)" class="absolute inset-0 z-20"></div>
+
                         </div>
                     </div>
-                </div>
+                <?php endforeach; ?>
+
             </div>
 
-            <div class="relative overflow-hidden rounded-2xl group min-h-64 shadow-md hover:shadow-xl transition-all duration-300">
-                <img src="https://images.unsplash.com/photo-1526232761682-d26e03ac148e?q=80&w=800&auto=format&fit=crop" alt="Sarana Olahraga" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                <div class="absolute inset-0 bg-linear-to-t from-[#0B4A2D]/95 via-[#0B4A2D]/60 to-transparent opacity-90 transition-opacity group-hover:opacity-100"></div>
-
-                <div class="relative z-10 h-full p-6 flex flex-col justify-end">
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 shrink-0 bg-white/20 backdrop-blur-sm border border-white/30 text-white rounded-xl flex items-center justify-center text-xl group-hover:bg-[#00A859] group-hover:border-[#00A859] transition-colors duration-300">
-                            <i class="fa-solid fa-volleyball"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold text-white mb-1">Sarana Olahraga</h4>
-                            <p class="text-sm text-gray-200 leading-snug">Lapangan futsal, basket, dan voli terpadu untuk mendukung kebugaran fisik siswa.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="relative overflow-hidden rounded-2xl group min-h-64 shadow-md hover:shadow-xl transition-all duration-300">
-                <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=800&auto=format&fit=crop" alt="Lab IPA" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                <div class="absolute inset-0 bg-linear-to-t from-[#0B4A2D]/95 via-[#0B4A2D]/60 to-transparent opacity-90 transition-opacity group-hover:opacity-100"></div>
-
-                <div class="relative z-10 h-full p-6 flex flex-col justify-end">
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 shrink-0 bg-white/20 backdrop-blur-sm border border-white/30 text-white rounded-xl flex items-center justify-center text-xl group-hover:bg-[#00A859] group-hover:border-[#00A859] transition-colors duration-300">
-                            <i class="fa-solid fa-microscope"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold text-white mb-1">Laboratorium IPA</h4>
-                            <p class="text-sm text-gray-200 leading-snug">Fasilitas riset dan praktikum sains yang lengkap dengan standar keamanan tinggi.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            <div class="swiper-pagination"></div>
         </div>
     </div>
+
+    <div x-show="isOpen"
+        style="display: none;"
+        class="fixed inset-0 z-100 bg-black/95 backdrop-blur-sm flex items-center justify-center"
+        @keydown.escape.window="tutupLightbox()"
+        @keydown.right.window="nextFoto()"
+        @keydown.left.window="prevFoto()">
+
+        <button @click="tutupLightbox()" class="absolute top-4 right-4 md:top-6 md:right-6 text-white/70 hover:text-white transition-colors p-2 z-50">
+            <i class="fa-solid fa-xmark text-4xl"></i>
+        </button>
+
+        <button x-show="kumpulanFoto.length > 1" @click.stop="prevFoto()" class="absolute left-2 md:left-8 text-white/50 hover:text-white transition-colors p-4 z-50">
+            <i class="fa-solid fa-chevron-left text-3xl md:text-5xl"></i>
+        </button>
+
+        <div class="relative max-w-5xl max-h-screen p-4 flex flex-col items-center justify-center" @click.outside="tutupLightbox()">
+            <img :src="kumpulanFoto[indexAktif]" class="max-h-[80vh] max-w-full object-contain rounded-lg shadow-2xl transition-all duration-300">
+
+            <div x-show="kumpulanFoto.length > 1" class="text-white/70 mt-4 font-medium text-sm bg-black/50 px-4 py-1 rounded-full">
+                <span x-text="indexAktif + 1"></span> / <span x-text="kumpulanFoto.length"></span>
+            </div>
+        </div>
+
+        <button x-show="kumpulanFoto.length > 1" @click.stop="nextFoto()" class="absolute right-2 md:right-8 text-white/50 hover:text-white transition-colors p-4 z-50">
+            <i class="fa-solid fa-chevron-right text-3xl md:text-5xl"></i>
+        </button>
+    </div>
+
 </section>
 
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var swiper = new Swiper(".fasilitasSwiper", {
+            slidesPerView: 1, // Tampil 1 kartu di HP
+            spaceBetween: 24, // Jarak antar kartu (sama seperti gap-6)
+            loop: true, // Biar slidernya muter terus tidak ada ujungnya
+            autoplay: {
+                delay: 3500, // Otomatis geser tiap 3.5 detik
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next-fasilitas",
+                prevEl: ".swiper-button-prev-fasilitas",
+            },
+            breakpoints: {
+                // Konfigurasi Layar Tablet (md)
+                768: {
+                    slidesPerView: 2,
+                },
+                // Konfigurasi Layar Laptop (lg)
+                1024: {
+                    slidesPerView: 3,
+                },
+            },
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('lightbox', () => ({
+            // ... (Kode Alpine.js lightbox Mas sama seperti sebelumnya, tidak diubah) ...
+            isOpen: false,
+            kumpulanFoto: [],
+            indexAktif: 0,
+
+            bukaLightbox(arrayFoto) {
+                this.kumpulanFoto = arrayFoto;
+                this.indexAktif = 0;
+                this.isOpen = true;
+                document.body.style.overflow = 'hidden';
+            },
+
+            tutupLightbox() {
+                this.isOpen = false;
+                document.body.style.overflow = 'auto';
+            },
+
+            nextFoto() {
+                if (this.kumpulanFoto.length > 1) {
+                    this.indexAktif = (this.indexAktif + 1) % this.kumpulanFoto.length;
+                }
+            },
+
+            prevFoto() {
+                if (this.kumpulanFoto.length > 1) {
+                    this.indexAktif = (this.indexAktif - 1 + this.kumpulanFoto.length) % this.kumpulanFoto.length;
+                }
+            }
+        }))
+    })
+</script>
+
+<!-- Tentang kami -->
 <section class="py-20 md:py-28 bg-gray-50 overflow-hidden border-t border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
@@ -292,13 +339,25 @@
                 <div class="absolute -top-10 -left-10 w-40 h-40 bg-green-200 rounded-full mix-blend-multiply filter blur-2xl opacity-50"></div>
                 <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-yellow-200 rounded-full mix-blend-multiply filter blur-2xl opacity-50"></div>
 
+                <?php
+                $videoUrl = $profil['tentang_kami_video'];
+                if (strpos($videoUrl, 'watch?v=') !== false) {
+                    $videoUrl = str_replace('watch?v=', 'embed/', $videoUrl);
+                    $videoUrl = explode('&', $videoUrl)[0];
+                } elseif (strpos($videoUrl, 'youtu.be/') !== false) {
+                    $videoUrl = str_replace('youtu.be/', 'youtube.com/embed/', $videoUrl);
+                    $videoUrl = explode('?', $videoUrl)[0];
+                }
+                ?>
+
                 <div class="relative w-full aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-gray-800 z-20 transition-transform duration-500 group-hover:scale-[1.02]">
-                    <iframe class="absolute top-0 left-0 w-full h-full"
-                        src="https://www.youtube.com/embed/aqz-KE-bpKQ?si=placeholder"
-                        title="Video Profil Sekolah"
+                    <iframe
+                        src="<?= esc($videoUrl) ?>"
+                        title="<?= esc($profil['tentang_kami_judul']) ?>"
                         frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowfullscreen>
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                        class="absolute inset-0 w-full h-full">
                     </iframe>
                 </div>
             </div>
@@ -310,33 +369,12 @@
                 </div>
 
                 <h2 class="text-3xl md:text-4xl font-extrabold text-[#0B4A2D] leading-tight mb-6">
-                    Menjelajahi Lingkungan Belajar yang <span class="text-[#00A859]">Inspiratif</span>
+                    <?= esc($profil['tentang_kami_judul']) ?>
                 </h2>
 
                 <p class="text-gray-600 text-base md:text-lg leading-relaxed mb-6">
-                    Kami tidak hanya mengajarkan ilmu pengetahuan, tetapi juga menanamkan nilai-nilai karakter yang kuat. Melalui fasilitas yang memadai dan tenaga pendidik yang berdedikasi, kami siap mendampingi setiap langkah siswa menuju kesuksesan.
+                    <?= nl2br(esc($profil['tentang_kami_deskripsi'])) ?>
                 </p>
-
-                <ul class="space-y-4 mb-8">
-                    <li class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-green-100 text-[#00A859] flex items-center justify-center shrink-0 shadow-sm">
-                            <i class="fa-solid fa-check text-sm"></i>
-                        </div>
-                        <span class="text-gray-700 font-medium">Lingkungan Belajar Nyaman & Kondusif</span>
-                    </li>
-                    <li class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-green-100 text-[#00A859] flex items-center justify-center shrink-0 shadow-sm">
-                            <i class="fa-solid fa-check text-sm"></i>
-                        </div>
-                        <span class="text-gray-700 font-medium">Kurikulum Adaptif & Berbasis Teknologi</span>
-                    </li>
-                    <li class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-green-100 text-[#00A859] flex items-center justify-center shrink-0 shadow-sm">
-                            <i class="fa-solid fa-check text-sm"></i>
-                        </div>
-                        <span class="text-gray-700 font-medium">Pembinaan Karakter & Kepemimpinan</span>
-                    </li>
-                </ul>
 
                 <div class="flex gap-4 border-t border-gray-200 pt-8 mt-4">
                     <a href="<?= base_url('kegiatan') ?>" class="group inline-flex items-center justify-center px-6 py-3.5 border border-transparent text-sm md:text-base font-bold rounded-xl text-white bg-[#0B4A2D] hover:bg-[#00A859] transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1">

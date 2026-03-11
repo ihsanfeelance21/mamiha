@@ -2,32 +2,40 @@
 
 namespace App\Controllers;
 
-use App\Models\KegiatanModel; // Wajib ditambahkan agar bisa akses tabel kegiatan
-use App\Models\TestimoniModel; // Wajib ditambahkan agar bisa akses tabel testimoni
+use App\Models\KegiatanModel;
+use App\Models\TestimoniModel;
+use App\Models\ProfilWebsiteModel; // <-- NAMA MODELNYA SUDAH SAYA BENARKAN DI SINI
 
 class Home extends BaseController
 {
     public function index(): string
     {
-        // 1. Panggil model-model yang dibutuhkan di halaman beranda
-        $kegiatanModel = new KegiatanModel();
-        $heroModel = new \App\Models\HeroSliderModel();
-        $testimoniModel = new TestimoniModel(); // Inisialisasi model testimoni
+        // 1. Panggil SEMUA model yang dibutuhkan di halaman beranda
+        $kegiatanModel  = new KegiatanModel();
+        $heroModel      = new \App\Models\HeroSliderModel();
+        $testimoniModel = new TestimoniModel();
+        $profilModel    = new ProfilWebsiteModel(); // <-- INISIALISASINYA JUGA SUDAH DIBENARKAN
 
-        // 2. Kumpulkan semua data ke dalam satu array $data
+        // 2. Kumpulkan SEMUA data ke dalam SATU array $data
         $data = [
             'title'             => "Beranda | MA Mabadi'ul Ihsan",
-            // Mengambil 3 data kegiatan terbaru berdasarkan tanggal dibuat
+
+            // Mengambil 3 data kegiatan terbaru
             'kegiatan'          => $kegiatanModel->orderBy('created_at', 'DESC')->findAll(3),
-            // Mengambil data slider dari database
+
+            // Mengambil data slider
             'sliders'           => $heroModel->findAll(),
-            // Mengambil 6 data testimoni terbaru yang statusnya sudah di-approve (1)
+
+            // Mengambil 6 data testimoni terbaru (approved)
             'testimoni_terbaru' => $testimoniModel->where('is_approved', 1)
                 ->orderBy('created_at', 'DESC')
                 ->findAll(6),
+
+            // <-- GABUNGKAN DATA PROFIL DI SINI -->
+            'profil'            => $profilModel->first(),
         ];
 
-        // 3. Kirim data ke view home
+        // 3. Kirim data gabungan ke view home
         return view('home', $data);
     }
 

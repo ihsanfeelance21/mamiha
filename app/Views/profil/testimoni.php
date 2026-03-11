@@ -117,9 +117,9 @@
             </button>
         </form>
     </div>
-    <div class="mt-12 flex justify-center w-full">
-        <?= $pager->links('testimoni', 'tailwind_pagination') ?>
-    </div>
+</div>
+<div class="mt-12 flex justify-center w-full">
+    <?= $pager->links('testimoni', 'tailwind_pagination') ?>
 </div>
 
 
