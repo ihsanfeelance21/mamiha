@@ -56,3 +56,5 @@ $routes->group('admin/guru', function ($routes) {
     $routes->post('update/(:num)', 'AdminGuru::update/$1');
     $routes->get('hapus/(:num)', 'AdminGuru::hapus/$1');
 });
+
+$routes->get('/profil/bakat-minat', 'Profil::bakatMinat');

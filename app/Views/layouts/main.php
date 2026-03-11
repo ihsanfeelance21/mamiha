@@ -130,6 +130,9 @@ if ($isBuka) {
                             <a href="<?= base_url('profil/struktur') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] border-b border-gray-50 transition-colors">
                                 <i class="fa-solid fa-sitemap mr-2 text-gray-400"></i> Struktur Organisasi
                             </a>
+                            <a href="<?= base_url('profil/bakat-minat') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] border-b border-gray-50 transition-colors">
+                                <i class="fa-solid fa-volleyball mr-2 text-gray-400"></i> Bakat Minat
+                            </a>
                             <a href="<?= base_url('profil/testimoni') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] transition-colors">
                                 <i class="fa-solid fa-comments mr-2 text-gray-400"></i> Testimoni
                             </a>

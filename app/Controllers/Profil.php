@@ -60,4 +60,15 @@ class Profil extends BaseController
 
         return view('profil/struktur', $data);
     }
+    public function bakatMinat()
+    {
+        $data = [
+            'title' => 'Bakat & Minat Siswa'
+            // Jika nanti ada tabel database khusus ekstrakurikuler, bisa dipanggil di sini.
+            // 'ekskul' => $this->ekskulModel->findAll() 
+        ];
+
+        // Mengarahkan ke file view: app/Views/profil/bakat_minat.php
+        return view('profil/bakat_minat', $data);
+    }
 }
