@@ -14,6 +14,7 @@ $pengaturan = (new \App\Models\PengaturanModel())->first();
         <link rel="icon" type="image/png" href="<?= base_url('uploads/pengaturan/' . $pengaturan['favicon']) ?>">
     <?php endif; ?>
     <link rel="stylesheet" href="<?= base_url('css/app.css') ?>">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
 <body class="bg-surface text-text-main font-sans flex h-screen overflow-hidden">

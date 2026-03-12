@@ -40,6 +40,12 @@ $routes->group('admin', function ($routes) {
     $routes->get('profil/fasilitas/galeri/(:num)', 'Admin\ProfilController::galeriFasilitas/$1');
     $routes->post('profil/fasilitas/galeri/simpan', 'Admin\ProfilController::simpanGaleri');
     $routes->get('profil/fasilitas/galeri/hapus/(:num)', 'Admin\ProfilController::hapusGaleri/$1');
+    $routes->get('bakat-minat', 'Admin\BakatMinat::index');
+    $routes->get('bakat-minat/create', 'Admin\BakatMinat::create');
+    $routes->post('bakat-minat/store', 'Admin\BakatMinat::store');
+    $routes->get('bakat-minat/edit/(:num)', 'Admin\BakatMinat::edit/$1');
+    $routes->post('bakat-minat/update/(:num)', 'Admin\BakatMinat::update/$1');
+    $routes->get('bakat-minat/delete/(:num)', 'Admin\BakatMinat::delete/$1');
 });
 // --- ROUTES PROFIL ---
 $routes->group('profil', function ($routes) {
