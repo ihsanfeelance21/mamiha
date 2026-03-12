@@ -21,6 +21,12 @@ if ($isBuka) {
     // Jika TUTUP: cegah aksi klik (preventDefault) dan tampilkan pop-up
     $onclickDaftar = 'onclick="event.preventDefault(); document.getElementById(\'modalTutup\').classList.remove(\'hidden\'); document.getElementById(\'modalTutup\').classList.add(\'flex\');"';
 }
+
+// --- LOGIKA DETEKSI MENU AKTIF ---
+$currentUri = uri_string(); // Mengambil url saat ini (misal: 'profil/madrasah')
+$isBeranda = ($currentUri == '' || $currentUri == '/');
+$isProfil  = (strpos($currentUri, 'profil') === 0);
+$isBerita  = (strpos($currentUri, 'kegiatan') === 0);
 ?>
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
@@ -117,10 +123,10 @@ if ($isBuka) {
                 </div>
 
                 <div class="hidden md:flex items-center gap-6 lg:gap-8">
-                    <a href="<?= base_url() ?>" class="text-[#0B4A2D] font-bold text-sm lg:text-base border-b-2 border-[#00A859] pb-1 hover:text-[#00A859] transition">Beranda</a>
+                    <a href="<?= base_url() ?>" class="text-sm lg:text-base transition <?= $isBeranda ? 'text-[#0B4A2D] font-bold border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">Beranda</a>
 
                     <div class="relative group">
-                        <button class="flex items-center gap-1 text-gray-600 font-semibold text-sm lg:text-base hover:text-[#00A859] transition py-2">
+                        <button class="flex items-center gap-1 text-sm lg:text-base transition py-2 <?= $isProfil ? 'text-[#0B4A2D] font-bold border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">
                             Profil <i class="fa-solid fa-chevron-down text-[10px] mt-0.5 group-hover:rotate-180 transition-transform duration-300"></i>
                         </button>
                         <div class="absolute left-0 mt-2 w-56 bg-white border border-gray-100 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-left scale-95 group-hover:scale-100 z-50 overflow-hidden">
@@ -139,7 +145,7 @@ if ($isBuka) {
                         </div>
                     </div>
 
-                    <a href="<?= base_url('kegiatan') ?>" class="text-gray-600 font-semibold text-sm lg:text-base hover:text-[#00A859] transition">Berita</a>
+                    <a href="<?= base_url('kegiatan') ?>" class="text-sm lg:text-base transition <?= $isBerita ? 'text-[#0B4A2D] font-bold border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">Berita</a>
 
                     <a href="<?= $linkDaftar ?>" <?= $targetDaftar ?> <?= $onclickDaftar ?> class="bg-[#00A859] hover:bg-green-600 text-white px-5 lg:px-6 py-2.5 rounded-lg font-bold text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 ml-2">
                         Daftar Sekarang
@@ -150,25 +156,32 @@ if ($isBuka) {
 
         <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-100 shadow-inner absolute w-full left-0">
             <div class="px-4 pt-2 pb-6 space-y-2">
-                <a href="<?= base_url() ?>" class="block px-3 py-3 rounded-md text-base font-bold text-[#0B4A2D] bg-green-50">Beranda</a>
-                <div x-data="{ openProfil: false }">
-                    <button @click="openProfil = !openProfil" class="w-full flex justify-between items-center px-3 py-3 rounded-md text-base font-semibold text-gray-600 hover:bg-gray-50 hover:text-[#00A859]">
+                <a href="<?= base_url() ?>" class="block px-3 py-3 rounded-md text-base transition-colors <?= $isBeranda ? 'font-bold text-[#0B4A2D] bg-green-50' : 'font-semibold hover:bg-gray-50 hover:text-[#00A859]' ?>">Beranda</a>
+
+                <div x-data="{ openProfil: <?= $isProfil ? 'true' : 'false' ?> }">
+                    <button @click="openProfil = !openProfil" class="w-full flex justify-between items-center px-3 py-3 rounded-md text-base transition-colors <?= $isProfil ? 'font-bold text-[#0B4A2D] bg-green-50' : 'font-semibold hover:bg-gray-50 hover:text-[#00A859]' ?>">
                         Profil
                         <i class="fa-solid fa-chevron-down text-sm transition-transform duration-300" :class="openProfil ? 'rotate-180' : ''"></i>
                     </button>
                     <div x-show="openProfil" class="pl-4 pr-2 py-2 space-y-1 bg-gray-50/50 rounded-b-md border-l-2 border-green-200 ml-2">
                         <a href="<?= base_url('profil/madrasah') ?>" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-[#00A859]">Profil Madrasah</a>
                         <a href="<?= base_url('profil/struktur') ?>" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-[#00A859]">Struktur Organisasi</a>
-                        <a href="<?= base_url('profil/testimoni') ?>" class="block px-4 py-2 hover:bg-green-50 hover:text-[#00A859] transition-colors">Testimoni</a>
-                    </div>
-                    <a href="<?= base_url('kegiatan') ?>" class="block px-3 py-3 rounded-md text-base font-semibold text-gray-600 hover:bg-gray-50 hover:text-[#00A859]">Berita</a>
-                    <div class="pt-4 pb-2">
-                        <a href="<?= $linkDaftar ?>" <?= $targetDaftar ?> <?= $onclickDaftar ?> class="block w-full text-center bg-[#00A859] hover:bg-green-600 text-white px-5 py-3 rounded-lg font-bold text-base shadow-md transition">
-                            Daftar Sekarang
-                        </a>
+
+                        <a href="<?= base_url('profil/bakat-minat') ?>" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-[#00A859]">Bakat Minat</a>
+
+                        <a href="<?= base_url('profil/testimoni') ?>" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:bg-green-50 hover:text-[#00A859] transition-colors">Testimoni</a>
                     </div>
                 </div>
+
+                <a href="<?= base_url('kegiatan') ?>" class="block px-3 py-3 rounded-md text-base transition-colors <?= $isBerita ? 'font-bold text-[#0B4A2D] bg-green-50' : 'font-semibold hover:bg-gray-50 hover:text-[#00A859]' ?>">Berita</a>
+
+                <div class="pt-4 pb-2">
+                    <a href="<?= $linkDaftar ?>" <?= $targetDaftar ?> <?= $onclickDaftar ?> class="block w-full text-center bg-[#00A859] hover:bg-green-600 text-white px-5 py-3 rounded-lg font-bold text-base shadow-md transition">
+                        Daftar Sekarang
+                    </a>
+                </div>
             </div>
+        </div>
     </nav>
 
     <main class="grow">

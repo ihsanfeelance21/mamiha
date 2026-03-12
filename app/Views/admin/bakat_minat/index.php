@@ -1,6 +1,5 @@
 <?= $this->extend('layouts/admin'); ?>
 <?= $this->section('content'); ?>
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <div class="p-6 bg-gray-50 min-h-screen">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold text-gray-800">Kelola Bakat & Minat</h1>
