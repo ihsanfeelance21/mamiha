@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 11, 2026 at 07:56 PM
+-- Generation Time: Mar 12, 2026 at 05:31 AM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.30
 
@@ -34,6 +34,38 @@ CREATE TABLE `akses_cepat` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bakat_minat`
+--
+
+CREATE TABLE `bakat_minat` (
+  `id` int UNSIGNED NOT NULL,
+  `judul` varchar(255) NOT NULL,
+  `deskripsi` text NOT NULL,
+  `jadwal` varchar(255) NOT NULL,
+  `tipe_pembina` enum('guru','manual') NOT NULL DEFAULT 'guru',
+  `guru_id` int UNSIGNED DEFAULT NULL,
+  `nama_pembina_manual` varchar(255) DEFAULT NULL,
+  `gambar` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `bakat_minat`
+--
+
+INSERT INTO `bakat_minat` (`id`, `judul`, `deskripsi`, `jadwal`, `tipe_pembina`, `guru_id`, `nama_pembina_manual`, `gambar`, `created_at`, `updated_at`) VALUES
+(2, 'Pramuka', 'Kegiatan ekstra setiap sabtu', 'Sabtu, 08.00 - 09.00 WIB', 'manual', NULL, 'Bpk, Satria', '1773286523_d03b3ce85bfae2acd067.jpg', '2026-03-12 03:35:23', '2026-03-12 04:07:34'),
+(4, 'Ko-Kurikuler', 'apaja ok', 'Sabtu, 08.00 - 09.00 WIB', 'guru', 14, NULL, '1773289179_c1e48680553199b0fd5a.jpg', '2026-03-12 04:19:39', '2026-03-12 04:19:39'),
+(7, 'PMR', 'sda', 'Jum\'at, 09.00', 'guru', 14, NULL, '1773289974_7b128eece46e74d617c7.jpg', '2026-03-12 04:32:54', '2026-03-12 04:32:54'),
+(8, 'Pramuk', 'daadawdaw', 'Sabtu, 08.00 - 09.00 WIB', 'manual', NULL, 'Bpk, Satria', '1773290004_ec74889faa07ca47f863.jpg', '2026-03-12 04:33:24', '2026-03-12 04:33:24'),
+(9, 'Ko-Kurikuler', 'wfaqw2gqgq', 'Jum\'at, 09.00', 'guru', 1, NULL, '1773290033_afe73a8b62a185b5bd2d.png', '2026-03-12 04:33:53', '2026-03-12 04:33:53'),
+(10, 'Tari', '14221', 'Sabtu, 08.00 - 09.00 WIB', 'manual', NULL, 'Bpk, Satria', '1773290068_eac8a502652f413074a8.jpg', '2026-03-12 04:34:28', '2026-03-12 04:34:28'),
+(11, 'Tari', 'dawgagaw', 'Sabtu, 08.00 - 09.00 WIB', 'manual', NULL, 'Bpk, Satria\'', '1773290266_aa52c1ffe8e3dc1d361c.png', '2026-03-12 04:37:46', '2026-03-12 04:37:46');
 
 -- --------------------------------------------------------
 
@@ -252,7 +284,7 @@ CREATE TABLE `pengaturan` (
 --
 
 INSERT INTO `pengaturan` (`id`, `nama_sekolah`, `alamat`, `telepon`, `email`, `deskripsi_footer`, `facebook`, `instagram`, `youtube`, `updated_at`, `favicon`, `meta_deskripsi`, `meta_keywords`, `logo`, `slogan`, `alamat_singkat`, `link_maps`, `link_whatsapp`, `tiktok`) VALUES
-(1, 'MA Mabadi\'ul Ihsan', 'Jl. K.H. Achmad Musayyidi No. 177\r\nDesa Karangdoro Kec. Tegalsari\r\nKab.  Banyuwangi, Jawa Timur Kode Pos 68485', '+6285746910126', 'ma.mabadiulihsan@gmail.com', 'Mencetak generasi yang unggul dalam IPTEK, kokoh dalam IMTAQ, dan berakhlakul karimah.', 'https://www.facebook.com/people/MA-Mabadiul-Ihsan/100095492828391/?_rdc=2&_rdr#', 'https://www.instagram.com/mamabadiulihsan.official/', 'https://www.youtube.com/@mamabadiulihsan.official', '2026-03-11 05:30:52', '1773207052_0134b5f6d50a4da73b3a.png', 'Website Resmi MA Mabadi\'ul Ihsan. Mencetak generasi unggul berwawasan global.', 'madrasah, sekolah, mamiha, banyuwangi', '1773207052_d5f19eea07e03795176c.png', 'Kreatif, Inovatis, Berprestasi', 'Karangdoro - Tegalsari - Banyuwangi', 'https://maps.app.goo.gl/gS242Snfp2S1jQJq8', 'https://wa.me/6285746910126', 'https://www.tiktok.com/@mamabadiulihsan.official?_r=1&_t=ZS-92PQJCA3g2f');
+(1, 'MA Mabadi\'ul Ihsan', 'Jl. K.H. Achmad Musayyidi No. 177\r\nDesa Karangdoro Kec. Tegalsari\r\nKab.  Banyuwangi, Jawa Timur Kode Pos 68485', '+6285746910126', 'ma.mabadiulihsan@gmail.com', 'Mencetak generasi yang unggul dalam IPTEK, kokoh dalam IMTAQ, dan berakhlakul karimah.', 'https://www.facebook.com/people/MA-Mabadiul-Ihsan/100095492828391/?_rdc=2&_rdr#', 'https://www.instagram.com/mamabadiulihsan.official/', 'https://www.youtube.com/@mamabadiulihsan.official', '2026-03-12 05:29:42', '1773207052_0134b5f6d50a4da73b3a.png', 'Website Resmi MA Mabadi\'ul Ihsan. Mencetak generasi unggul berwawasan global.', 'madrasah, sekolah, mamiha, banyuwangi', '1773207052_d5f19eea07e03795176c.png', 'Kreatif, Inovatis, Berprestasi', 'Karangdoro - Tegalsari - Banyuwangi', 'https://maps.app.goo.gl/gS242Snfp2S1jQJq8', 'https://wa.me/6285746910126', 'https://www.tiktok.com/@mamabadiulihsan.official?_r=1&_t=ZS-92PQJCA3g2f');
 
 -- --------------------------------------------------------
 
@@ -343,6 +375,12 @@ ALTER TABLE `akses_cepat`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `bakat_minat`
+--
+ALTER TABLE `bakat_minat`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `fasilitas`
 --
 ALTER TABLE `fasilitas`
@@ -419,6 +457,12 @@ ALTER TABLE `testimoni`
 --
 ALTER TABLE `akses_cepat`
   MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `bakat_minat`
+--
+ALTER TABLE `bakat_minat`
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `fasilitas`
