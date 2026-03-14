@@ -50,6 +50,7 @@ $isBerita  = (strpos($currentUri, 'kegiatan') === 0);
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <?= $this->renderSection('meta') ?>
+
 </head>
 
 <body class="bg-gray-50 text-gray-800 font-sans antialiased flex flex-col min-h-screen">
