@@ -2,26 +2,31 @@
 
 namespace App\Controllers;
 
-use App\Models\KegiatanModel;
+use App\Models\BeritaModel; // <-- KegiatanModel diganti menjadi BeritaModel
 use App\Models\TestimoniModel;
-use App\Models\ProfilWebsiteModel; // <-- NAMA MODELNYA SUDAH SAYA BENARKAN DI SINI
+use App\Models\ProfilWebsiteModel;
+use App\Models\HeroSliderModel;
 
 class Home extends BaseController
 {
     public function index(): string
     {
         // 1. Panggil SEMUA model yang dibutuhkan di halaman beranda
-        $kegiatanModel  = new KegiatanModel();
-        $heroModel      = new \App\Models\HeroSliderModel();
+        $beritaModel    = new BeritaModel(); // <-- Inisialisasi BeritaModel
+        $heroModel      = new HeroSliderModel();
         $testimoniModel = new TestimoniModel();
-        $profilModel    = new ProfilWebsiteModel(); // <-- INISIALISASINYA JUGA SUDAH DIBENARKAN
+        $profilModel    = new ProfilWebsiteModel();
 
         // 2. Kumpulkan SEMUA data ke dalam SATU array $data
         $data = [
             'title'             => "Beranda | MA Mabadi'ul Ihsan",
 
-            // Mengambil 3 data kegiatan terbaru
-            'kegiatan'          => $kegiatanModel->orderBy('created_at', 'DESC')->findAll(3),
+            // <-- MENGAMBIL DATA BERITA TERBARU (JOIN KATEGORI) -->
+            'berita'            => $beritaModel->select('berita.*, kategori_berita.nama_kategori')
+                ->join('kategori_berita', 'kategori_berita.id = berita.id_kategori', 'left')
+                ->orderBy('berita.created_at', 'DESC')
+                ->limit(3)
+                ->find(),
 
             // Mengambil data slider
             'sliders'           => $heroModel->findAll(),
@@ -31,7 +36,7 @@ class Home extends BaseController
                 ->orderBy('created_at', 'DESC')
                 ->findAll(6),
 
-            // <-- GABUNGKAN DATA PROFIL DI SINI -->
+            // Menggabungkan data profil
             'profil'            => $profilModel->first(),
         ];
 
@@ -39,23 +44,27 @@ class Home extends BaseController
         return view('home', $data);
     }
 
-    public function detail_kegiatan($slug)
+    // Fungsi detail kita ubah namanya jadi detail_berita
+    public function detail_berita($slug)
     {
-        $kegiatanModel = new KegiatanModel();
+        $beritaModel = new BeritaModel();
 
-        // Cari kegiatan berdasarkan slug
-        $kegiatan = $kegiatanModel->where('slug', $slug)->first();
+        // Cari berita berdasarkan slug + Join Kategori
+        $berita = $beritaModel->select('berita.*, kategori_berita.nama_kategori')
+            ->join('kategori_berita', 'kategori_berita.id = berita.id_kategori', 'left')
+            ->where('berita.slug', $slug)
+            ->first();
 
         // Jika data tidak ditemukan, tampilkan halaman error 404
-        if (!$kegiatan) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Kegiatan tidak ditemukan.');
+        if (!$berita) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Berita tidak ditemukan.');
         }
 
         $data = [
-            'title'    => $kegiatan['judul'] . " | MA Mabadi'ul Ihsan",
-            'kegiatan' => $kegiatan
+            'title'  => $berita['judul'] . " | MA Mabadi'ul Ihsan",
+            'berita' => $berita
         ];
 
-        return view('kegiatan_detail', $data);
+        return view('berita_detail', $data); // Nanti kita buat file view ini
     }
 }

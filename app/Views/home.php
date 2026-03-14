@@ -302,7 +302,7 @@ if ($isBuka) {
                     Berita & Informasi Terbaru
                 </h2>
             </div>
-            <a href="/berita" class="group inline-flex items-center gap-2 text-[#00A859] font-bold hover:text-[#0B4A2D] transition-colors duration-300">
+            <a href="<?= base_url('berita') ?>" class="group inline-flex items-center gap-2 text-[#00A859] font-bold hover:text-[#0B4A2D] transition-colors duration-300">
                 Lihat Semua Berita
                 <span class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center group-hover:bg-[#0B4A2D] group-hover:text-white transition-colors duration-300">
                     <i class="fa-solid fa-arrow-right"></i>
@@ -312,89 +312,53 @@ if ($isBuka) {
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-            <div class="group bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 flex flex-col">
-                <div class="relative h-60 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=800&auto=format&fit=crop" alt="Thumbnail" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out">
-                    <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-xs font-bold text-[#0B4A2D] shadow-sm">
-                        Prestasi
-                    </div>
-                </div>
-                <div class="p-6 md:p-8 flex flex-col grow">
-                    <div class="flex items-center gap-4 text-sm text-gray-500 mb-4 font-medium">
-                        <span class="flex items-center gap-1.5"><i class="fa-regular fa-calendar text-[#00A859]"></i> 12 Okt 2025</span>
-                        <span class="flex items-center gap-1.5"><i class="fa-regular fa-user text-[#00A859]"></i> Admin</span>
-                    </div>
-                    <a href="#" class="block mb-4">
-                        <h3 class="text-xl font-bold text-gray-800 leading-snug group-hover:text-[#00A859] transition-colors line-clamp-2">
-                            Tim Robotik Sekolah Berhasil Meraih Juara 1 Tingkat Nasional
-                        </h3>
-                    </a>
-                    <p class="text-gray-500 text-sm leading-relaxed mb-6 line-clamp-3">
-                        Prestasi membanggakan kembali diraih oleh tim ekstrakurikuler robotik dalam ajang kompetisi teknologi tahunan yang diselenggarakan di Jakarta...
-                    </p>
-                    <div class="mt-auto pt-4 border-t border-gray-100">
-                        <a href="#" class="inline-flex items-center gap-2 text-sm font-bold text-[#0B4A2D] group-hover:text-[#00A859] transition-colors">
-                            Baca Selengkapnya <i class="fa-solid fa-arrow-right-long group-hover:translate-x-2 transition-transform duration-300"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
+            <?php if (!empty($berita)) : ?>
+                <?php foreach ($berita as $item) : ?>
+                    <div class="group bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 flex flex-col">
+                        <div class="relative h-60 overflow-hidden bg-gray-100">
+                            <?php if ($item['gambar']) : ?>
+                                <img src="<?= base_url('uploads/berita/' . $item['gambar']) ?>" alt="<?= esc($item['judul']) ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out">
+                            <?php else : ?>
+                                <div class="w-full h-full flex items-center justify-center text-gray-400 text-sm">Tanpa Gambar</div>
+                            <?php endif; ?>
 
-            <div class="group bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 flex flex-col">
-                <div class="relative h-60 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=800&auto=format&fit=crop" alt="Thumbnail" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out">
-                    <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-xs font-bold text-[#0B4A2D] shadow-sm">
-                        Akademik
-                    </div>
-                </div>
-                <div class="p-6 md:p-8 flex flex-col grow">
-                    <div class="flex items-center gap-4 text-sm text-gray-500 mb-4 font-medium">
-                        <span class="flex items-center gap-1.5"><i class="fa-regular fa-calendar text-[#00A859]"></i> 08 Okt 2025</span>
-                        <span class="flex items-center gap-1.5"><i class="fa-regular fa-user text-[#00A859]"></i> Humas</span>
-                    </div>
-                    <a href="#" class="block mb-4">
-                        <h3 class="text-xl font-bold text-gray-800 leading-snug group-hover:text-[#00A859] transition-colors line-clamp-2">
-                            Penerimaan Peserta Didik Baru (PPDB) Tahun Ajaran Depan Telah Dibuka
-                        </h3>
-                    </a>
-                    <p class="text-gray-500 text-sm leading-relaxed mb-6 line-clamp-3">
-                        Kabar gembira bagi para orang tua dan calon siswa. Pendaftaran untuk tahun ajaran baru kini dapat dilakukan secara online melalui portal resmi...
-                    </p>
-                    <div class="mt-auto pt-4 border-t border-gray-100">
-                        <a href="#" class="inline-flex items-center gap-2 text-sm font-bold text-[#0B4A2D] group-hover:text-[#00A859] transition-colors">
-                            Baca Selengkapnya <i class="fa-solid fa-arrow-right-long group-hover:translate-x-2 transition-transform duration-300"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
+                            <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-xs font-bold text-[#0B4A2D] shadow-sm">
+                                <?= esc($item['nama_kategori'] ?? 'Umum') ?>
+                            </div>
+                        </div>
+                        <div class="p-6 md:p-8 flex flex-col grow">
+                            <div class="flex items-center gap-4 text-sm text-gray-500 mb-4 font-medium">
+                                <span class="flex items-center gap-1.5"><i class="fa-regular fa-calendar text-[#00A859]"></i> <?= date('d M Y', strtotime($item['created_at'])) ?></span>
+                                <span class="flex items-center gap-1.5"><i class="fa-regular fa-user text-[#00A859]"></i> Admin</span>
+                            </div>
 
-            <div class="group bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 flex flex-col lg:flex">
-                <div class="relative h-60 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1544928147-79a2dbc1f389?q=80&w=800&auto=format&fit=crop" alt="Thumbnail" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out">
-                    <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-xs font-bold text-[#0B4A2D] shadow-sm">
-                        Kegiatan
+                            <a href="<?= base_url('berita/baca/' . $item['slug']) ?>" class="block mb-4">
+                                <h3 class="text-xl font-bold text-gray-800 leading-snug group-hover:text-[#00A859] transition-colors line-clamp-2" title="<?= esc($item['judul']) ?>">
+                                    <?= esc($item['judul']) ?>
+                                </h3>
+                            </a>
+
+                            <p class="text-gray-500 text-sm leading-relaxed mb-6 line-clamp-3">
+                                <?= esc(mb_substr(strip_tags($item['konten']), 0, 150)) ?>...
+                            </p>
+
+                            <div class="mt-auto pt-4 border-t border-gray-100">
+                                <a href="<?= base_url('berita/baca/' . $item['slug']) ?>" class="inline-flex items-center gap-2 text-sm font-bold text-[#0B4A2D] group-hover:text-[#00A859] transition-colors">
+                                    Baca Selengkapnya <i class="fa-solid fa-arrow-right-long group-hover:translate-x-2 transition-transform duration-300"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
+                <?php endforeach; ?>
+            <?php else : ?>
+                <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-12 bg-white rounded-3xl border border-gray-100">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-50 mb-4">
+                        <i class="fa-regular fa-newspaper text-2xl text-gray-400"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">Belum Ada Berita</h3>
+                    <p class="text-gray-500 text-sm">Berita dan informasi terbaru akan muncul di sini.</p>
                 </div>
-                <div class="p-6 md:p-8 flex flex-col grow">
-                    <div class="flex items-center gap-4 text-sm text-gray-500 mb-4 font-medium">
-                        <span class="flex items-center gap-1.5"><i class="fa-regular fa-calendar text-[#00A859]"></i> 01 Okt 2025</span>
-                        <span class="flex items-center gap-1.5"><i class="fa-regular fa-user text-[#00A859]"></i> Admin</span>
-                    </div>
-                    <a href="#" class="block mb-4">
-                        <h3 class="text-xl font-bold text-gray-800 leading-snug group-hover:text-[#00A859] transition-colors line-clamp-2">
-                            Peringatan Hari Guru Nasional dengan Berbagai Penampilan Seni Siswa
-                        </h3>
-                    </a>
-                    <p class="text-gray-500 text-sm leading-relaxed mb-6 line-clamp-3">
-                        Seluruh elemen sekolah berkumpul di lapangan utama untuk memberikan apresiasi tertinggi kepada para pahlawan tanpa tanda jasa...
-                    </p>
-                    <div class="mt-auto pt-4 border-t border-gray-100">
-                        <a href="#" class="inline-flex items-center gap-2 text-sm font-bold text-[#0B4A2D] group-hover:text-[#00A859] transition-colors">
-                            Baca Selengkapnya <i class="fa-solid fa-arrow-right-long group-hover:translate-x-2 transition-transform duration-300"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
+            <?php endif; ?>
 
         </div>
     </div>

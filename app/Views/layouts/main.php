@@ -49,7 +49,7 @@ $isBerita  = (strpos($currentUri, 'kegiatan') === 0);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
+    <?= $this->renderSection('meta') ?>
 </head>
 
 <body class="bg-gray-50 text-gray-800 font-sans antialiased flex flex-col min-h-screen">
@@ -145,7 +145,16 @@ $isBerita  = (strpos($currentUri, 'kegiatan') === 0);
                         </div>
                     </div>
 
-                    <a href="<?= base_url('kegiatan') ?>" class="text-sm lg:text-base transition <?= $isBerita ? 'text-[#0B4A2D] font-bold border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">Berita</a>
+                    <div class="relative group">
+                        <button class="flex items-center gap-1 text-sm lg:text-base transition py-2 <?= $isBerita ? 'text-[#0B4A2D] font-bold border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">
+                            Berita <i class="fa-solid fa-chevron-down text-[10px] mt-0.5 group-hover:rotate-180 transition-transform duration-300"></i>
+                        </button>
+                        <div class="absolute left-0 mt-2 w-56 bg-white border border-gray-100 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-left scale-95 group-hover:scale-100 z-50 overflow-hidden">
+                            <a href="<?= base_url('berita') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] border-b border-gray-50 transition-colors">
+                                <i class="fa-solid fa-school mr-2 text-gray-400"></i> Berita
+                            </a>
+                        </div>
+                    </div>
 
                     <a href="<?= $linkDaftar ?>" <?= $targetDaftar ?> <?= $onclickDaftar ?> class="bg-[#00A859] hover:bg-green-600 text-white px-5 lg:px-6 py-2.5 rounded-lg font-bold text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 ml-2">
                         Daftar Sekarang
@@ -173,7 +182,16 @@ $isBerita  = (strpos($currentUri, 'kegiatan') === 0);
                     </div>
                 </div>
 
-                <a href="<?= base_url('kegiatan') ?>" class="block px-3 py-3 rounded-md text-base transition-colors <?= $isBerita ? 'font-bold text-[#0B4A2D] bg-green-50' : 'font-semibold hover:bg-gray-50 hover:text-[#00A859]' ?>">Berita</a>
+                <div x-data="{ openBerita: <?= $isBerita ? 'true' : 'false' ?> }">
+                    <button @click="openBerita = !openBerita" class="w-full flex justify-between items-center px-3 py-3 rounded-md text-base transition-colors <?= $isBerita ? 'font-bold text-[#0B4A2D] bg-green-50' : 'font-semibold hover:bg-gray-50 hover:text-[#00A859]' ?>">
+                        Berita
+                        <i class="fa-solid fa-chevron-down text-sm transition-transform duration-300" :class="openProfil ? 'rotate-180' : ''"></i>
+                    </button>
+                    <div x-show="openBerita" class="pl-4 pr-2 py-2 space-y-1 bg-gray-50/50 rounded-b-md border-l-2 border-green-200 ml-2">
+                        <a href="<?= base_url('berita') ?>" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-[#00A859]">Berita</a>
+
+                    </div>
+                </div>
 
                 <div class="pt-4 pb-2">
                     <a href="<?= $linkDaftar ?>" <?= $targetDaftar ?> <?= $onclickDaftar ?> class="block w-full text-center bg-[#00A859] hover:bg-green-600 text-white px-5 py-3 rounded-lg font-bold text-base shadow-md transition">

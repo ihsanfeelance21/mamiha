@@ -46,6 +46,25 @@ $routes->group('admin', function ($routes) {
     $routes->get('bakat-minat/edit/(:num)', 'Admin\BakatMinat::edit/$1');
     $routes->post('bakat-minat/update/(:num)', 'Admin\BakatMinat::update/$1');
     $routes->get('bakat-minat/delete/(:num)', 'Admin\BakatMinat::delete/$1');
+    // --- ROUTES KATEGORI BERITA ---
+    $routes->group('kategori-berita', function ($routes) {
+        $routes->get('/', 'Admin\BeritaController::kategori');
+        $routes->post('simpan', 'Admin\BeritaController::simpanKategori');
+        $routes->get('hapus/(:num)', 'Admin\BeritaController::hapusKategori/$1');
+    });
+
+    // --- ROUTES BERITA ---
+    $routes->group('berita', function ($routes) {
+        $routes->get('/', 'Admin\BeritaController::index');
+        $routes->get('tambah', 'Admin\BeritaController::tambah');
+        $routes->post('simpan', 'Admin\BeritaController::simpan');
+        $routes->get('edit/(:num)', 'Admin\BeritaController::edit/$1');
+        $routes->post('update/(:num)', 'Admin\BeritaController::update/$1');
+        $routes->get('hapus/(:num)', 'Admin\BeritaController::hapus/$1');
+
+        // Route khusus untuk upload gambar dari editor teks Quill.js (AJAX)
+        $routes->post('upload-gambar-quill', 'Admin\BeritaController::uploadGambarQuill');
+    });
 });
 // --- ROUTES PROFIL ---
 $routes->group('profil', function ($routes) {
@@ -64,3 +83,8 @@ $routes->group('admin/guru', function ($routes) {
 });
 
 $routes->get('/profil/bakat-minat', 'Profil::bakatMinat');
+
+$routes->get('/berita', 'Berita::index');
+$routes->get('/berita/(:segment)', 'Berita::detail/$1');
+$routes->get('berita/baca/(:any)', 'Home::detail_berita/$1');
+$routes->get('berita/baca/(:segment)', 'Berita::baca/$1');

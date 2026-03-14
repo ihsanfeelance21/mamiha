@@ -94,12 +94,43 @@ $currentUri = uri_string();
                     <a href="<?= base_url('admin/guru') ?>" class="flex items-center py-2 px-8 text-xs rounded-lg transition-colors <?= url_is('admin/guru*') ? 'text-white font-bold' : 'text-green-200/70 hover:text-white' ?>">
                         Data Guru & Staff
                     </a>
-                    <a href="<?= base_url('admin/kegiatan') ?>" class="flex items-center py-2 px-8 text-xs rounded-lg transition-colors <?= url_is('admin/kegiatan*') ? 'text-white font-bold' : 'text-green-200/70 hover:text-white' ?>">
-                        Kegiatan Sekolah
-                    </a>
+
                     <a href="<?= base_url('admin/testimoni') ?>" class="flex items-center py-2 px-8 text-xs rounded-lg transition-colors <?= url_is('admin/testimoni*') ? 'text-white font-bold' : 'text-green-200/70 hover:text-white' ?>">
                         Testimoni
                     </a>
+                    <div class="mt-4">
+                        <button onclick="document.getElementById('submenu-berita').classList.toggle('hidden')"
+                            class="w-full flex items-center justify-between px-4 py-2 text-text-main hover:bg-gray-100 rounded-lg transition <?= url_is('admin/berita*') || url_is('admin/kategori-berita*') || url_is('admin/prestasi*') ? 'bg-blue-50 text-primary font-semibold' : '' ?>">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H14"></path>
+                                </svg>
+                                Berita
+                            </div>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+
+                        <div id="submenu-berita" class="flex-col pl-11 pr-4 py-2 space-y-1 <?= url_is('admin/berita*') || url_is('admin/kategori-berita*') || url_is('admin/prestasi*') ? 'flex' : 'hidden' ?>">
+
+                            <a href="<?= base_url('admin/berita/tambah') ?>" class="block py-1.5 text-sm text-gray-500 hover:text-primary transition <?= url_is('admin/berita/tambah') ? 'text-primary font-medium' : '' ?>">
+                                + Tulis Berita
+                            </a>
+
+                            <a href="<?= base_url('admin/berita') ?>" class="block py-1.5 text-sm text-gray-500 hover:text-primary transition <?= (url_is('admin/berita*') && !url_is('admin/berita/tambah')) ? 'text-primary font-medium' : '' ?>">
+                                Daftar Berita
+                            </a>
+
+                            <a href="<?= base_url('admin/kategori-berita') ?>" class="block py-1.5 text-sm text-gray-500 hover:text-primary transition <?= url_is('admin/kategori-berita*') ? 'text-primary font-medium' : '' ?>">
+                                Kategori Berita
+                            </a>
+
+                            <a href="<?= base_url('admin/prestasi') ?>" class="block py-1.5 text-sm text-gray-500 hover:text-primary transition <?= url_is('admin/prestasi*') ? 'text-primary font-medium' : '' ?>">
+                                Data Prestasi
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
