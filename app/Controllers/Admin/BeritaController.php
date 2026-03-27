@@ -340,6 +340,7 @@ class BeritaController extends BaseController
 
         return $this->response->setJSON(['success' => false, 'message' => 'Gagal mengunggah gambar.']);
     }
+
     // =========================================================================
     // FITUR KELOLA TAGS / LABEL
     // =========================================================================

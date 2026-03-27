@@ -87,7 +87,5 @@ $routes->group('admin/guru', function ($routes) {
 
 $routes->get('/profil/bakat-minat', 'Profil::bakatMinat');
 
-$routes->get('/berita', 'Berita::index');
-$routes->get('/berita/(:segment)', 'Berita::detail/$1');
-$routes->get('berita/baca/(:any)', 'Home::detail_berita/$1');
-$routes->get('berita/baca/(:segment)', 'Berita::baca/$1');
+$routes->get('berita', 'Berita::index');
+$routes->get('berita/baca/(:segment)', 'Berita::detail/$1');
