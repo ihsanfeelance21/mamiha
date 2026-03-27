@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\BeritaModel; // <-- KegiatanModel diganti menjadi BeritaModel
+use App\Models\BeritaModel;
 use App\Models\TestimoniModel;
 use App\Models\ProfilWebsiteModel;
 use App\Models\HeroSliderModel;
@@ -12,7 +12,7 @@ class Home extends BaseController
     public function index(): string
     {
         // 1. Panggil SEMUA model yang dibutuhkan di halaman beranda
-        $beritaModel    = new BeritaModel(); // <-- Inisialisasi BeritaModel
+        $beritaModel    = new BeritaModel();
         $heroModel      = new HeroSliderModel();
         $testimoniModel = new TestimoniModel();
         $profilModel    = new ProfilWebsiteModel();
@@ -21,10 +21,20 @@ class Home extends BaseController
         $data = [
             'title'             => "Beranda | MA Mabadi'ul Ihsan",
 
-            // <-- MENGAMBIL DATA BERITA TERBARU (JOIN KATEGORI) -->
-            'berita'            => $beritaModel->select('berita.*, kategori_berita.nama_kategori')
+            // <-- MENGAMBIL DATA BERITA TERBARU DENGAN FILTER KEAMANAN -->
+            'berita' => $beritaModel->select('berita.*, kategori_berita.nama_kategori')
                 ->join('kategori_berita', 'kategori_berita.id = berita.id_kategori', 'left')
-                ->orderBy('berita.created_at', 'DESC')
+                // Gembok Status
+                ->groupStart()
+                ->where('berita.status', 'terbit')
+                ->orWhere('berita.status', 'terjadwal')
+                ->groupEnd()
+                // Gembok Waktu
+                ->groupStart()
+                ->where('berita.waktu_tayang <=', date('Y-m-d H:i:s'))
+                ->orWhere('berita.waktu_tayang IS NULL')
+                ->groupEnd()
+                ->orderBy('berita.waktu_tayang', 'DESC')
                 ->limit(3)
                 ->find(),
 
@@ -42,29 +52,5 @@ class Home extends BaseController
 
         // 3. Kirim data gabungan ke view home
         return view('home', $data);
-    }
-
-    // Fungsi detail kita ubah namanya jadi detail_berita
-    public function detail_berita($slug)
-    {
-        $beritaModel = new BeritaModel();
-
-        // Cari berita berdasarkan slug + Join Kategori
-        $berita = $beritaModel->select('berita.*, kategori_berita.nama_kategori')
-            ->join('kategori_berita', 'kategori_berita.id = berita.id_kategori', 'left')
-            ->where('berita.slug', $slug)
-            ->first();
-
-        // Jika data tidak ditemukan, tampilkan halaman error 404
-        if (!$berita) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Berita tidak ditemukan.');
-        }
-
-        $data = [
-            'title'  => $berita['judul'] . " | MA Mabadi'ul Ihsan",
-            'berita' => $berita
-        ];
-
-        return view('berita_detail', $data); // Nanti kita buat file view ini
     }
 }

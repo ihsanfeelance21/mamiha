@@ -61,6 +61,9 @@ $routes->group('admin', function ($routes) {
         $routes->get('edit/(:num)', 'Admin\BeritaController::edit/$1');
         $routes->post('update/(:num)', 'Admin\BeritaController::update/$1');
         $routes->get('hapus/(:num)', 'Admin\BeritaController::hapus/$1');
+        $routes->get('tags', 'Admin\BeritaController::tags');
+        $routes->post('simpanTag', 'Admin\BeritaController::simpanTag');
+        $routes->get('hapusTag/(:num)', 'Admin\BeritaController::hapusTag/$1');
 
         // Route khusus untuk upload gambar dari editor teks Quill.js (AJAX)
         $routes->post('upload-gambar-quill', 'Admin\BeritaController::uploadGambarQuill');

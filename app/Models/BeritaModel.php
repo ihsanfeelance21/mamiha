@@ -9,51 +9,41 @@ class BeritaModel extends Model
     protected $table            = 'berita';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
+    protected $returnType       = 'array';
 
-    // Semua kolom sesuai database migration
-    protected $allowedFields    = ['id_kategori', 'judul', 'slug', 'konten', 'gambar', 'layout'];
-
+    // Konfigurasi Timestamps (Cukup ditulis sekali)
     protected $useTimestamps    = true;
     protected $createdField     = 'created_at';
     protected $updatedField     = 'updated_at';
 
-    // Fungsi khusus untuk mengambil data Berita + Nama Kategori (JOIN)
+    // Kolom yang diizinkan untuk diisi
+    protected $allowedFields    = [
+        'id_kategori',
+        'judul',
+        'slug',
+        'konten',
+        'gambar',
+        'layout',
+        'status',
+        'waktu_tayang'
+    ];
+
+    // Fungsi mengambil semua berita untuk daftar (Admin/Frontend)
     public function getBeritaDenganKategori()
     {
+        // Tambahkan 'left' join agar berita tetap muncul meskipun kategorinya tidak sengaja terhapus
         return $this->select('berita.*, kategori_berita.nama_kategori')
-            ->join('kategori_berita', 'kategori_berita.id = berita.id_kategori')
+            ->join('kategori_berita', 'kategori_berita.id = berita.id_kategori', 'left')
             ->orderBy('berita.created_at', 'DESC')
             ->findAll();
     }
-    public function baca($slug)
-    {
-        $beritaModel = new \App\Models\BeritaModel();
 
-        // Cari berita berdasarkan slug beserta nama kategorinya
-        $berita = $beritaModel->select('berita.*, kategori_berita.nama_kategori')
+    // Fungsi KHUSUS untuk mengambil 1 berita berdasarkan slug
+    public function getBeritaBySlug($slug)
+    {
+        return $this->select('berita.*, kategori_berita.nama_kategori')
             ->join('kategori_berita', 'kategori_berita.id = berita.id_kategori', 'left')
             ->where('slug', $slug)
             ->first();
-
-        // Jika berita tidak ditemukan, lempar error 404
-        if (!$berita) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Berita tidak ditemukan.");
-        }
-
-        // Auto-generate Meta Description (Potong 150 karakter pertama dari konten)
-        $metaDescription = mb_substr(strip_tags($berita['konten']), 0, 150) . '...';
-
-        $data = [
-            'title'            => $berita['judul'] . ' - MA Mabadi\'ul Ihsan',
-            'berita'           => $berita,
-            // Data untuk SEO & Open Graph
-            'meta_description' => $metaDescription,
-            'og_title'         => $berita['judul'],
-            'og_description'   => $metaDescription,
-            'og_image'         => base_url('uploads/berita/' . $berita['gambar']),
-            'og_url'           => current_url()
-        ];
-
-        return view('berita_detail', $data);
     }
 }
