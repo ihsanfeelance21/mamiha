@@ -59,6 +59,7 @@
                 </select>
             </div>
 
+
             <div>
                 <label for="status" class="block text-sm font-medium text-text-main mb-1">Status Publikasi</label>
                 <select id="status" name="status" class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition bg-white">
@@ -68,33 +69,41 @@
                 </select>
             </div>
 
-            <div id="waktu-tayang-container" class="<?= old('status') == 'terjadwal' ? '' : 'hidden' ?> md:col-span-2 bg-blue-50 p-4 rounded border border-blue-200">
-                <label for="waktu_tayang" class="block text-sm font-medium text-blue-800 mb-1">Pilih Jadwal Tayang <span class="text-red-500">*</span></label>
+            <div id="waktu-tayang-container" class="<?= old('status') == 'draft' ? 'hidden' : '' ?> md:col-span-2 p-4 rounded border transition-colors duration-300 <?= old('status') == 'terjadwal' ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-200' ?>">
+                <div class="flex items-center justify-between mb-1">
+                    <label for="waktu_tayang" id="label-waktu" class="block text-sm font-medium <?= old('status') == 'terjadwal' ? 'text-blue-800' : 'text-gray-700' ?>">
+                        <?= old('status') == 'terjadwal' ? 'Pilih Jadwal Tayang <span class="text-red-500">*</span>' : 'Ubah Tanggal Rilis (Opsional)' ?>
+                    </label>
+                    <button type="button" id="btn-reset-waktu" class="<?= old('status') == 'terbit' ? 'block' : 'hidden' ?> text-xs text-red-500 hover:text-red-700 font-medium">Reset ke Waktu Sekarang</button>
+                </div>
+
                 <input type="datetime-local" id="waktu_tayang" name="waktu_tayang" value="<?= old('waktu_tayang') ?>"
-                    class="w-full md:w-1/2 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
-                <p class="text-xs text-blue-600 mt-2">Berita ini tidak akan terlihat oleh pengunjung sebelum tanggal dan jam yang ditentukan.</p>
+                    class="w-full md:w-1/2 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-1 transition <?= old('status') == 'terjadwal' ? 'focus:border-blue-500 focus:ring-blue-500' : 'focus:border-primary focus:ring-primary' ?>">
+
+                <p id="desc-waktu" class="text-xs mt-2 <?= old('status') == 'terjadwal' ? 'text-blue-600' : 'text-gray-500' ?>">
+                    <?= old('status') == 'terjadwal' ? 'Berita ini tidak akan terlihat oleh pengunjung sebelum tanggal dan jam yang ditentukan.' : 'Biarkan kosong jika ingin diterbitkan saat ini juga. Isi dengan tanggal lampau untuk keperluan arsip/Backdate.' ?>
+                </p>
             </div>
-        </div>
 
-        <div class="mb-6 p-4 bg-gray-50 rounded border border-gray-200">
-            <label for="gambar" class="block text-sm font-medium text-text-main mb-1">Gambar Utama / Thumbnail (Wajib)</label>
-            <input type="file" id="gambar" name="gambar" accept="image/png, image/jpeg, image/webp" required
-                class="w-full border border-gray-300 rounded px-4 py-2 text-sm text-gray-500 bg-white file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary-hover transition">
-            <p class="text-xs text-gray-500 mt-2">Gambar ini akan otomatis dikompres dan diubah ke format WEBP. Gunakan gambar lanskap untuk layout Modern, atau persegi untuk layout Legacy.</p>
-        </div>
+            <div class="mb-6 p-4 bg-gray-50 rounded border border-gray-200">
+                <label for="gambar" class="block text-sm font-medium text-text-main mb-1">Gambar Utama / Thumbnail (Wajib)</label>
+                <input type="file" id="gambar" name="gambar" accept="image/png, image/jpeg, image/webp" required
+                    class="w-full border border-gray-300 rounded px-4 py-2 text-sm text-gray-500 bg-white file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary-hover transition">
+                <p class="text-xs text-gray-500 mt-2">Gambar ini akan otomatis dikompres dan diubah ke format WEBP. Gunakan gambar lanskap untuk layout Modern, atau persegi untuk layout Legacy.</p>
+            </div>
 
-        <div class="mb-6">
-            <label class="block text-sm font-medium text-text-main mb-1">Isi Berita <span class="text-red-500">*</span></label>
-            <div id="editor-container" style="height: 500px; background-color: white; font-family: inherit; font-size: 16px;"></div>
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-text-main mb-1">Isi Berita <span class="text-red-500">*</span></label>
+                <div id="editor-container" style="height: 500px; background-color: white; font-family: inherit; font-size: 16px;"></div>
 
-            <input type="hidden" name="konten" id="konten" value="<?= htmlspecialchars(old('konten') ?? '') ?>">
-        </div>
+                <input type="hidden" name="konten" id="konten" value="<?= htmlspecialchars(old('konten') ?? '') ?>">
+            </div>
 
-        <div class="flex justify-end pt-4 border-t border-gray-100">
-            <button type="submit" class="bg-primary hover:bg-primary-hover text-white px-8 py-3 rounded font-bold transition shadow-md">
-                Simpan Berita
-            </button>
-        </div>
+            <div class="flex justify-end pt-4 border-t border-gray-100">
+                <button type="submit" class="bg-primary hover:bg-primary-hover text-white px-8 py-3 rounded font-bold transition shadow-md">
+                    Simpan Berita
+                </button>
+            </div>
     </form>
 </div>
 
@@ -161,22 +170,67 @@
     });
 
     // --------------------------------------------------------------
-    // 2. LOGIKA STATUS PENJADWALAN
+    // 2. LOGIKA STATUS PENJADWALAN & BACKDATE (Dinamic UI)
     // --------------------------------------------------------------
     const statusSelect = document.getElementById('status');
     const waktuTayangContainer = document.getElementById('waktu-tayang-container');
     const waktuTayangInput = document.getElementById('waktu_tayang');
+    const labelWaktu = document.getElementById('label-waktu');
+    const descWaktu = document.getElementById('desc-waktu');
+    const btnResetWaktu = document.getElementById('btn-reset-waktu');
 
-    statusSelect.addEventListener('change', function() {
-        if (this.value === 'terjadwal') {
-            waktuTayangContainer.classList.remove('hidden');
+    function updateWaktuUI() {
+        const status = statusSelect.value;
+
+        if (status === 'terjadwal') {
+            waktuTayangContainer.classList.remove('hidden', 'bg-gray-50', 'border-gray-200');
+            waktuTayangContainer.classList.add('bg-blue-50', 'border-blue-200');
+
+            labelWaktu.innerHTML = 'Pilih Jadwal Tayang <span class="text-red-500">*</span>';
+            labelWaktu.className = 'block text-sm font-medium text-blue-800 mb-1';
+
+            descWaktu.innerHTML = 'Berita ini tidak akan terlihat oleh pengunjung sebelum tanggal dan jam yang ditentukan.';
+            descWaktu.className = 'text-xs text-blue-600 mt-2';
+
             waktuTayangInput.setAttribute('required', 'required');
-        } else {
+            waktuTayangInput.classList.remove('focus:border-primary', 'focus:ring-primary');
+            waktuTayangInput.classList.add('focus:border-blue-500', 'focus:ring-blue-500');
+
+            btnResetWaktu.classList.add('hidden');
+
+        } else if (status === 'terbit') {
+            waktuTayangContainer.classList.remove('hidden', 'bg-blue-50', 'border-blue-200');
+            waktuTayangContainer.classList.add('bg-gray-50', 'border-gray-200');
+
+            labelWaktu.innerHTML = 'Ubah Tanggal Rilis (Opsional)';
+            labelWaktu.className = 'block text-sm font-medium text-gray-700 mb-1';
+
+            descWaktu.innerHTML = 'Biarkan kosong jika ingin diterbitkan saat ini juga. Isi dengan tanggal lampau untuk keperluan arsip/Backdate.';
+            descWaktu.className = 'text-xs text-gray-500 mt-2';
+
+            waktuTayangInput.removeAttribute('required');
+            waktuTayangInput.classList.remove('focus:border-blue-500', 'focus:ring-blue-500');
+            waktuTayangInput.classList.add('focus:border-primary', 'focus:ring-primary');
+
+            btnResetWaktu.classList.remove('hidden');
+
+        } else if (status === 'draft') {
             waktuTayangContainer.classList.add('hidden');
             waktuTayangInput.removeAttribute('required');
-            waktuTayangInput.value = ''; // Kosongkan input jika bukan terjadwal
+            waktuTayangInput.value = ''; // Kosongkan input
         }
+    }
+
+    // Tombol untuk mereset tanggal kembali kosong
+    btnResetWaktu.addEventListener('click', function() {
+        waktuTayangInput.value = '';
     });
+
+    // Jalankan saat dropdown berubah
+    statusSelect.addEventListener('change', updateWaktuUI);
+
+    // Jalankan sekali saat halaman dimuat (untuk menangani error validasi form / old value)
+    updateWaktuUI();
 
     // --------------------------------------------------------------
     // 3. INISIALISASI QUILL EDITOR

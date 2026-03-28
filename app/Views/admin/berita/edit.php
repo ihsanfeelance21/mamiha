@@ -45,18 +45,29 @@
         <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
 
             <div class="mb-5">
-                <label class="block text-text-main font-semibold mb-2">Status Publikasi</label>
-                <select name="status" id="status" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-primary transition bg-gray-50">
-                    <option value="terbit" <?= old('status', $berita['status']) == 'terbit' ? 'selected' : '' ?>>Langsung Terbit</option>
-                    <option value="draft" <?= old('status', $berita['status']) == 'draft' ? 'selected' : '' ?>>Simpan sbg Draft</option>
-                    <option value="terjadwal" <?= old('status', $berita['status']) == 'terjadwal' ? 'selected' : '' ?>>Terjadwal (Otomatis)</option>
+                <label for="status" class="block text-text-main font-semibold mb-2">Status Publikasi</label>
+                <select name="status" id="status" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition bg-white">
+                    <option value="terbit" <?= old('status', $berita['status']) == 'terbit' ? 'selected' : '' ?>>Terbitkan Langsung</option>
+                    <option value="draft" <?= old('status', $berita['status']) == 'draft' ? 'selected' : '' ?>>Simpan sebagai Draft</option>
+                    <option value="terjadwal" <?= old('status', $berita['status']) == 'terjadwal' ? 'selected' : '' ?>>Jadwalkan Tayang...</option>
                 </select>
             </div>
 
-            <div class="mb-5" id="waktu-tayang-container">
-                <label class="block text-text-main font-semibold mb-2">Jadwal Tayang <span class="text-red-500">*</span></label>
-                <input type="datetime-local" name="waktu_tayang" value="<?= old('waktu_tayang', ($berita['waktu_tayang'] ? date('Y-m-d\TH:i', strtotime($berita['waktu_tayang'])) : '')) ?>" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-primary transition">
-                <p class="text-xs text-gray-500 mt-1">Berita akan otomatis terbit pada waktu ini.</p>
+            <div id="waktu-tayang-container" class="<?= old('status', $berita['status']) == 'draft' ? 'hidden' : '' ?> mb-5 p-4 rounded border transition-colors duration-300 <?= old('status', $berita['status']) == 'terjadwal' ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-200' ?>">
+                <div class="flex items-center justify-between mb-2">
+                    <label for="waktu_tayang" id="label-waktu" class="block font-semibold <?= old('status', $berita['status']) == 'terjadwal' ? 'text-blue-800' : 'text-gray-700' ?>">
+                        <?= old('status', $berita['status']) == 'terjadwal' ? 'Jadwal Tayang <span class="text-red-500">*</span>' : 'Ubah Tanggal Rilis' ?>
+                    </label>
+                    <button type="button" id="btn-reset-waktu" class="<?= old('status', $berita['status']) == 'terbit' ? 'block' : 'hidden' ?> text-xs text-red-500 hover:text-red-700 font-medium">Kosongkan</button>
+                </div>
+
+                <input type="datetime-local" id="waktu_tayang" name="waktu_tayang"
+                    value="<?= old('waktu_tayang', ($berita['waktu_tayang'] ? date('Y-m-d\TH:i', strtotime($berita['waktu_tayang'])) : '')) ?>"
+                    class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 transition <?= old('status', $berita['status']) == 'terjadwal' ? 'focus:border-blue-500 focus:ring-blue-500' : 'focus:border-primary focus:ring-primary' ?>">
+
+                <p id="desc-waktu" class="text-xs mt-2 <?= old('status', $berita['status']) == 'terjadwal' ? 'text-blue-600' : 'text-gray-500' ?>">
+                    <?= old('status', $berita['status']) == 'terjadwal' ? 'Berita tidak akan terlihat sebelum tanggal ini.' : 'Kosongkan jika tidak ingin mengubah waktu tayang aslinya.' ?>
+                </p>
             </div>
 
             <div class="mb-5">
@@ -119,19 +130,62 @@
 <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
 
 <script>
-    // 1. Logika Tampil/Sembunyi Jadwal Tayang
+    // 1. Logika Tampil/Sembunyi dan UI Dinamis Jadwal Tayang
     const statusSelect = document.getElementById('status');
     const waktuContainer = document.getElementById('waktu-tayang-container');
+    const waktuTayangInput = document.getElementById('waktu_tayang');
+    const labelWaktu = document.getElementById('label-waktu');
+    const descWaktu = document.getElementById('desc-waktu');
+    const btnResetWaktu = document.getElementById('btn-reset-waktu');
 
-    function toggleWaktuTayang() {
-        if (statusSelect.value === 'terjadwal') {
-            waktuContainer.classList.remove('hidden');
-        } else {
+    function updateWaktuUI() {
+        const status = statusSelect.value;
+
+        if (status === 'terjadwal') {
+            waktuContainer.classList.remove('hidden', 'bg-gray-50', 'border-gray-200');
+            waktuContainer.classList.add('bg-blue-50', 'border-blue-200');
+
+            labelWaktu.innerHTML = 'Jadwal Tayang <span class="text-red-500">*</span>';
+            labelWaktu.className = 'block font-semibold text-blue-800';
+
+            descWaktu.innerHTML = 'Berita tidak akan terlihat sebelum tanggal ini.';
+            descWaktu.className = 'text-xs text-blue-600 mt-2';
+
+            waktuTayangInput.setAttribute('required', 'required');
+            waktuTayangInput.classList.remove('focus:border-primary', 'focus:ring-primary');
+            waktuTayangInput.classList.add('focus:border-blue-500', 'focus:ring-blue-500');
+
+            btnResetWaktu.classList.add('hidden');
+
+        } else if (status === 'terbit') {
+            waktuContainer.classList.remove('hidden', 'bg-blue-50', 'border-blue-200');
+            waktuContainer.classList.add('bg-gray-50', 'border-gray-200');
+
+            labelWaktu.innerHTML = 'Ubah Tanggal Rilis';
+            labelWaktu.className = 'block font-semibold text-gray-700';
+
+            descWaktu.innerHTML = 'Kosongkan jika tidak ingin mengubah waktu tayang aslinya.';
+            descWaktu.className = 'text-xs text-gray-500 mt-2';
+
+            waktuTayangInput.removeAttribute('required');
+            waktuTayangInput.classList.remove('focus:border-blue-500', 'focus:ring-blue-500');
+            waktuTayangInput.classList.add('focus:border-primary', 'focus:ring-primary');
+
+            btnResetWaktu.classList.remove('hidden');
+
+        } else if (status === 'draft') {
             waktuContainer.classList.add('hidden');
+            waktuTayangInput.removeAttribute('required');
         }
     }
-    statusSelect.addEventListener('change', toggleWaktuTayang);
-    toggleWaktuTayang(); // Jalankan saat halaman pertama kali diload
+
+    // Tombol untuk mereset/mengosongkan tanggal kembali
+    btnResetWaktu.addEventListener('click', function() {
+        waktuTayangInput.value = '';
+    });
+
+    statusSelect.addEventListener('change', updateWaktuUI);
+    updateWaktuUI(); // Jalankan saat halaman pertama kali diload
 
     // 2. Inisialisasi Tom Select (Multi Tags)
     new TomSelect("#tags", {

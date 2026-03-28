@@ -134,13 +134,28 @@ class BeritaController extends BaseController
         $kontenKotor = $this->request->getPost('konten');
         $kontenBersih = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $kontenKotor);
 
-        // 3. Tentukan Waktu Tayang
+        // 3. Tentukan Waktu Tayang (LOGIKA BACKDATE & TERJADWAL)
+        $waktuTayangInput = $this->request->getPost('waktu_tayang');
         $waktuTayang = null;
-        if ($statusInput == 'terjadwal') {
-            $waktuTayang = $this->request->getPost('waktu_tayang');
-        } else if ($statusInput == 'terbit') {
-            // Jika langsung terbit, waktu tayang = waktu sekarang
-            $waktuTayang = date('Y-m-d H:i:s');
+
+        if ($statusInput == 'terbit') {
+            if (!empty($waktuTayangInput)) {
+                // Jika admin mengisi tanggal (Backdate)
+                $waktuTayang = date('Y-m-d H:i:s', strtotime($waktuTayangInput));
+            } else {
+                // Jika dikosongkan, rilis detik ini juga
+                $waktuTayang = date('Y-m-d H:i:s');
+            }
+        } elseif ($statusInput == 'terjadwal') {
+            if (!empty($waktuTayangInput)) {
+                $waktuTayang = date('Y-m-d H:i:s', strtotime($waktuTayangInput));
+                // Proteksi: Jika jadwal diatur ke masa lalu, otomatis jadikan "Terbit"
+                if (strtotime($waktuTayang) <= time()) {
+                    $statusInput = 'terbit';
+                }
+            } else {
+                $statusInput = 'draft';
+            }
         }
 
         // 4. Simpan Data Berita Utama
@@ -255,13 +270,28 @@ class BeritaController extends BaseController
         $kontenKotor = $this->request->getPost('konten');
         $kontenBersih = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $kontenKotor);
 
-        // 5. Tentukan Waktu Tayang
+        // 5. Tentukan Waktu Tayang (LOGIKA BACKDATE & TERJADWAL UNTUK UPDATE)
+        $waktuTayangInput = $this->request->getPost('waktu_tayang');
         $waktuTayang = null;
-        if ($statusInput == 'terjadwal') {
-            $waktuTayang = $this->request->getPost('waktu_tayang');
-        } else if ($statusInput == 'terbit') {
-            // Jika sebelumnya sudah terbit, biarkan jam tayang lama. Jika tidak, pakai jam sekarang.
-            $waktuTayang = ($beritaLama['status'] == 'terbit') ? $beritaLama['waktu_tayang'] : date('Y-m-d H:i:s');
+
+        if ($statusInput == 'terbit') {
+            if (!empty($waktuTayangInput)) {
+                // Jika admin mengubah tanggalnya
+                $waktuTayang = date('Y-m-d H:i:s', strtotime($waktuTayangInput));
+            } else {
+                // Jika dikosongkan, gunakan waktu tayang lama (jangan direset ke hari ini)
+                $waktuTayang = $beritaLama['waktu_tayang'] ?? date('Y-m-d H:i:s');
+            }
+        } elseif ($statusInput == 'terjadwal') {
+            if (!empty($waktuTayangInput)) {
+                $waktuTayang = date('Y-m-d H:i:s', strtotime($waktuTayangInput));
+                // Proteksi masa lalu
+                if (strtotime($waktuTayang) <= time()) {
+                    $statusInput = 'terbit';
+                }
+            }
+        } elseif ($statusInput == 'draft') {
+            $waktuTayang = null;
         }
 
         // 6. Update Data ke Tabel Berita

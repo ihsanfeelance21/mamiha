@@ -61,12 +61,12 @@
                 </div>
 
                 <div class="lg:col-span-1 flex gap-2 w-full">
-                    <button type="submit" class="flex-grow px-0 py-2.5 bg-[#00A859] hover:bg-[#0B4A2D] text-white font-bold rounded-xl transition-colors shadow-sm flex items-center justify-center gap-2 h-[42px]" title="Terapkan Filter">
+                    <button type="submit" class="grow px-0 py-2.5 bg-[#00A859] hover:bg-[#0B4A2D] text-white font-bold rounded-xl transition-colors shadow-sm flex items-center justify-center gap-2 h-10.5" title="Terapkan Filter">
                         <i class="fa-solid fa-filter"></i> <span class="lg:hidden">Filter</span>
                     </button>
 
                     <?php if (!empty($keyword) || !empty($kategoriAktif) || !empty($tahunAktif) || $urutanAktif != 'terbaru'): ?>
-                        <a href="<?= base_url('berita') ?>" class="w-[42px] py-2.5 bg-red-50 hover:bg-red-100 text-red-500 border border-red-100 font-bold rounded-xl transition-colors flex items-center justify-center shrink-0 h-[42px]" title="Reset Filter">
+                        <a href="<?= base_url('berita') ?>" class="w-10.5 py-2.5 bg-red-50 hover:bg-red-100 text-red-500 border border-red-100 font-bold rounded-xl transition-colors flex items-center justify-center shrink-0 h-10.5" title="Reset Filter">
                             <i class="fa-solid fa-rotate-right"></i>
                         </a>
                     <?php endif; ?>
@@ -93,7 +93,10 @@
                         </div>
                         <div class="p-6 flex flex-col grow">
                             <div class="flex items-center gap-4 text-xs text-gray-500 mb-3 font-medium">
-                                <span class="flex items-center gap-1.5"><i class="fa-regular fa-calendar text-[#00A859]"></i> <?= date('d M Y', strtotime($item['created_at'])) ?></span>
+                                <span class="flex items-center gap-1.5">
+                                    <i class="fa-regular fa-calendar text-[#00A859]"></i>
+                                    <?= date('d M Y', strtotime($item['waktu_tayang'] ?? $item['created_at'])) ?>
+                                </span>
                                 <span class="flex items-center gap-1.5"><i class="fa-regular fa-user text-[#00A859]"></i> Admin</span>
                             </div>
 
