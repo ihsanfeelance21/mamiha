@@ -45,10 +45,10 @@
                                     <i class="fa-solid fa-bullhorn text-6xl text-gray-300"></i>
                                 </div>
                             <?php endif; ?>
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
+                            <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-60"></div>
                         </div>
 
-                        <div class="p-6 flex flex-col flex-grow">
+                        <div class="p-6 flex flex-col grow">
                             <div class="flex items-center gap-2 text-sm text-gray-500 mb-3 font-medium">
                                 <i class="fa-regular fa-calendar-check text-[#00A859]"></i>
                                 <?= date('d M Y', strtotime($item['tanggal_publish'])) ?>
@@ -58,7 +58,7 @@
                                 <?= esc($item['judul']) ?>
                             </h3>
 
-                            <p class="text-gray-600 mb-6 line-clamp-3 text-sm flex-grow">
+                            <p class="text-gray-600 mb-6 line-clamp-3 text-sm grow">
                                 <?= strip_tags($item['konten']) ?>
                             </p>
 

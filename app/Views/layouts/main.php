@@ -199,6 +199,7 @@ $isBerita  = (strpos($currentUri, 'kegiatan') === 0);
                     <div x-show="openBerita" class="pl-4 pr-2 py-2 space-y-1 bg-gray-50/50 rounded-b-md border-l-2 border-green-200 ml-2">
                         <a href="<?= base_url('berita') ?>" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-[#00A859]">Berita</a>
                         <a href="<?= base_url('prestasi') ?>" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-[#00A859]">Prestasi</a>
+                        <a href="<?= base_url('pengumuman') ?>" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-[#00A859]">Pengumuman</a>
                     </div>
                 </div>
 
