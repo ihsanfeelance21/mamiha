@@ -452,7 +452,7 @@ if ($isBuka) {
                 </div>
             </div>
 
-            <div class="group relative bg-gray-100 rounded-4xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 h-120 md:h-[520px]">
+            <div class="group relative bg-gray-100 rounded-4xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 h-120 md:h-130">
                 <img src="path/to/your/image.png" alt="Poster Prestasi" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
 
                 <div class="absolute top-5 left-5 bg-white px-3.5 py-1.5 rounded-full text-[11px] font-extrabold text-gray-800 shadow-md flex items-center gap-2 z-10">
