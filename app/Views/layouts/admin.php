@@ -133,6 +133,10 @@ $currentUri = uri_string();
                             <a href="<?= base_url('admin/prestasi') ?>" class="block py-1.5 text-sm text-gray-500 hover:text-primary transition <?= url_is('admin/prestasi*') ? 'text-primary font-medium' : '' ?>">
                                 Data Prestasi
                             </a>
+
+                            <a href="<?= base_url('admin/pengumuman') ?>" class="block py-1.5 text-sm text-gray-500 hover:text-primary transition <?= url_is('admin/pengumuman*') ? 'text-primary font-medium' : '' ?>">
+                                Kelola Pengumuman
+                            </a>
                         </div>
                     </div>
 
