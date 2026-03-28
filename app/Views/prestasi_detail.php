@@ -123,6 +123,22 @@
                         </div>
                     <?php endif; ?>
                 </div>
+                <div class="mt-12 pt-8 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-50 p-6 rounded-2xl shadow-inner border">
+                    <span class="font-bold text-gray-800 flex items-center gap-2">
+                        <i class="fa-solid fa-share-nodes text-[#00A859]"></i> Bagikan Prestasi Ini:
+                    </span>
+                    <div class="flex gap-3">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u=<?= current_url() ?>" target="_blank" class="w-10 h-10 rounded-full bg-[#1877F2] text-white flex items-center justify-center hover:-translate-y-1 transition-transform shadow-md" title="Share ke Facebook">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <a href="https://twitter.com/intent/tweet?url=<?= current_url() ?>&text=<?= esc($prestasi['judul']) ?>" target="_blank" class="w-10 h-10 rounded-full bg-[#1DA1F2] text-white flex items-center justify-center hover:-translate-y-1 transition-transform shadow-md" title="Share ke Twitter (X)">
+                            <i class="fa-brands fa-twitter"></i>
+                        </a>
+                        <a href="https://api.whatsapp.com/send?text=<?= esc($prestasi['judul']) ?> - <?= current_url() ?>" target="_blank" class="w-10 h-10 rounded-full bg-[#25D366] text-white flex items-center justify-center hover:-translate-y-1 transition-transform shadow-md" title="Share ke WhatsApp">
+                            <i class="fa-brands fa-whatsapp text-lg"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
 
         </div>
