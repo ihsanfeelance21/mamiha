@@ -154,8 +154,15 @@ $isBerita  = (strpos($currentUri, 'kegiatan') === 0);
                             <a href="<?= base_url('berita') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] border-b border-gray-50 transition-colors">
                                 <i class="fa-solid fa-school mr-2 text-gray-400"></i> Berita
                             </a>
+                            <a href="<?= base_url('prestasi') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] border-b border-gray-50 transition-colors">
+                                <i class="fa-solid fa-medal mr-2 text-gray-400"></i> Prestasi
+                            </a>
                         </div>
                     </div>
+
+                    <a href="<?= base_url('kalender') ?>" class="text-sm lg:text-base transition 'text-[#0B4A2D] font-bold border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">Kalender Akademik</a>
+
+
 
                     <a href="<?= $linkDaftar ?>" <?= $targetDaftar ?> <?= $onclickDaftar ?> class="bg-[#00A859] hover:bg-green-600 text-white px-5 lg:px-6 py-2.5 rounded-lg font-bold text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 ml-2">
                         Daftar Sekarang
@@ -190,9 +197,11 @@ $isBerita  = (strpos($currentUri, 'kegiatan') === 0);
                     </button>
                     <div x-show="openBerita" class="pl-4 pr-2 py-2 space-y-1 bg-gray-50/50 rounded-b-md border-l-2 border-green-200 ml-2">
                         <a href="<?= base_url('berita') ?>" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-[#00A859]">Berita</a>
-
+                        <a href="<?= base_url('prestasi') ?>" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-[#00A859]">Prestasi</a>
                     </div>
                 </div>
+
+                <a href="<?= base_url('kalender') ?>" class="block px-3 py-2 text-base font-semibold hover:text-[#00A859]">Kalender Akademik</a>
 
                 <div class="pt-4 pb-2">
                     <a href="<?= $linkDaftar ?>" <?= $targetDaftar ?> <?= $onclickDaftar ?> class="block w-full text-center bg-[#00A859] hover:bg-green-600 text-white px-5 py-3 rounded-lg font-bold text-base shadow-md transition">
