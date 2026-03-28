@@ -135,6 +135,10 @@ $currentUri = uri_string();
                             </a>
                         </div>
                     </div>
+
+                    <a href="<?= base_url('admin/kalender') ?>" class="flex items-center py-2 px-8 text-xs rounded-lg transition-colors <?= url_is('admin/kalender') ? 'text-white font-bold' : 'text-green-200/70 hover:text-white' ?>">
+                        Kelola Kalender
+                    </a>
                 </div>
             </div>
 
