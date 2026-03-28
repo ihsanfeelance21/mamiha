@@ -145,7 +145,11 @@ $currentUri = uri_string();
                     </a>
                 </div>
             </div>
-
+            <a href="<?= base_url('admin/galeri') ?>"
+                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 <?= url_is('admin/galeri*') ? 'bg-[#00A859] text-white shadow-md' : 'text-green-100 hover:bg-white/10' ?>">
+                <i class="fa-solid fa-camera w-5 text-center text-sm"></i>
+                <span class="font-medium text-sm">Manajemen Galeri</span>
+            </a>
             <a href="<?= base_url('admin/pendaftaran') ?>"
                 class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 <?= url_is('admin/pendaftaran*') ? 'bg-[#00A859] text-white shadow-md' : 'text-green-100 hover:bg-white/10' ?>">
                 <i class="fa-solid fa-user-plus w-5 text-center text-sm"></i>
