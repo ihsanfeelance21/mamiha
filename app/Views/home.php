@@ -386,114 +386,99 @@ if ($isBuka) {
             </a>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
 
-            <div class="group bg-green-600 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col relative" style="background-image: radial-gradient(#ffffff20 2px, transparent 2px); background-size: 30px 30px;">
-                <div class="relative h-60 p-8 flex flex-col justify-start">
-                    <div class="absolute top-4 left-4 bg-white/90 px-4 py-2 rounded-full text-xs font-bold text-green-800 shadow-sm flex items-center gap-2">
-                        <i class="fa-solid fa-circle text-green-400 text-[8px]"></i>
-                        JUARA 1 NASIONAL
-                    </div>
+            <div class="group relative bg-gray-100 rounded-4xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 h-120 md:h-130">
+                <img src="path/to/your/image.png" alt="Poster Prestasi" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
 
-                    <div class="flex justify-center md:justify-start items-center relative z-10 mt-12">
-                        <img src="path/to/your/image.png" alt="Selamat & Sukses" class="h-24 object-contain drop-shadow-lg">
-                    </div>
-
+                <div class="absolute top-5 left-5 bg-white px-3.5 py-1.5 rounded-full text-[11px] font-extrabold text-gray-800 shadow-md flex items-center gap-2 z-10">
+                    <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
+                    JUARA 3 HARAPAN NASIONAL
                 </div>
 
-                <div class="bg-white rounded-t-4xl p-8 pt-6 flex flex-col grow relative z-20 shadow-[-10px_-10px_20px_rgba(0,0,0,0.03)]">
-                    <div class="mb-2">
-                        <span class="text-gray-400 font-bold text-xs uppercase tracking-wider">Tingkat Nasional</span>
+                <div class="absolute bottom-5 left-5 right-5 bg-white rounded-2xl p-5 shadow-xl z-10 flex flex-col">
+                    <div class="mb-1.5">
+                        <span class="text-gray-400 font-bold text-[10px] uppercase tracking-widest">Tingkat Nasional</span>
                     </div>
-                    <h3 class="text-2xl font-extrabold text-[#0B4A2D] leading-snug group-hover:text-[#00A859] transition-colors mb-3">
-                        Olimpiade Matematika
+                    <h3 class="text-lg font-extrabold text-gray-800 leading-tight mb-2 line-clamp-2 group-hover:text-[#00A859] transition-colors">
+                        Lomba Baca Puisi Soekarno
                     </h3>
-                    <p class="text-gray-500 text-sm leading-relaxed mb-6 line-clamp-2">
-                        Berhasil meraih medali emas pada ajang bergengsi Kompetisi Sains...
+                    <p class="text-gray-500 text-xs leading-relaxed mb-4 line-clamp-2">
+                        Lomba Baca Puisi Soekarno "Aku Melihat Indonesia" pada Kategori Pelajar Tingkat Menengah...
                     </p>
-                    <div class="mt-auto pt-5 border-t border-gray-100 flex items-center justify-between gap-4">
-                        <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center shadow-inner">
-                                <i class="fa-solid fa-user text-sm"></i>
+                    <div class="pt-4 border-t border-gray-100 flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2 truncate">
+                            <div class="w-6 h-6 rounded-full bg-gray-50 text-gray-400 border border-gray-100 flex items-center justify-center shrink-0">
+                                <i class="fa-regular fa-user text-[10px]"></i>
                             </div>
-                            <span class="font-bold text-gray-800">Ahmad Fauzi</span>
+                            <span class="font-bold text-gray-600 text-xs truncate">Khuzaimah Syifa</span>
                         </div>
-                        <div class="bg-green-50 text-green-600 px-3 py-1 rounded-lg text-sm font-bold shadow-sm">
-                            2024
+                        <div class="bg-yellow-50 text-yellow-600 px-2.5 py-1 rounded text-[11px] font-bold shrink-0">
+                            2025
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="group bg-green-600 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col relative" style="background-image: radial-gradient(#ffffff20 2px, transparent 2px); background-size: 30px 30px;">
-                <div class="relative h-60 p-8 flex flex-col justify-start">
-                    <div class="absolute top-4 left-4 bg-white/90 px-4 py-2 rounded-full text-xs font-bold text-green-800 shadow-sm flex items-center gap-2">
-                        <i class="fa-solid fa-circle text-green-400 text-[8px]"></i>
-                        JUARA 1 NASIONAL
-                    </div>
+            <div class="group relative bg-gray-100 rounded-4xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 h-120 md:h-130">
+                <img src="path/to/your/image.png" alt="Poster Prestasi" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
 
-                    <div class="flex justify-center md:justify-start items-center relative z-10 mt-12">
-                        <img src="path/to/your/image.png" alt="Selamat & Sukses" class="h-24 object-contain drop-shadow-lg">
-                    </div>
-
+                <div class="absolute top-5 left-5 bg-white px-3.5 py-1.5 rounded-full text-[11px] font-extrabold text-gray-800 shadow-md flex items-center gap-2 z-10">
+                    <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
+                    JUARA 3
                 </div>
 
-                <div class="bg-white rounded-t-4xl p-8 pt-6 flex flex-col grow relative z-20 shadow-[-10px_-10px_20px_rgba(0,0,0,0.03)]">
-                    <div class="mb-2">
-                        <span class="text-gray-400 font-bold text-xs uppercase tracking-wider">Tingkat Nasional</span>
+                <div class="absolute bottom-5 left-5 right-5 bg-white rounded-2xl p-5 shadow-xl z-10 flex flex-col">
+                    <div class="mb-1.5">
+                        <span class="text-gray-400 font-bold text-[10px] uppercase tracking-widest">Tingkat Kabupaten</span>
                     </div>
-                    <h3 class="text-2xl font-extrabold text-[#0B4A2D] leading-snug group-hover:text-[#00A859] transition-colors mb-3">
-                        Olimpiade Matematika
+                    <h3 class="text-lg font-extrabold text-gray-800 leading-tight mb-2 line-clamp-2 group-hover:text-[#00A859] transition-colors">
+                        JUNIO 2025 (Junior National Olympiad)
                     </h3>
-                    <p class="text-gray-500 text-sm leading-relaxed mb-6 line-clamp-2">
-                        Berhasil meraih medali emas pada ajang bergengsi Kompetisi Sains...
+                    <p class="text-gray-500 text-xs leading-relaxed mb-4 line-clamp-2">
+                        Salah satu perwakilan siswi MA Mabadi'ul Ihsan berhasil menyabet juara 3 pada ajang olimpiade...
                     </p>
-                    <div class="mt-auto pt-5 border-t border-gray-100 flex items-center justify-between gap-4">
-                        <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center shadow-inner">
-                                <i class="fa-solid fa-user text-sm"></i>
+                    <div class="pt-4 border-t border-gray-100 flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2 truncate">
+                            <div class="w-6 h-6 rounded-full bg-gray-50 text-gray-400 border border-gray-100 flex items-center justify-center shrink-0">
+                                <i class="fa-regular fa-user text-[10px]"></i>
                             </div>
-                            <span class="font-bold text-gray-800">Ahmad Fauzi</span>
+                            <span class="font-bold text-gray-600 text-xs truncate">Cahaya Nadine</span>
                         </div>
-                        <div class="bg-green-50 text-green-600 px-3 py-1 rounded-lg text-sm font-bold shadow-sm">
-                            2024
+                        <div class="bg-yellow-50 text-yellow-600 px-2.5 py-1 rounded text-[11px] font-bold shrink-0">
+                            2025
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="group bg-green-600 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col relative" style="background-image: radial-gradient(#ffffff20 2px, transparent 2px); background-size: 30px 30px;">
-                <div class="relative h-60 p-8 flex flex-col justify-start">
-                    <div class="absolute top-4 left-4 bg-white/90 px-4 py-2 rounded-full text-xs font-bold text-green-800 shadow-sm flex items-center gap-2">
-                        <i class="fa-solid fa-circle text-green-400 text-[8px]"></i>
-                        JUARA 1 NASIONAL
-                    </div>
+            <div class="group relative bg-gray-100 rounded-4xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 h-120 md:h-[520px]">
+                <img src="path/to/your/image.png" alt="Poster Prestasi" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
 
-                    <div class="flex justify-center md:justify-start items-center relative z-10 mt-12">
-                        <img src="path/to/your/image.png" alt="Selamat & Sukses" class="h-24 object-contain drop-shadow-lg">
-                    </div>
-
+                <div class="absolute top-5 left-5 bg-white px-3.5 py-1.5 rounded-full text-[11px] font-extrabold text-gray-800 shadow-md flex items-center gap-2 z-10">
+                    <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
+                    JUARA FAVORIT
                 </div>
 
-                <div class="bg-white rounded-t-4xl p-8 pt-6 flex flex-col grow relative z-20 shadow-[-10px_-10px_20px_rgba(0,0,0,0.03)]">
-                    <div class="mb-2">
-                        <span class="text-gray-400 font-bold text-xs uppercase tracking-wider">Tingkat Nasional</span>
+                <div class="absolute bottom-5 left-5 right-5 bg-white rounded-2xl p-5 shadow-xl z-10 flex flex-col">
+                    <div class="mb-1.5">
+                        <span class="text-gray-400 font-bold text-[10px] uppercase tracking-widest">Tingkat Kecamatan</span>
                     </div>
-                    <h3 class="text-2xl font-extrabold text-[#0B4A2D] leading-snug group-hover:text-[#00A859] transition-colors mb-3">
-                        Olimpiade Matematika
+                    <h3 class="text-lg font-extrabold text-gray-800 leading-tight mb-2 line-clamp-2 group-hover:text-[#00A859] transition-colors">
+                        Lomba Desain Poster Digital
                     </h3>
-                    <p class="text-gray-500 text-sm leading-relaxed mb-6 line-clamp-2">
-                        Berhasil meraih medali emas pada ajang bergengsi Kompetisi Sains...
+                    <p class="text-gray-500 text-xs leading-relaxed mb-4 line-clamp-2">
+                        Alhamdulillah perwakilan sekolah melalui wakilnya atas nama Moh. Raditya berhasil menjadi juara...
                     </p>
-                    <div class="mt-auto pt-5 border-t border-gray-100 flex items-center justify-between gap-4">
-                        <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center shadow-inner">
-                                <i class="fa-solid fa-user text-sm"></i>
+                    <div class="pt-4 border-t border-gray-100 flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2 truncate">
+                            <div class="w-6 h-6 rounded-full bg-gray-50 text-gray-400 border border-gray-100 flex items-center justify-center shrink-0">
+                                <i class="fa-regular fa-user text-[10px]"></i>
                             </div>
-                            <span class="font-bold text-gray-800">Ahmad Fauzi</span>
+                            <span class="font-bold text-gray-600 text-xs truncate">Moh. Raditya F.</span>
                         </div>
-                        <div class="bg-green-50 text-green-600 px-3 py-1 rounded-lg text-sm font-bold shadow-sm">
-                            2024
+                        <div class="bg-yellow-50 text-yellow-600 px-2.5 py-1 rounded text-[11px] font-bold shrink-0">
+                            2025
                         </div>
                     </div>
                 </div>

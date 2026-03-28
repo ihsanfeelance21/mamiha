@@ -68,6 +68,16 @@ $routes->group('admin', function ($routes) {
         // Route khusus untuk upload gambar dari editor teks Quill.js (AJAX)
         $routes->post('upload-gambar-quill', 'Admin\BeritaController::uploadGambarQuill');
     });
+
+    $routes->group('prestasi', function ($routes) {
+        $routes->get('/', 'Admin\Prestasi::index');
+        $routes->get('create', 'Admin\Prestasi::create');
+        $routes->post('store', 'Admin\Prestasi::store');
+        $routes->get('edit/(:num)', 'Admin\Prestasi::edit/$1');
+        $routes->post('update/(:num)', 'Admin\Prestasi::update/$1');
+        // Route hapus mendukung _method="DELETE" dari form
+        $routes->delete('delete/(:num)', 'Admin\Prestasi::delete/$1');
+    });
 });
 // --- ROUTES PROFIL ---
 $routes->group('profil', function ($routes) {
@@ -89,3 +99,6 @@ $routes->get('/profil/bakat-minat', 'Profil::bakatMinat');
 
 $routes->get('berita', 'Berita::index');
 $routes->get('berita/baca/(:segment)', 'Berita::detail/$1');
+
+$routes->get('prestasi', 'PrestasiController::index'); // Pastikan Controller bernama PrestasiController
+$routes->get('prestasi/detail/(:segment)', 'PrestasiController::detail/$1');
