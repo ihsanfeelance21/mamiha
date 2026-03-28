@@ -5,8 +5,8 @@
     <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
         <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/20 shadow-sm rounded-full mb-4 backdrop-blur-sm">
-            <span class="w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></span>
-            <span class="text-sm font-bold text-yellow-400 tracking-widest uppercase">Generasi Juara</span>
+            <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+            <span class="text-sm font-bold text-green-400 tracking-widest uppercase">Generasi Juara</span>
         </div>
         <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Galeri Prestasi</h1>
         <p class="text-lg text-green-100 max-w-2xl mx-auto">
@@ -94,7 +94,7 @@
                         <?php endif; ?>
 
                         <div class="absolute top-5 left-5 bg-white px-3.5 py-1.5 rounded-full text-[11px] font-extrabold text-gray-800 shadow-md flex items-center gap-2 z-10">
-                            <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
+                            <span class="w-2 h-2 rounded-full bg-green-700"></span>
                             <?= esc(strtoupper($item['juara'])) ?>
                         </div>
 
@@ -139,7 +139,7 @@
                                         ?>
                                     </span>
                                 </div>
-                                <div class="bg-yellow-50 text-yellow-600 px-2.5 py-1 rounded text-[11px] font-bold shrink-0">
+                                <div class="bg-green-50 text-green-600 px-2.5 py-1 rounded text-[11px] font-bold shrink-0">
                                     <?= esc($item['tahun_perolehan']) ?>
                                 </div>
                             </div>
