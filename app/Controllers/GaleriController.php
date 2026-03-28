@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\GaleriModel;
 use App\Models\GaleriFotoModel;
+use App\Models\GaleriVideoModel;
 
 class GaleriController extends BaseController
 {
@@ -50,5 +51,22 @@ class GaleriController extends BaseController
         ];
 
         return view('galeri_detail', $data);
+    }
+
+    public function video()
+    {
+        $videoModel = new GaleriVideoModel();
+
+        $data = [
+            'title'  => 'Galeri Video | Madrasah', // Bebas disesuaikan
+            'videos' => $videoModel->orderBy('tanggal', 'DESC')->findAll(),
+            'landscape' => $videoModel->where('orientasi', 'landscape')->orderBy('tanggal', 'DESC')->findAll(),
+            // Ambil khusus portrait
+            'portrait'  => $videoModel->where('orientasi', 'portrait')->orderBy('tanggal', 'DESC')->findAll()
+        ];
+
+
+        // Memanggil file view yang baru saja kita buat tadi
+        return view('galeri_video', $data);
     }
 }

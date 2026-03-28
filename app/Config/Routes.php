@@ -110,6 +110,15 @@ $routes->group('admin', function ($routes) {
         // Rute khusus untuk menghapus foto tertentu dalam album
         $routes->post('deletePhoto/(:num)', 'Admin\GaleriController::deletePhoto/$1');
     });
+
+    $routes->group('galeri-video', function ($routes) {
+        $routes->get('/', 'Admin\GaleriVideoController::index');
+        $routes->get('create', 'Admin\GaleriVideoController::create');
+        $routes->post('store', 'Admin\GaleriVideoController::store');
+        $routes->get('edit/(:num)', 'Admin\GaleriVideoController::edit/$1');
+        $routes->post('update/(:num)', 'Admin\GaleriVideoController::update/$1');
+        $routes->get('delete/(:num)', 'Admin\GaleriVideoController::delete/$1');
+    });
 });
 // --- ROUTES PROFIL ---
 $routes->group('profil', function ($routes) {
@@ -142,3 +151,4 @@ $routes->get('pengumuman/(:segment)', 'PengumumanController::detail/$1');
 
 $routes->get('galeri', 'GaleriController::index');
 $routes->get('galeri/(:segment)', 'GaleriController::detail/$1');
+$routes->get('galeri-video', 'GaleriController::video');

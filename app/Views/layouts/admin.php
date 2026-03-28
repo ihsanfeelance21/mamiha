@@ -115,7 +115,7 @@ $currentUri = uri_string();
                         <div id="submenu-berita" class="flex-col pl-11 pr-4 py-2 space-y-1 <?= url_is('admin/berita*') || url_is('admin/kategori-berita*') || url_is('admin/prestasi*') ? 'flex' : 'hidden' ?>">
 
                             <a href="<?= base_url('admin/berita/tambah') ?>" class="block py-1.5 text-sm text-gray-500 hover:text-primary transition <?= url_is('admin/berita/tambah') ? 'text-primary font-medium' : '' ?>">
-                                + Tulis Berita
+                                Tulis Berita
                             </a>
 
                             <a href="<?= base_url('admin/berita') ?>" class="block py-1.5 text-sm text-gray-500 hover:text-primary transition <?= (url_is('admin/berita*') && !url_is('admin/berita/tambah')) ? 'text-primary font-medium' : '' ?>">
@@ -148,7 +148,13 @@ $currentUri = uri_string();
             <a href="<?= base_url('admin/galeri') ?>"
                 class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 <?= url_is('admin/galeri*') ? 'bg-[#00A859] text-white shadow-md' : 'text-green-100 hover:bg-white/10' ?>">
                 <i class="fa-solid fa-camera w-5 text-center text-sm"></i>
-                <span class="font-medium text-sm">Manajemen Galeri</span>
+                <span class="font-medium text-sm">Manajemen Galeri Foto</span>
+            </a>
+
+            <a href="<?= base_url('admin/galeri-video') ?>"
+                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 <?= url_is('admin/galeri-video*') ? 'bg-[#00A859] text-white shadow-md' : 'text-green-100 hover:bg-white/10' ?>">
+                <i class="fa-solid fa-camera w-5 text-center text-sm"></i>
+                <span class="font-medium text-sm">Manajemen Galeri Video</span>
             </a>
             <a href="<?= base_url('admin/pendaftaran') ?>"
                 class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 <?= url_is('admin/pendaftaran*') ? 'bg-[#00A859] text-white shadow-md' : 'text-green-100 hover:bg-white/10' ?>">
