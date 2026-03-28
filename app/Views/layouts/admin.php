@@ -126,6 +126,10 @@ $currentUri = uri_string();
                                 Kategori Berita
                             </a>
 
+                            <a href="<?= base_url('admin/berita/tags') ?>" class="block py-1.5 text-sm text-gray-500 hover:text-primary transition <?= url_is('admin/berita/tags*') ? 'text-primary font-medium' : '' ?>">
+                                Kelola Tags
+                            </a>
+
                             <a href="<?= base_url('admin/prestasi') ?>" class="block py-1.5 text-sm text-gray-500 hover:text-primary transition <?= url_is('admin/prestasi*') ? 'text-primary font-medium' : '' ?>">
                                 Data Prestasi
                             </a>
