@@ -96,6 +96,20 @@ $routes->group('admin', function ($routes) {
         $routes->post('update/(:num)', 'Admin\PengumumanController::update/$1');
         $routes->get('delete/(:num)', 'Admin\PengumumanController::delete/$1');
     });
+
+    $routes->group('galeri', function ($routes) {
+        $routes->get('/', 'Admin\GaleriController::index');
+        $routes->get('create', 'Admin\GaleriController::create');
+        $routes->post('store', 'Admin\GaleriController::store');
+        $routes->get('edit/(:num)', 'Admin\GaleriController::edit/$1');
+        $routes->post('update/(:num)', 'Admin\GaleriController::update/$1');
+        $routes->get('delete/(:num)', 'Admin\GaleriController::delete/$1');
+
+        // Rute khusus untuk mengupload foto-foto dalam album
+        $routes->post('uploadPhotos/(:num)', 'Admin\GaleriController::uploadPhotos/$1');
+        // Rute khusus untuk menghapus foto tertentu dalam album
+        $routes->post('deletePhoto/(:num)', 'Admin\GaleriController::deletePhoto/$1');
+    });
 });
 // --- ROUTES PROFIL ---
 $routes->group('profil', function ($routes) {
@@ -125,3 +139,6 @@ $routes->get('kalender', 'KalenderController::index');
 
 $routes->get('pengumuman', 'PengumumanController::index');
 $routes->get('pengumuman/(:segment)', 'PengumumanController::detail/$1');
+
+$routes->get('galeri', 'GaleriController::index');
+$routes->get('galeri/(:segment)', 'GaleriController::detail/$1');
