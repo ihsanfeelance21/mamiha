@@ -157,6 +157,9 @@ $isBerita  = (strpos($currentUri, 'kegiatan') === 0);
                             <a href="<?= base_url('prestasi') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] border-b border-gray-50 transition-colors">
                                 <i class="fa-solid fa-medal mr-2 text-gray-400"></i> Prestasi
                             </a>
+                            <a href="<?= base_url('pengumuman') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] border-b border-gray-50 transition-colors">
+                                <i class="fa-solid fa-scroll mr-2 text-gray-400"></i> Pengumuman
+                            </a>
                         </div>
                     </div>
 

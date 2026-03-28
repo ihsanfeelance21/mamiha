@@ -87,6 +87,15 @@ $routes->group('admin', function ($routes) {
         $routes->post('update/(:num)', 'Admin\KalenderAkademikController::update/$1');
         $routes->get('delete/(:num)', 'Admin\KalenderAkademikController::delete/$1');
     });
+
+    $routes->group('pengumuman', function ($routes) {
+        $routes->get('/', 'Admin\PengumumanController::index');
+        $routes->get('create', 'Admin\PengumumanController::create');
+        $routes->post('store', 'Admin\PengumumanController::store');
+        $routes->get('edit/(:num)', 'Admin\PengumumanController::edit/$1');
+        $routes->post('update/(:num)', 'Admin\PengumumanController::update/$1');
+        $routes->get('delete/(:num)', 'Admin\PengumumanController::delete/$1');
+    });
 });
 // --- ROUTES PROFIL ---
 $routes->group('profil', function ($routes) {
@@ -113,3 +122,6 @@ $routes->get('prestasi', 'PrestasiController::index');
 $routes->get('prestasi/detail/(:segment)', 'PrestasiController::detail/$1');
 
 $routes->get('kalender', 'KalenderController::index');
+
+$routes->get('pengumuman', 'PengumumanController::index');
+$routes->get('pengumuman/(:segment)', 'PengumumanController::detail/$1');
