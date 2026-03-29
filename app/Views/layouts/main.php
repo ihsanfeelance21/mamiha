@@ -88,7 +88,7 @@ $isBerita  = (strpos($currentUri, 'kegiatan') === 0);
         </div>
     </div>
 
-    <nav class="bg-white shadow-md sticky top-0 z-40 transition-all duration-300">
+    <nav class="bg-white shadow-md sticky top-0 z-40 transition-all duration-300" x-data="{ mobileMenuOpen: false }">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20 md:h-24">
 
@@ -118,55 +118,60 @@ $isBerita  = (strpos($currentUri, 'kegiatan') === 0);
                 </a>
 
                 <div class="md:hidden flex items-center">
-                    <button onclick="document.getElementById('mobileMenu').classList.toggle('hidden')" class="text-[#0B4A2D] hover:text-green-600 focus:outline-none p-2">
-                        <i class="fa-solid fa-bars text-2xl"></i>
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-[#0B4A2D] hover:text-[#00A859] focus:outline-none p-2 transition-colors">
+                        <i class="fa-solid fa-bars text-2xl" x-show="!mobileMenuOpen"></i>
+                        <i class="fa-solid fa-xmark text-2xl" x-show="mobileMenuOpen" x-cloak></i>
                     </button>
                 </div>
 
-                <div class="hidden md:flex items-center gap-6 lg:gap-8">
-                    <a href="<?= base_url() ?>" class="text-sm lg:text-base transition <?= $isBeranda ? 'text-[#0B4A2D] font-bold border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">Beranda</a>
+                <div class="hidden md:flex items-center gap-5 lg:gap-7">
+
+                    <a href="<?= base_url() ?>" class="text-sm lg:text-[15px] font-medium transition-colors <?= isset($isBeranda) && $isBeranda ? 'text-[#0B4A2D] border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">Beranda</a>
 
                     <div class="relative group">
-                        <button class="flex items-center gap-1 text-sm lg:text-base transition py-2 <?= $isProfil ? 'text-[#0B4A2D] font-bold border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">
+                        <button class="flex items-center gap-1.5 text-sm lg:text-[15px] font-medium transition-colors py-2 <?= isset($isProfil) && $isProfil ? 'text-[#0B4A2D] border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">
                             Profil <i class="fa-solid fa-chevron-down text-[10px] mt-0.5 group-hover:rotate-180 transition-transform duration-300"></i>
                         </button>
                         <div class="absolute left-0 mt-2 w-56 bg-white border border-gray-100 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-left scale-95 group-hover:scale-100 z-50 overflow-hidden">
                             <a href="<?= base_url('profil/madrasah') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] border-b border-gray-50 transition-colors">
-                                <i class="fa-solid fa-school mr-2 text-gray-400"></i> Profil Madrasah
+                                <i class="fa-solid fa-school w-5 text-center mr-1.5 text-gray-400"></i> Profil Madrasah
                             </a>
                             <a href="<?= base_url('profil/struktur') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] border-b border-gray-50 transition-colors">
-                                <i class="fa-solid fa-sitemap mr-2 text-gray-400"></i> Struktur Organisasi
+                                <i class="fa-solid fa-sitemap w-5 text-center mr-1.5 text-gray-400"></i> Struktur Organisasi
                             </a>
                             <a href="<?= base_url('profil/bakat-minat') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] border-b border-gray-50 transition-colors">
-                                <i class="fa-solid fa-volleyball mr-2 text-gray-400"></i> Bakat Minat
+                                <i class="fa-solid fa-volleyball w-5 text-center mr-1.5 text-gray-400"></i> Bakat Minat
                             </a>
                             <a href="<?= base_url('profil/testimoni') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] transition-colors">
-                                <i class="fa-solid fa-comments mr-2 text-gray-400"></i> Testimoni
+                                <i class="fa-solid fa-comments w-5 text-center mr-1.5 text-gray-400"></i> Testimoni
                             </a>
                         </div>
                     </div>
 
                     <div class="relative group">
-                        <button class="flex items-center gap-1 text-sm lg:text-base transition py-2 <?= $isBerita ? 'text-[#0B4A2D] font-bold border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">
+                        <button class="flex items-center gap-1.5 text-sm lg:text-[15px] font-medium transition-colors py-2 <?= isset($isBerita) && $isBerita ? 'text-[#0B4A2D] border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">
                             Berita <i class="fa-solid fa-chevron-down text-[10px] mt-0.5 group-hover:rotate-180 transition-transform duration-300"></i>
                         </button>
                         <div class="absolute left-0 mt-2 w-56 bg-white border border-gray-100 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-left scale-95 group-hover:scale-100 z-50 overflow-hidden">
                             <a href="<?= base_url('berita') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] border-b border-gray-50 transition-colors">
-                                <i class="fa-solid fa-school mr-2 text-gray-400"></i> Berita
+                                <i class="fa-solid fa-newspaper w-5 text-center mr-1.5 text-gray-400"></i> Berita
                             </a>
                             <a href="<?= base_url('prestasi') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] border-b border-gray-50 transition-colors">
-                                <i class="fa-solid fa-medal mr-2 text-gray-400"></i> Prestasi
+                                <i class="fa-solid fa-medal w-5 text-center mr-1.5 text-gray-400"></i> Prestasi
                             </a>
                             <a href="<?= base_url('pengumuman') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] border-b border-gray-50 transition-colors">
-                                <i class="fa-solid fa-scroll mr-2 text-gray-400"></i> Pengumuman
+                                <i class="fa-solid fa-scroll w-5 text-center mr-1.5 text-gray-400"></i> Pengumuman
                             </a>
                         </div>
                     </div>
 
-                    <a href="<?= base_url('kalender') ?>" class="text-sm lg:text-base transition 'text-[#0B4A2D] font-bold border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">Kalender Akademik</a>
-                    <a href="<?= base_url('galeri') ?>" class="text-sm lg:text-base transition 'text-[#0B4A2D] font-bold border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">Galeri</a>
-                    <a href="<?= base_url('pusat-unduhan') ?>" class="text-sm lg:text-base transition 'text-[#0B4A2D] font-bold border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">Unduhan</a>
-                    <a href="<?= base_url('hubungi-kami') ?>" class="text-sm lg:text-base transition 'text-[#0B4A2D] font-bold border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">Kontak</a>
+                    <a href="<?= base_url('kalender') ?>" class="text-sm lg:text-[15px] font-medium transition-colors <?= isset($isKalender) && $isKalender ? 'text-[#0B4A2D] border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">Agenda Madrasah</a>
+
+                    <a href="<?= base_url('galeri') ?>" class="text-sm lg:text-[15px] font-medium transition-colors <?= isset($isGaleri) && $isGaleri ? 'text-[#0B4A2D] border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">Galeri</a>
+
+                    <a href="<?= base_url('pusat-unduhan') ?>" class="text-sm lg:text-[15px] font-medium transition-colors <?= isset($isUnduhan) && $isUnduhan ? 'text-[#0B4A2D] border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">Unduhan</a>
+
+                    <a href="<?= base_url('hubungi-kami') ?>" class="text-sm lg:text-[15px] font-medium transition-colors <?= isset($isKontak) && $isKontak ? 'text-[#0B4A2D] border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">Kontak</a>
 
                     <a href="<?= $linkDaftar ?>" <?= $targetDaftar ?> <?= $onclickDaftar ?> class="bg-[#00A859] hover:bg-green-600 text-white px-5 lg:px-6 py-2.5 rounded-lg font-bold text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 ml-2">
                         Daftar Sekarang
@@ -175,44 +180,49 @@ $isBerita  = (strpos($currentUri, 'kegiatan') === 0);
             </div>
         </div>
 
-        <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-100 shadow-inner absolute w-full left-0">
-            <div class="px-4 pt-2 pb-6 space-y-2">
-                <a href="<?= base_url() ?>" class="block px-3 py-3 rounded-md text-base transition-colors <?= $isBeranda ? 'font-bold text-[#0B4A2D] bg-green-50' : 'font-semibold hover:bg-gray-50 hover:text-[#00A859]' ?>">Beranda</a>
+        <div x-show="mobileMenuOpen"
+            x-collapse
+            x-cloak
+            class="md:hidden bg-white border-t border-gray-100 shadow-inner absolute w-full left-0 z-50">
 
-                <div x-data="{ openProfil: <?= $isProfil ? 'true' : 'false' ?> }">
-                    <button @click="openProfil = !openProfil" class="w-full flex justify-between items-center px-3 py-3 rounded-md text-base transition-colors <?= $isProfil ? 'font-bold text-[#0B4A2D] bg-green-50' : 'font-semibold hover:bg-gray-50 hover:text-[#00A859]' ?>">
+            <div class="px-4 pt-2 pb-6 space-y-1.5 max-h-[80vh] overflow-y-auto">
+                <a href="<?= base_url() ?>" class="block px-3 py-3 rounded-md text-base transition-colors <?= isset($isBeranda) && $isBeranda ? 'font-bold text-[#0B4A2D] bg-green-50' : 'font-semibold hover:bg-gray-50 hover:text-[#00A859]' ?>">Beranda</a>
+
+                <div x-data="{ openProfil: <?= (isset($isProfil) && $isProfil) ? 'true' : 'false' ?> }">
+                    <button @click="openProfil = !openProfil" class="w-full flex justify-between items-center px-3 py-3 rounded-md text-base transition-colors <?= isset($isProfil) && $isProfil ? 'font-bold text-[#0B4A2D] bg-green-50' : 'font-semibold hover:bg-gray-50 hover:text-[#00A859]' ?>">
                         Profil
                         <i class="fa-solid fa-chevron-down text-sm transition-transform duration-300" :class="openProfil ? 'rotate-180' : ''"></i>
                     </button>
-                    <div x-show="openProfil" class="pl-4 pr-2 py-2 space-y-1 bg-gray-50/50 rounded-b-md border-l-2 border-green-200 ml-2">
-                        <a href="<?= base_url('profil/madrasah') ?>" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-[#00A859]">Profil Madrasah</a>
-                        <a href="<?= base_url('profil/struktur') ?>" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-[#00A859]">Struktur Organisasi</a>
-
-                        <a href="<?= base_url('profil/bakat-minat') ?>" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-[#00A859]">Bakat Minat</a>
-
-                        <a href="<?= base_url('profil/testimoni') ?>" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:bg-green-50 hover:text-[#00A859] transition-colors">Testimoni</a>
+                    <div x-show="openProfil" x-collapse class="pl-4 pr-2 py-2 space-y-1 bg-gray-50/50 rounded-b-md border-l-2 border-green-200 ml-2">
+                        <a href="<?= base_url('profil/madrasah') ?>" class="block px-3 py-2.5 text-sm font-medium text-gray-600 hover:text-[#00A859]">Profil Madrasah</a>
+                        <a href="<?= base_url('profil/struktur') ?>" class="block px-3 py-2.5 text-sm font-medium text-gray-600 hover:text-[#00A859]">Struktur Organisasi</a>
+                        <a href="<?= base_url('profil/bakat-minat') ?>" class="block px-3 py-2.5 text-sm font-medium text-gray-600 hover:text-[#00A859]">Bakat Minat</a>
+                        <a href="<?= base_url('profil/testimoni') ?>" class="block px-3 py-2.5 text-sm font-medium text-gray-600 hover:text-[#00A859]">Testimoni</a>
                     </div>
                 </div>
 
-                <div x-data="{ openBerita: <?= $isBerita ? 'true' : 'false' ?> }">
-                    <button @click="openBerita = !openBerita" class="w-full flex justify-between items-center px-3 py-3 rounded-md text-base transition-colors <?= $isBerita ? 'font-bold text-[#0B4A2D] bg-green-50' : 'font-semibold hover:bg-gray-50 hover:text-[#00A859]' ?>">
+                <div x-data="{ openBerita: <?= (isset($isBerita) && $isBerita) ? 'true' : 'false' ?> }">
+                    <button @click="openBerita = !openBerita" class="w-full flex justify-between items-center px-3 py-3 rounded-md text-base transition-colors <?= isset($isBerita) && $isBerita ? 'font-bold text-[#0B4A2D] bg-green-50' : 'font-semibold hover:bg-gray-50 hover:text-[#00A859]' ?>">
                         Berita
-                        <i class="fa-solid fa-chevron-down text-sm transition-transform duration-300" :class="openProfil ? 'rotate-180' : ''"></i>
+                        <i class="fa-solid fa-chevron-down text-sm transition-transform duration-300" :class="openBerita ? 'rotate-180' : ''"></i>
                     </button>
-                    <div x-show="openBerita" class="pl-4 pr-2 py-2 space-y-1 bg-gray-50/50 rounded-b-md border-l-2 border-green-200 ml-2">
-                        <a href="<?= base_url('berita') ?>" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-[#00A859]">Berita</a>
-                        <a href="<?= base_url('prestasi') ?>" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-[#00A859]">Prestasi</a>
-                        <a href="<?= base_url('pengumuman') ?>" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-[#00A859]">Pengumuman</a>
+                    <div x-show="openBerita" x-collapse class="pl-4 pr-2 py-2 space-y-1 bg-gray-50/50 rounded-b-md border-l-2 border-green-200 ml-2">
+                        <a href="<?= base_url('berita') ?>" class="block px-3 py-2.5 text-sm font-medium text-gray-600 hover:text-[#00A859]">Berita</a>
+                        <a href="<?= base_url('prestasi') ?>" class="block px-3 py-2.5 text-sm font-medium text-gray-600 hover:text-[#00A859]">Prestasi</a>
+                        <a href="<?= base_url('pengumuman') ?>" class="block px-3 py-2.5 text-sm font-medium text-gray-600 hover:text-[#00A859]">Pengumuman</a>
                     </div>
                 </div>
 
-                <a href="<?= base_url('kalender') ?>" class="block px-3 py-2 text-base font-semibold hover:text-[#00A859]">Kalender Akademik</a>
-                <a href="<?= base_url('galeri') ?>" class="block px-3 py-2 text-base font-semibold hover:text-[#00A859]">Galeri</a>
-                <a href="<?= base_url('pusat-unduhan') ?>" class="block px-3 py-2 text-base font-semibold hover:text-[#00A859]">Unduhan</a>
-                <a href="<?= base_url('hubungi-kami') ?>" class="block px-3 py-2 text-base font-semibold hover:text-[#00A859]">Kontak</a>
+                <a href="<?= base_url('kalender') ?>" class="block px-3 py-3 rounded-md text-base transition-colors <?= isset($isKalender) && $isKalender ? 'font-bold text-[#0B4A2D] bg-green-50' : 'font-semibold hover:bg-gray-50 hover:text-[#00A859]' ?>">Kalender Akademik</a>
 
-                <div class="pt-4 pb-2">
-                    <a href="<?= $linkDaftar ?>" <?= $targetDaftar ?> <?= $onclickDaftar ?> class="block w-full text-center bg-[#00A859] hover:bg-green-600 text-white px-5 py-3 rounded-lg font-bold text-base shadow-md transition">
+                <a href="<?= base_url('galeri') ?>" class="block px-3 py-3 rounded-md text-base transition-colors <?= isset($isGaleri) && $isGaleri ? 'font-bold text-[#0B4A2D] bg-green-50' : 'font-semibold hover:bg-gray-50 hover:text-[#00A859]' ?>">Galeri</a>
+
+                <a href="<?= base_url('pusat-unduhan') ?>" class="block px-3 py-3 rounded-md text-base transition-colors <?= isset($isUnduhan) && $isUnduhan ? 'font-bold text-[#0B4A2D] bg-green-50' : 'font-semibold hover:bg-gray-50 hover:text-[#00A859]' ?>">Unduhan</a>
+
+                <a href="<?= base_url('hubungi-kami') ?>" class="block px-3 py-3 rounded-md text-base transition-colors <?= isset($isKontak) && $isKontak ? 'font-bold text-[#0B4A2D] bg-green-50' : 'font-semibold hover:bg-gray-50 hover:text-[#00A859]' ?>">Kontak</a>
+
+                <div class="pt-6 pb-2 px-3">
+                    <a href="<?= $linkDaftar ?>" <?= $targetDaftar ?> <?= $onclickDaftar ?> class="block w-full text-center bg-[#00A859] hover:bg-[#088a4c] text-white px-5 py-3.5 rounded-xl font-bold text-base shadow-md transition-colors">
                         Daftar Sekarang
                     </a>
                 </div>

@@ -91,54 +91,62 @@ $currentUri = uri_string();
                 </button>
 
                 <div x-show="open" x-collapse x-cloak class="mt-1 space-y-1">
-                    <a href="<?= base_url('admin/beranda') ?>" class="flex items-center py-2.5 px-10 text-xs rounded-lg transition-colors <?= url_is('admin/beranda*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
-                        <i class="fa-solid fa-minus text-[8px] mr-2 opacity-50"></i> Slider Beranda
+                    <a href="<?= base_url('admin/beranda') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/beranda*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Slider Beranda
                     </a>
-                    <a href="<?= base_url('admin/profil') ?>" class="flex items-center py-2.5 px-10 text-xs rounded-lg transition-colors <?= url_is('admin/profil*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
-                        <i class="fa-solid fa-minus text-[8px] mr-2 opacity-50"></i> Profil Madrasah
+                    <a href="<?= base_url('admin/profil') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/profil*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Profil Madrasah
                     </a>
-                    <a href="<?= base_url('admin/guru') ?>" class="flex items-center py-2.5 px-10 text-xs rounded-lg transition-colors <?= url_is('admin/guru*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
-                        <i class="fa-solid fa-minus text-[8px] mr-2 opacity-50"></i> Data Guru & Staff
+                    <a href="<?= base_url('admin/guru') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/guru*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Data Guru & Staff
                     </a>
-                    <a href="<?= base_url('admin/testimoni') ?>" class="flex items-center py-2.5 px-10 text-xs rounded-lg transition-colors <?= url_is('admin/testimoni*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
-                        <i class="fa-solid fa-minus text-[8px] mr-2 opacity-50"></i> Testimoni
+                    <a href="<?= base_url('admin/testimoni') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/testimoni*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Testimoni
                     </a>
 
                     <div x-data="{ openBerita: <?= (url_is('admin/berita*') || url_is('admin/kategori-berita*') || url_is('admin/prestasi*') || url_is('admin/pengumuman*')) ? 'true' : 'false' ?> }">
-                        <button @click="openBerita = !openBerita" class="w-full flex items-center justify-between py-2.5 px-10 text-xs rounded-lg transition-colors <?= (url_is('admin/berita*') || url_is('admin/kategori-berita*') || url_is('admin/prestasi*') || url_is('admin/pengumuman*')) ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                        <button @click="openBerita = !openBerita" class="w-full flex items-center justify-between py-2.5 px-10 text-sm rounded-lg transition-colors <?= (url_is('admin/berita*') || url_is('admin/kategori-berita*') || url_is('admin/prestasi*') || url_is('admin/pengumuman*')) ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
                             <div class="flex items-center">
-                                <i class="fa-solid fa-newspaper text-[10px] mr-2 opacity-70"></i> Portal Berita
+                                <i class="fa-solid fa-newspaper text-xs mr-2 opacity-70"></i> Portal Berita
                             </div>
                             <i class="fa-solid fa-angle-down text-[10px] transition-transform duration-300" :class="openBerita ? 'rotate-180' : ''"></i>
                         </button>
 
-                        <div x-show="openBerita" x-collapse x-cloak class="pl-12 pr-4 py-1 space-y-1 bg-black/10 rounded-lg mx-4 mt-1">
-                            <a href="<?= base_url('admin/berita/tambah') ?>" class="block py-2 text-[11px] transition-colors <?= url_is('admin/berita/tambah') ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Tulis Berita Baru</a>
-                            <a href="<?= base_url('admin/berita') ?>" class="block py-2 text-[11px] transition-colors <?= (url_is('admin/berita*') && !url_is('admin/berita/tambah') && !url_is('admin/berita/tags*')) ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Daftar Berita</a>
-                            <a href="<?= base_url('admin/kategori-berita') ?>" class="block py-2 text-[11px] transition-colors <?= url_is('admin/kategori-berita*') ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Kategori Berita</a>
-                            <a href="<?= base_url('admin/berita/tags') ?>" class="block py-2 text-[11px] transition-colors <?= url_is('admin/berita/tags*') ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Kelola Tags</a>
-                            <a href="<?= base_url('admin/prestasi') ?>" class="block py-2 text-[11px] transition-colors <?= url_is('admin/prestasi*') ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Data Prestasi</a>
-                            <a href="<?= base_url('admin/pengumuman') ?>" class="block py-2 text-[11px] transition-colors <?= url_is('admin/pengumuman*') ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Pengumuman</a>
+                        <div x-show="openBerita" x-collapse x-cloak class="pl-14 pr-4 py-1.5 space-y-1 bg-black/15 rounded-lg mx-4 mt-1 mb-2">
+                            <a href="<?= base_url('admin/berita/tambah') ?>" class="block py-2 text-[13px] transition-colors <?= url_is('admin/berita/tambah') ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Tulis Berita Baru</a>
+                            <a href="<?= base_url('admin/berita') ?>" class="block py-2 text-[13px] transition-colors <?= (url_is('admin/berita*') && !url_is('admin/berita/tambah') && !url_is('admin/berita/tags*')) ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Daftar Berita</a>
+                            <a href="<?= base_url('admin/kategori-berita') ?>" class="block py-2 text-[13px] transition-colors <?= url_is('admin/kategori-berita*') ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Kategori Berita</a>
+                            <a href="<?= base_url('admin/berita/tags') ?>" class="block py-2 text-[13px] transition-colors <?= url_is('admin/berita/tags*') ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Kelola Tags</a>
+                            <a href="<?= base_url('admin/prestasi') ?>" class="block py-2 text-[13px] transition-colors <?= url_is('admin/prestasi*') ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Data Prestasi</a>
+                            <a href="<?= base_url('admin/pengumuman') ?>" class="block py-2 text-[13px] transition-colors <?= url_is('admin/pengumuman*') ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Pengumuman</a>
                         </div>
                     </div>
 
-                    <a href="<?= base_url('admin/kalender') ?>" class="flex items-center py-2.5 px-10 text-xs rounded-lg transition-colors <?= url_is('admin/kalender*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
-                        <i class="fa-solid fa-minus text-[8px] mr-2 opacity-50"></i> Kalender Akademik
+                    <a href="<?= base_url('admin/kalender') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/kalender*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Kalender Akademik
                     </a>
                 </div>
             </div>
 
-            <a href="<?= base_url('admin/galeri') ?>"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 <?= url_is('admin/galeri*') ? 'bg-[#00A859] text-white shadow-md font-semibold' : 'text-green-100 hover:bg-white/10 hover:text-white' ?>">
-                <i class="fa-solid fa-images w-5 text-center text-sm"></i>
-                <span class="text-sm">Galeri Foto</span>
-            </a>
+            <div x-data="{ open: <?= url_is('admin/galeri*') ? 'true' : 'false' ?> }">
 
-            <a href="<?= base_url('admin/galeri-video') ?>"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 <?= url_is('admin/galeri-video*') ? 'bg-[#00A859] text-white shadow-md font-semibold' : 'text-green-100 hover:bg-white/10 hover:text-white' ?>">
-                <i class="fa-brands fa-youtube w-5 text-center text-sm"></i>
-                <span class="text-sm">Galeri Video</span>
-            </a>
+                <button @click="open = !open" class="w-full flex justify-between items-center text-green-100 hover:bg-white/10 hover:text-white px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none <?= url_is('admin/galeri*') ? 'bg-white/5' : '' ?>">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-images w-5 text-center text-sm"></i>
+                        <span class="text-sm font-medium">Kelola Galeri</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300" :class="open ? 'rotate-180' : ''"></i>
+                </button>
+
+                <div x-show="open" x-collapse x-cloak class="mt-1 space-y-1">
+                    <a href="<?= base_url('admin/galeri') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= (url_is('admin/galeri*') && !url_is('admin/galeri-video*')) ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Galeri Foto
+                    </a>
+                    <a href="<?= base_url('admin/galeri-video') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/galeri-video*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Galeri Video
+                    </a>
+                </div>
+            </div>
 
             <a href="<?= base_url('admin/pendaftaran') ?>"
                 class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 <?= url_is('admin/pendaftaran*') ? 'bg-[#00A859] text-white shadow-md font-semibold' : 'text-green-100 hover:bg-white/10 hover:text-white' ?>">
@@ -163,14 +171,14 @@ $currentUri = uri_string();
                 </button>
 
                 <div x-show="open" x-collapse x-cloak class="mt-1 space-y-1">
-                    <a href="<?= base_url('admin/pengaturan') ?>" class="flex items-center py-2.5 px-10 text-xs rounded-lg transition-colors <?= url_is('admin/pengaturan*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
-                        <i class="fa-solid fa-minus text-[8px] mr-2 opacity-50"></i> Profil Web
+                    <a href="<?= base_url('admin/pengaturan') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/pengaturan*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Profil Web
                     </a>
-                    <a href="<?= base_url('admin/akses-cepat') ?>" class="flex items-center py-2.5 px-10 text-xs rounded-lg transition-colors <?= url_is('admin/akses-cepat*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
-                        <i class="fa-solid fa-minus text-[8px] mr-2 opacity-50"></i> Menu Akses Cepat
+                    <a href="<?= base_url('admin/akses-cepat') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/akses-cepat*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Menu Akses Cepat
                     </a>
-                    <a href="<?= base_url('admin/unduhan') ?>" class="flex items-center py-2.5 px-10 text-xs rounded-lg transition-colors <?= url_is('admin/unduhan*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
-                        <i class="fa-solid fa-minus text-[8px] mr-2 opacity-50"></i> Pusat Unduhan
+                    <a href="<?= base_url('admin/unduhan') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/unduhan*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Pusat Unduhan
                     </a>
                 </div>
             </div>
