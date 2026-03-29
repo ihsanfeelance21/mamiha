@@ -119,6 +119,15 @@ $routes->group('admin', function ($routes) {
         $routes->post('update/(:num)', 'Admin\GaleriVideoController::update/$1');
         $routes->get('delete/(:num)', 'Admin\GaleriVideoController::delete/$1');
     });
+
+    $routes->group('unduhan', function ($routes) {
+        $routes->get('/', 'Admin\UnduhanController::index');
+        $routes->get('create', 'Admin\UnduhanController::create');
+        $routes->post('store', 'Admin\UnduhanController::store');
+        $routes->get('edit/(:num)', 'Admin\UnduhanController::edit/$1');
+        $routes->post('update/(:num)', 'Admin\UnduhanController::update/$1');
+        $routes->get('delete/(:num)', 'Admin\UnduhanController::delete/$1');
+    });
 });
 // --- ROUTES PROFIL ---
 $routes->group('profil', function ($routes) {
@@ -152,3 +161,5 @@ $routes->get('pengumuman/(:segment)', 'PengumumanController::detail/$1');
 $routes->get('galeri', 'GaleriController::index');
 $routes->get('galeri/(:segment)', 'GaleriController::detail/$1');
 $routes->get('galeri-video', 'GaleriController::video');
+
+$routes->get('/pusat-unduhan', 'Unduhan::index');
