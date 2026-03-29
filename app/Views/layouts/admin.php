@@ -179,6 +179,9 @@ $currentUri = uri_string();
                     <a href="<?= base_url('admin/akses-cepat') ?>" class="flex items-center py-2 px-8 text-xs rounded-lg transition-colors <?= url_is('admin/akses-cepat*') ? 'text-white font-bold' : 'text-green-200/70 hover:text-white' ?>">
                         Akses Cepat
                     </a>
+                    <a href="<?= base_url('admin/unduhan') ?>" class="flex items-center py-2 px-8 text-xs rounded-lg transition-colors <?= url_is('admin/unduhan*') ? 'text-white font-bold' : 'text-green-200/70 hover:text-white' ?>">
+                        Manajemen Unduhan
+                    </a>
                 </div>
             </div>
 

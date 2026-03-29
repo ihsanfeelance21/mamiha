@@ -165,6 +165,7 @@ $isBerita  = (strpos($currentUri, 'kegiatan') === 0);
 
                     <a href="<?= base_url('kalender') ?>" class="text-sm lg:text-base transition 'text-[#0B4A2D] font-bold border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">Kalender Akademik</a>
                     <a href="<?= base_url('galeri') ?>" class="text-sm lg:text-base transition 'text-[#0B4A2D] font-bold border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">Galeri</a>
+                    <a href="<?= base_url('pusat-unduhan') ?>" class="text-sm lg:text-base transition 'text-[#0B4A2D] font-bold border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">Pusat Unduhan</a>
 
                     <a href="<?= $linkDaftar ?>" <?= $targetDaftar ?> <?= $onclickDaftar ?> class="bg-[#00A859] hover:bg-green-600 text-white px-5 lg:px-6 py-2.5 rounded-lg font-bold text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 ml-2">
                         Daftar Sekarang
@@ -206,6 +207,7 @@ $isBerita  = (strpos($currentUri, 'kegiatan') === 0);
 
                 <a href="<?= base_url('kalender') ?>" class="block px-3 py-2 text-base font-semibold hover:text-[#00A859]">Kalender Akademik</a>
                 <a href="<?= base_url('galeri') ?>" class="block px-3 py-2 text-base font-semibold hover:text-[#00A859]">Galeri</a>
+                <a href="<?= base_url('pusat-unduhan') ?>" class="block px-3 py-2 text-base font-semibold hover:text-[#00A859]">Pusat Unduhan</a>
 
                 <div class="pt-4 pb-2">
                     <a href="<?= $linkDaftar ?>" <?= $targetDaftar ?> <?= $onclickDaftar ?> class="block w-full text-center bg-[#00A859] hover:bg-green-600 text-white px-5 py-3 rounded-lg font-bold text-base shadow-md transition">
