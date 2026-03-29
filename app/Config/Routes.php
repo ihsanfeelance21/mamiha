@@ -128,6 +128,11 @@ $routes->group('admin', function ($routes) {
         $routes->post('update/(:num)', 'Admin\UnduhanController::update/$1');
         $routes->get('delete/(:num)', 'Admin\UnduhanController::delete/$1');
     });
+    $routes->group('kontak', function ($routes) {
+        $routes->get('/', 'Admin\KontakController::index');
+        $routes->get('show/(:num)', 'Admin\KontakController::show/$1');
+        $routes->get('delete/(:num)', 'Admin\KontakController::delete/$1');
+    });
 });
 // --- ROUTES PROFIL ---
 $routes->group('profil', function ($routes) {
@@ -163,3 +168,6 @@ $routes->get('galeri/(:segment)', 'GaleriController::detail/$1');
 $routes->get('galeri-video', 'GaleriController::video');
 
 $routes->get('/pusat-unduhan', 'Unduhan::index');
+
+$routes->get('/hubungi-kami', 'Kontak::index');
+$routes->post('/hubungi-kami/kirim', 'Kontak::kirim');

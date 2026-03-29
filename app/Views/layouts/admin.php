@@ -161,6 +161,11 @@ $currentUri = uri_string();
                 <i class="fa-solid fa-user-plus w-5 text-center text-sm"></i>
                 <span class="font-medium text-sm">Manajemen PPDB</span>
             </a>
+            <a href="<?= base_url('admin/kontak') ?>"
+                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 <?= url_is('admin/kontak*') ? 'bg-[#00A859] text-white shadow-md' : 'text-green-100 hover:bg-white/10' ?>">
+                <i class="fa-solid fa-envelope-open-text w-5 text-center text-sm"></i>
+                <span class="font-medium text-sm">Kelola Kontak Masuk</span>
+            </a>
 
             <div x-data="{ open: <?= (strpos($currentUri, 'admin/pengaturan') !== false || strpos($currentUri, 'admin/akses-cepat') !== false) ? 'true' : 'false' ?> }">
                 <button @click="open = !open"
