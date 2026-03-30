@@ -100,6 +100,9 @@ $currentUri = uri_string();
                     <a href="<?= base_url('admin/guru') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/guru*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
                         <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Data Guru & Staff
                     </a>
+                    <a href="<?= base_url('admin/bakat-minat') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/bakat-minat*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Bakat Minat
+                    </a>
                     <a href="<?= base_url('admin/testimoni') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/testimoni*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
                         <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Testimoni
                     </a>
