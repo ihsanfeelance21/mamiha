@@ -1,7 +1,19 @@
 <?php
-// Mengambil data pengaturan untuk Favicon dan Title di Admin
 $pengaturan = (new \App\Models\PengaturanModel())->first();
 $currentUri = uri_string();
+
+// Cek agar fungsi tidak dideklarasikan dua kali
+if (!function_exists('hasAccess')) {
+    function hasAccess($slug)
+    {
+        if (session()->get('role') === 'superadmin') return true;
+        $db = \Config\Database::connect();
+        return $db->table('user_permissions')
+            ->where('id_user', session()->get('id_user'))
+            ->where('menu_slug', $slug)
+            ->countAllResults() > 0;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -203,13 +215,17 @@ $currentUri = uri_string();
                     <a href="<?= base_url('admin/unduhan') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/unduhan*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
                         <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Pusat Unduhan
                     </a>
+
                 </div>
+                <a href="<?= base_url('admin/users') ?>" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-200 hover:bg-red-500/20 <?= url_is('admin/users*') ? 'bg-red-500/20 font-bold' : '' ?>">
+                    <i class="fa-solid fa-user-shield w-5 text-center text-sm"></i> <span class="text-sm">Manajemen User</span>
+                </a>
             </div>
 
         </nav>
 
         <div class="p-4 border-t border-white/10 bg-[#083a23] shrink-0">
-            <a href="<?= base_url('logout') ?>" class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-red-100 hover:text-white bg-red-500/10 hover:bg-red-500 transition-colors w-full font-bold text-sm">
+            <a href="<?= base_url('logout') ?>" class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-green-100 hover:text-white bg-green-500/10 hover:bg-green-500 transition-colors w-full font-bold text-sm">
                 <i class="fa-solid fa-right-from-bracket"></i> Keluar
             </a>
         </div>
