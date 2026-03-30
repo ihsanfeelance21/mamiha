@@ -133,6 +133,26 @@ $routes->group('admin', function ($routes) {
         $routes->get('show/(:num)', 'Admin\KontakController::show/$1');
         $routes->get('delete/(:num)', 'Admin\KontakController::delete/$1');
     });
+    $routes->group('universitas', function ($routes) {
+        $routes->get('/', 'Admin\Universitas::index');
+        $routes->post('simpan', 'Admin\Universitas::store');
+        $routes->post('update/(:num)', 'Admin\Universitas::update/$1');
+        $routes->get('edit/(:num)', 'Admin\Universitas::edit/$1');
+        $routes->get('hapus/(:num)', 'Admin\Universitas::delete/$1');
+    });
+    $routes->group('alumni', function ($routes) {
+        $routes->get('/', 'Admin\Alumni::index');
+        $routes->get('create', 'Admin\Alumni::create');
+        $routes->post('simpan', 'Admin\Alumni::store');
+        $routes->get('edit/(:num)', 'Admin\Alumni::edit/$1');
+        $routes->post('update/(:num)', 'Admin\Alumni::update/$1');
+        $routes->get('hapus/(:num)', 'Admin\Alumni::delete/$1');
+
+        // Rute Khusus Approval & Slider
+        $routes->get('approve/(:num)', 'Admin\Alumni::approve/$1');
+        $routes->get('reject/(:num)', 'Admin\Alumni::reject/$1');
+        $routes->get('toggle-featured/(:num)', 'Admin\Alumni::toggleFeatured/$1');
+    });
 });
 // --- ROUTES PROFIL ---
 $routes->group('profil', function ($routes) {
@@ -171,3 +191,9 @@ $routes->get('/pusat-unduhan', 'Unduhan::index');
 
 $routes->get('/hubungi-kami', 'Kontak::index');
 $routes->post('/hubungi-kami/kirim', 'Kontak::kirim');
+
+// Halaman Publik Direktori Alumni
+$routes->get('/alumni', 'AlumniPublic::index');
+$routes->get('/alumni/kampus/(:num)', 'AlumniPublic::kampus/$1'); // Untuk lihat detail kampus
+$routes->get('/alumni/daftar', 'AlumniPublic::daftar');
+$routes->post('/alumni/simpan-mandiri', 'AlumniPublic::simpanMandiri');

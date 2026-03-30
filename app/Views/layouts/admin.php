@@ -57,7 +57,7 @@ $currentUri = uri_string();
         class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden" x-cloak>
     </div>
 
-    <aside class="fixed inset-y-0 left-0 z-50 w-[260px] bg-[#0B4A2D] text-white flex flex-col shadow-2xl transition-transform duration-300 transform lg:translate-x-0 lg:static lg:inset-0 shrink-0"
+    <aside class="fixed inset-y-0 left-0 z-50 w-65 bg-[#0B4A2D] text-white flex flex-col shadow-2xl transition-transform duration-300 transform lg:translate-x-0 lg:static lg:inset-0 shrink-0"
         :class="isSidebarOpen ? 'translate-x-0' : '-translate-x-full'">
 
         <div class="h-16 flex items-center justify-between px-6 border-b border-white/10 shrink-0 bg-[#083a23]">
@@ -154,6 +154,26 @@ $currentUri = uri_string();
                 <span class="text-sm">Manajemen PPDB</span>
             </a>
 
+            <div x-data="{ open: <?= url_is('admin/alumni*') ? 'true' : 'false' ?> }">
+
+                <button @click="open = !open" class="w-full flex justify-between items-center text-green-100 hover:bg-white/10 hover:text-white px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none <?= url_is('admin/alumni*') ? 'bg-white/5' : '' ?>">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-graduation-cap w-5 text-center text-sm"></i>
+                        <span class="text-sm font-medium">Manajemen Alumni</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300" :class="open ? 'rotate-180' : ''"></i>
+                </button>
+
+                <div x-show="open" x-collapse x-cloak class="mt-1 space-y-1">
+                    <a href="<?= base_url('admin/alumni') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= (url_is('admin/alumni*') && !url_is('admin/universitas*')) ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Daftar Alumni
+                    </a>
+                    <a href="<?= base_url('admin/universitas') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/universitas*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Kelola Universitas
+                    </a>
+                </div>
+            </div>
+
             <a href="<?= base_url('admin/kontak') ?>"
                 class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 <?= url_is('admin/kontak*') ? 'bg-[#00A859] text-white shadow-md font-semibold' : 'text-green-100 hover:bg-white/10 hover:text-white' ?>">
                 <i class="fa-solid fa-envelope-open-text w-5 text-center text-sm"></i>
@@ -214,7 +234,7 @@ $currentUri = uri_string();
                         <p class="text-xs font-bold text-gray-900 leading-none">Admin Madrasah</p>
                         <p class="text-[10px] text-[#00A859] mt-1 font-semibold uppercase tracking-widest">Administrator</p>
                     </div>
-                    <div class="w-9 h-9 lg:w-10 lg:h-10 bg-gradient-to-br from-[#0B4A2D] to-[#00A859] rounded-full flex items-center justify-center text-white shadow-md border-2 border-green-100">
+                    <div class="w-9 h-9 lg:w-10 lg:h-10 bg-linear-to-br from-[#0B4A2D] to-[#00A859] rounded-full flex items-center justify-center text-white shadow-md border-2 border-green-100">
                         <i class="fa-solid fa-user-shield text-sm"></i>
                     </div>
                 </div>

@@ -36,7 +36,7 @@
                         <div>
                             <h4 class="font-bold text-gray-800 text-sm mb-1">Telepon & Email</h4>
                             <p class="text-gray-500 text-sm">Telp: 085147849869</p>
-                            <p class="text-gray-500 text-sm">Email: smpplus.cordova@gmail.com</p>
+                            <p class="text-gray-500 text-sm">Email: ma.mabadiulihsan@gmail.com</p>
                         </div>
                     </div>
 

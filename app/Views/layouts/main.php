@@ -142,6 +142,9 @@ $isBerita  = (strpos($currentUri, 'kegiatan') === 0);
                             <a href="<?= base_url('profil/bakat-minat') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] border-b border-gray-50 transition-colors">
                                 <i class="fa-solid fa-volleyball w-5 text-center mr-1.5 text-gray-400"></i> Bakat Minat
                             </a>
+                            <a href="<?= base_url('/alumni') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] border-b border-gray-50 transition-colors">
+                                <i class="fa-solid fa-graduation-cap w-5 text-center mr-1.5 text-gray-400"></i> Where Are They Now?
+                            </a>
                             <a href="<?= base_url('profil/testimoni') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] transition-colors">
                                 <i class="fa-solid fa-comments w-5 text-center mr-1.5 text-gray-400"></i> Testimoni
                             </a>
@@ -197,6 +200,7 @@ $isBerita  = (strpos($currentUri, 'kegiatan') === 0);
                         <a href="<?= base_url('profil/madrasah') ?>" class="block px-3 py-2.5 text-sm font-medium text-gray-600 hover:text-[#00A859]">Profil Madrasah</a>
                         <a href="<?= base_url('profil/struktur') ?>" class="block px-3 py-2.5 text-sm font-medium text-gray-600 hover:text-[#00A859]">Struktur Organisasi</a>
                         <a href="<?= base_url('profil/bakat-minat') ?>" class="block px-3 py-2.5 text-sm font-medium text-gray-600 hover:text-[#00A859]">Bakat Minat</a>
+                        <a href="<?= base_url('/alumni') ?>" class="block px-3 py-2.5 text-sm font-medium text-gray-600 hover:text-[#00A859]">Where Are They Now?</a>
                         <a href="<?= base_url('profil/testimoni') ?>" class="block px-3 py-2.5 text-sm font-medium text-gray-600 hover:text-[#00A859]">Testimoni</a>
                     </div>
                 </div>
