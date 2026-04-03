@@ -65,38 +65,51 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     $routes->post('pengaturan/update', 'Admin::update_pengaturan');
 
     // Akses Cepat & Beranda
-    $routes->get('akses-cepat', 'Admin::akses_cepat');
-    $routes->post('akses-cepat/tambah', 'Admin::akses_cepat_tambah');
-    $routes->get('akses-cepat/hapus/(:num)', 'Admin::akses_cepat_hapus/$1');
-    $routes->get('beranda', 'Admin::beranda');
-    $routes->post('beranda/tambah', 'Admin::beranda_tambah');
-    $routes->get('beranda/hapus/(:num)', 'Admin::beranda_hapus/$1');
-    $routes->get('beranda/edit/(:num)', 'Admin::beranda_edit/$1');
-    $routes->post('beranda/update/(:num)', 'Admin::beranda_update/$1');
+    $routes->group('akses-cepat', function ($routes) {
+        $routes->get('/', 'Admin::akses_cepat'); // INI MEMANGGIL FUNGSI YANG TIDAK ADA
+        $routes->post('tambah', 'Admin::akses_cepat_tambah'); // INI JUGA TIDAK ADA
+        $routes->get('hapus/(:num)', 'Admin::akses_cepat_hapus/$1'); // INI JUGA TIDAK ADA
+    });
+
+
+    $routes->group('beranda', function ($routes) {
+        $routes->get('/', 'Admin::beranda');
+        $routes->post('tambah', 'Admin::beranda_tambah');
+        $routes->get('hapus/(:num)', 'Admin::beranda_hapus/$1');
+        $routes->get('edit/(:num)', 'Admin::beranda_edit/$1');
+        $routes->post('update/(:num)', 'Admin::beranda_update/$1');
+    });
 
     // Pendaftaran & Kegiatan
     $routes->get('pendaftaran', 'Admin::pendaftaran');
     $routes->post('pendaftaran/update', 'Admin::update_pendaftaran');
-    $routes->get('kegiatan', 'Admin::kegiatan');
-    $routes->get('kegiatan/tambah', 'Admin::tambah_kegiatan');
-    $routes->post('kegiatan/simpan', 'Admin::simpan_kegiatan');
-    $routes->get('kegiatan/edit/(:num)', 'Admin::edit_kegiatan/$1');
-    $routes->post('kegiatan/update/(:num)', 'Admin::update_kegiatan/$1');
-    $routes->get('kegiatan/hapus/(:num)', 'Admin::hapus_kegiatan/$1');
+    $routes->group('kegiatan', function ($routes) {
+        $routes->get('/', 'Admin::kegiatan');
+        $routes->get('tambah', 'Admin::tambah_kegiatan');
+        $routes->post('simpan', 'Admin::simpan_kegiatan');
+        $routes->get('edit/(:num)', 'Admin::edit_kegiatan/$1');
+        $routes->post('update/(:num)', 'Admin::update_kegiatan/$1');
+        $routes->get('hapus/(:num)', 'Admin::hapus_kegiatan/$1');
+    });
 
     // Testimoni & Profil
-    $routes->get('testimoni', 'AdminTestimoniController::index');
-    $routes->get('testimoni/approve/(:num)', 'AdminTestimoniController::approve/$1');
-    $routes->get('testimoni/reject/(:num)', 'AdminTestimoniController::reject/$1');
-    $routes->get('testimoni/delete/(:num)', 'AdminTestimoniController::delete/$1');
-    $routes->get('profil', 'Admin\ProfilController::index');
-    $routes->post('profil/update-umum', 'Admin\ProfilController::updateUmum');
-    $routes->post('profil/fasilitas/simpan', 'Admin\ProfilController::simpanFasilitas');
-    $routes->post('profil/fasilitas/update/(:num)', 'Admin\ProfilController::updateFasilitas/$1');
-    $routes->get('profil/fasilitas/hapus/(:num)', 'Admin\ProfilController::hapusFasilitas/$1');
-    $routes->get('profil/fasilitas/galeri/(:num)', 'Admin\ProfilController::galeriFasilitas/$1');
-    $routes->post('profil/fasilitas/galeri/simpan', 'Admin\ProfilController::simpanGaleri');
-    $routes->get('profil/fasilitas/galeri/hapus/(:num)', 'Admin\ProfilController::hapusGaleri/$1');
+    $routes->group('testimoni', function ($routes) {
+        $routes->get('/', 'AdminTestimoniController::index');
+        $routes->get('approve/(:num)', 'AdminTestimoniController::approve/$1');
+        $routes->get('reject/(:num)', 'AdminTestimoniController::reject/$1');
+        $routes->get('delete/(:num)', 'AdminTestimoniController::delete/$1');
+    });
+
+    $routes->group('profil', function ($routes) {
+        $routes->get('/', 'Admin\ProfilController::index');
+        $routes->post('update-umum', 'Admin\ProfilController::updateUmum');
+        $routes->post('fasilitas/simpan', 'Admin\ProfilController::simpanFasilitas');
+        $routes->post('fasilitas/update/(:num)', 'Admin\ProfilController::updateFasilitas/$1');
+        $routes->get('fasilitas/hapus/(:num)', 'Admin\ProfilController::hapusFasilitas/$1');
+        $routes->get('fasilitas/galeri/(:num)', 'Admin\ProfilController::galeriFasilitas/$1');
+        $routes->post('fasilitas/galeri/simpan', 'Admin\ProfilController::simpanGaleri');
+        $routes->get('fasilitas/galeri/hapus/(:num)', 'Admin\ProfilController::hapusGaleri/$1');
+    });
 
     // Modul Lainnya
     $routes->group('bakat-minat', function ($routes) {

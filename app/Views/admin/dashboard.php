@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<div class="relative overflow-hidden bg-gradient-to-br from-[#0B4A2D] to-[#00A859] rounded-[2rem] p-8 mb-8 shadow-xl text-white">
+<div class="relative overflow-hidden bg-linear-to-br from-[#0B4A2D] to-[#00A859] rounded-4xl p-8 mb-8 shadow-xl text-white">
     <div class="relative z-10">
         <div class="flex items-center gap-2 bg-white/20 backdrop-blur-md w-fit px-4 py-1.5 rounded-full border border-white/10 mb-6">
             <i class="fa-solid fa-calendar-day text-xs"></i>

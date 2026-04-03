@@ -35,7 +35,7 @@
             <div class="w-20 h-1.5 bg-[#00A859] mt-8 rounded-full shadow-[0_0_15px_rgba(0,168,89,0.5)]"></div>
         </div>
 
-        <div class="glass p-10 rounded-[2rem] shadow-2xl">
+        <div class="glass p-10 rounded-4xl shadow-2xl">
             <div class="mb-10">
                 <h2 class="text-white text-3xl font-bold mb-2">Login</h2>
                 <p class="text-green-100/40 text-sm italic">Glad you're back.!</p>

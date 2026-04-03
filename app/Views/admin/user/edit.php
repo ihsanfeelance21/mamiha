@@ -28,7 +28,7 @@
             </div>
 
             <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-                <h3 class="font-bold text-gray-800 border-b border-gray-50 pb-3 mb-4 text-sm uppercase tracking-wider text-green-600">Hak Akses Menu</h3>
+                <h3 class="font-bold text-gray-800 border-b border-gray-50 pb-3 mb-4 text-sm uppercase tracking-wider">Hak Akses Menu</h3>
                 <div class="overflow-hidden border border-gray-50 rounded-2xl">
                     <table class="w-full text-left text-sm">
                         <thead class="bg-gray-50 text-gray-500 text-[10px] uppercase font-bold">

@@ -156,6 +156,53 @@ class Admin extends BaseController
         return redirect()->to('admin/pengaturan')->with('pesan', 'Pengaturan diperbarui!');
     }
 
+    public function akses_cepat()
+    {
+        $this->cekIzin('beranda'); // Atau ganti 'akses_cepat' jika Mas punya permission khusus
+        $data = [
+            'title'       => 'Kelola Akses Cepat',
+            'akses_cepat' => (new AksesCepatModel())->findAll()
+        ];
+        return view('admin/akses_cepat', $data); // Pastikan view 'admin/akses_cepat.php' ada
+    }
+
+    public function akses_cepat_tambah()
+    {
+        $this->cekIzin('beranda');
+        $model = new AksesCepatModel();
+
+        // 1. Validasi disesuaikan dengan atribut name="..." di View
+        $rules = [
+            'nama_link' => 'required',
+            'url_link'  => 'required'
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('error', 'Semua kolom wajib diisi.');
+        }
+
+        // 2. Disimpan dengan nama kolom yang sesuai di Model
+        $model->save([
+            'nama_link' => $this->request->getPost('nama_link'),
+            'url_link'  => $this->request->getPost('url_link')
+        ]);
+
+        return redirect()->to('admin/akses-cepat')->with('pesan', 'Menu Akses Cepat berhasil ditambahkan!');
+    }
+
+    public function akses_cepat_hapus($id)
+    {
+        $this->cekIzin('beranda');
+        $model = new AksesCepatModel();
+
+        if ($model->find($id)) {
+            $model->delete($id);
+            return redirect()->to('admin/akses-cepat')->with('pesan', 'Menu Akses Cepat berhasil dihapus!');
+        }
+
+        return redirect()->to('admin/akses-cepat')->with('error', 'Data tidak ditemukan.');
+    }
+
     // --- MANAJEMEN PPDB ---
     public function pendaftaran()
     {
@@ -209,5 +256,92 @@ class Admin extends BaseController
             return redirect()->to('admin/beranda')->with('pesan', 'Slide ditambahkan!');
         }
         return redirect()->back()->with('error', 'Gagal upload.');
+    }
+
+    public function beranda_edit($id)
+    {
+        $this->cekIzin('beranda');
+        $heroModel = new HeroSliderModel();
+
+        $data = [
+            'title' => 'Edit Hero Slider',
+            'slide' => $heroModel->find($id)
+        ];
+
+        if (!$data['slide']) {
+            return redirect()->to('admin/beranda')->with('error', 'Data tidak ditemukan.');
+        }
+
+        // Pastikan file view 'app/Views/admin/beranda_edit.php' tersedia
+        return view('admin/beranda_edit', $data);
+    }
+
+    public function beranda_update($id)
+    {
+        $this->cekIzin('beranda');
+        $heroModel = new HeroSliderModel();
+        $slideLama = $heroModel->find($id);
+
+        if (!$slideLama) {
+            return redirect()->to('admin/beranda')->with('error', 'Data tidak ditemukan.');
+        }
+
+        // 1. Tangani Gambar Desktop
+        $fileGambar = $this->request->getFile('gambar');
+        $namaGambar = $slideLama['gambar']; // Default pakai yang lama
+
+        if ($fileGambar && $fileGambar->isValid()) {
+            $namaGambar = $fileGambar->getRandomName();
+            $fileGambar->move('uploads/hero', $namaGambar);
+            if (!empty($slideLama['gambar']) && file_exists('uploads/hero/' . $slideLama['gambar'])) {
+                unlink('uploads/hero/' . $slideLama['gambar']);
+            }
+        }
+
+        // 2. Tangani Gambar Mobile
+        $fileMobile = $this->request->getFile('gambar_mobile');
+        $namaMobile = $slideLama['gambar_mobile']; // Default pakai yang lama
+
+        if ($fileMobile && $fileMobile->isValid()) {
+            $namaMobile = $fileMobile->getRandomName();
+            $fileMobile->move('uploads/hero', $namaMobile);
+            if (!empty($slideLama['gambar_mobile']) && file_exists('uploads/hero/' . $slideLama['gambar_mobile'])) {
+                unlink('uploads/hero/' . $slideLama['gambar_mobile']);
+            }
+        }
+
+        // 3. Update SEMUA data sesuai dengan allowedFields di Model
+        $heroModel->update($id, [
+            'gambar'        => $namaGambar,
+            'gambar_mobile' => $namaMobile,
+            'label'         => $this->request->getPost('label'),
+            'judul'         => $this->request->getPost('judul'),
+            'subjudul'      => $this->request->getPost('subjudul'),
+            'btn1_teks'     => $this->request->getPost('btn1_teks'),
+            'btn1_url'      => $this->request->getPost('btn1_url'),
+            'btn2_teks'     => $this->request->getPost('btn2_teks'),
+            'btn2_url'      => $this->request->getPost('btn2_url'),
+        ]);
+
+        return redirect()->to('admin/beranda')->with('pesan', 'Slide berhasil diperbarui secara menyeluruh!');
+    }
+
+    public function beranda_hapus($id)
+    {
+        $this->cekIzin('beranda');
+        $heroModel = new HeroSliderModel();
+        $slide = $heroModel->find($id);
+
+        if ($slide) {
+            // Hapus file fisiknya juga
+            if (!empty($slide['gambar']) && file_exists('uploads/hero/' . $slide['gambar'])) {
+                unlink('uploads/hero/' . $slide['gambar']);
+            }
+            // Hapus dari database
+            $heroModel->delete($id);
+            return redirect()->to('admin/beranda')->with('pesan', 'Slide berhasil dihapus!');
+        }
+
+        return redirect()->to('admin/beranda')->with('error', 'Data tidak ditemukan.');
     }
 }

@@ -23,13 +23,13 @@ class Auth extends BaseController
         $user = $userModel->where('username', $username)->first();
 
         // ==========================================
-        // 🛑 KODE RESET PASSWORD SEMENTARA
+        // ðŸ›‘ KODE RESET PASSWORD SEMENTARA
         // ==========================================
         // if ($username === 'admin') {
         //     $userModel->update($user['id_user'], [
         //         'password' => password_hash('admin123', PASSWORD_DEFAULT)
         //     ]);
-        //     die('✅ BERHASIL! Password admin telah direset menjadi: admin123. Silakan hapus/comment kode ini dan ulangi login.');
+        //     die('âœ… BERHASIL! Password admin telah direset menjadi: admin123. Silakan hapus/comment kode ini dan ulangi login.');
         // }
         // ==========================================
 
