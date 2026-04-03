@@ -378,7 +378,7 @@ if ($isBuka) {
                     Prestasi Membanggakan
                 </h2>
             </div>
-            <a href="/prestasi" class="group inline-flex items-center gap-2 text-[#00A859] font-bold hover:text-[#0B4A2D] transition-colors duration-300">
+            <a href="<?= base_url('prestasi') ?>" class="group inline-flex items-center gap-2 text-[#00A859] font-bold hover:text-[#0B4A2D] transition-colors duration-300">
                 Lihat Semua Prestasi
                 <span class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center group-hover:bg-[#0B4A2D] group-hover:text-white transition-colors duration-300">
                     <i class="fa-solid fa-arrow-right"></i>
@@ -388,101 +388,63 @@ if ($isBuka) {
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
 
-            <div class="group relative bg-gray-100 rounded-4xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 h-120 md:h-130">
-                <img src="path/to/your/image.png" alt="Poster Prestasi" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+            <?php if (!empty($prestasi)) : ?>
+                <?php foreach ($prestasi as $item) : ?>
+                    <div class="group relative bg-gray-100 rounded-4xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 h-120 md:h-130">
 
-                <div class="absolute top-5 left-5 bg-white px-3.5 py-1.5 rounded-full text-[11px] font-extrabold text-gray-800 shadow-md flex items-center gap-2 z-10">
-                    <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
-                    JUARA 3 HARAPAN NASIONAL
-                </div>
+                        <?php if ($item['gambar']) : ?>
+                            <img src="<?= base_url('uploads/prestasi/' . $item['gambar']) ?>" alt="<?= esc($item['judul']) ?>" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <?php else : ?>
+                            <div class="absolute inset-0 w-full h-full flex items-center justify-center bg-gray-200 text-gray-400">Tanpa Gambar</div>
+                        <?php endif; ?>
 
-                <div class="absolute bottom-5 left-5 right-5 bg-white rounded-2xl p-5 shadow-xl z-10 flex flex-col">
-                    <div class="mb-1.5">
-                        <span class="text-gray-400 font-bold text-[10px] uppercase tracking-widest">Tingkat Nasional</span>
-                    </div>
-                    <h3 class="text-lg font-extrabold text-gray-800 leading-tight mb-2 line-clamp-2 group-hover:text-[#00A859] transition-colors">
-                        Lomba Baca Puisi Soekarno
-                    </h3>
-                    <p class="text-gray-500 text-xs leading-relaxed mb-4 line-clamp-2">
-                        Lomba Baca Puisi Soekarno "Aku Melihat Indonesia" pada Kategori Pelajar Tingkat Menengah...
-                    </p>
-                    <div class="pt-4 border-t border-gray-100 flex items-center justify-between gap-2">
-                        <div class="flex items-center gap-2 truncate">
-                            <div class="w-6 h-6 rounded-full bg-gray-50 text-gray-400 border border-gray-100 flex items-center justify-center shrink-0">
-                                <i class="fa-regular fa-user text-[10px]"></i>
+                        <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
+
+                        <div class="absolute top-5 left-5 bg-white px-3.5 py-1.5 rounded-full text-[11px] font-extrabold text-gray-800 shadow-md flex items-center gap-2 z-10">
+                            <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                            <?= esc(strtoupper($item['juara'])) ?>
+                        </div>
+
+                        <div class="absolute bottom-5 left-5 right-5 bg-white rounded-2xl p-5 shadow-xl z-10 flex flex-col">
+                            <div class="mb-1.5">
+                                <span class="text-gray-400 font-bold text-[10px] uppercase tracking-widest"><?= esc($item['kategori_prestasi']) ?></span>
                             </div>
-                            <span class="font-bold text-gray-600 text-xs truncate">Khuzaimah Syifa</span>
-                        </div>
-                        <div class="bg-yellow-50 text-yellow-600 px-2.5 py-1 rounded text-[11px] font-bold shrink-0">
-                            2025
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="group relative bg-gray-100 rounded-4xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 h-120 md:h-130">
-                <img src="path/to/your/image.png" alt="Poster Prestasi" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <a href="<?= base_url('prestasi/' . $item['slug']) ?>" class="block">
+                                <h3 class="text-lg font-extrabold text-gray-800 leading-tight mb-2 line-clamp-2 group-hover:text-[#00A859] transition-colors" title="<?= esc($item['judul']) ?>">
+                                    <?= esc($item['judul']) ?>
+                                </h3>
+                            </a>
 
-                <div class="absolute top-5 left-5 bg-white px-3.5 py-1.5 rounded-full text-[11px] font-extrabold text-gray-800 shadow-md flex items-center gap-2 z-10">
-                    <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
-                    JUARA 3
-                </div>
+                            <p class="text-gray-500 text-xs leading-relaxed mb-4 line-clamp-2">
+                                <?= esc(mb_substr(strip_tags($item['konten']), 0, 100)) ?>...
+                            </p>
 
-                <div class="absolute bottom-5 left-5 right-5 bg-white rounded-2xl p-5 shadow-xl z-10 flex flex-col">
-                    <div class="mb-1.5">
-                        <span class="text-gray-400 font-bold text-[10px] uppercase tracking-widest">Tingkat Kabupaten</span>
-                    </div>
-                    <h3 class="text-lg font-extrabold text-gray-800 leading-tight mb-2 line-clamp-2 group-hover:text-[#00A859] transition-colors">
-                        JUNIO 2025 (Junior National Olympiad)
-                    </h3>
-                    <p class="text-gray-500 text-xs leading-relaxed mb-4 line-clamp-2">
-                        Salah satu perwakilan siswi MA Mabadi'ul Ihsan berhasil menyabet juara 3 pada ajang olimpiade...
-                    </p>
-                    <div class="pt-4 border-t border-gray-100 flex items-center justify-between gap-2">
-                        <div class="flex items-center gap-2 truncate">
-                            <div class="w-6 h-6 rounded-full bg-gray-50 text-gray-400 border border-gray-100 flex items-center justify-center shrink-0">
-                                <i class="fa-regular fa-user text-[10px]"></i>
+                            <div class="pt-4 border-t border-gray-100 flex items-center justify-between gap-2">
+                                <div class="flex items-center gap-2 truncate">
+                                    <div class="w-6 h-6 rounded-full bg-gray-50 text-gray-400 border border-gray-100 flex items-center justify-center shrink-0">
+                                        <i class="fa-regular fa-user text-[10px]"></i>
+                                    </div>
+                                    <span class="font-bold text-gray-600 text-xs truncate" title="<?= esc($item['nama_pemenang']) ?>">
+                                        <?= esc($item['nama_pemenang']) ?>
+                                    </span>
+                                </div>
+                                <div class="bg-green-50 text-green-600 px-2.5 py-1 rounded text-[11px] font-bold shrink-0">
+                                    <?= esc($item['tahun_perolehan']) ?>
+                                </div>
                             </div>
-                            <span class="font-bold text-gray-600 text-xs truncate">Cahaya Nadine</span>
-                        </div>
-                        <div class="bg-yellow-50 text-yellow-600 px-2.5 py-1 rounded text-[11px] font-bold shrink-0">
-                            2025
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div class="group relative bg-gray-100 rounded-4xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 h-120 md:h-130">
-                <img src="path/to/your/image.png" alt="Poster Prestasi" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-
-                <div class="absolute top-5 left-5 bg-white px-3.5 py-1.5 rounded-full text-[11px] font-extrabold text-gray-800 shadow-md flex items-center gap-2 z-10">
-                    <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
-                    JUARA FAVORIT
-                </div>
-
-                <div class="absolute bottom-5 left-5 right-5 bg-white rounded-2xl p-5 shadow-xl z-10 flex flex-col">
-                    <div class="mb-1.5">
-                        <span class="text-gray-400 font-bold text-[10px] uppercase tracking-widest">Tingkat Kecamatan</span>
+                <?php endforeach; ?>
+            <?php else : ?>
+                <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-12 bg-white rounded-3xl border border-gray-100">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-50 mb-4">
+                        <i class="fa-solid fa-trophy text-2xl text-green-500"></i>
                     </div>
-                    <h3 class="text-lg font-extrabold text-gray-800 leading-tight mb-2 line-clamp-2 group-hover:text-[#00A859] transition-colors">
-                        Lomba Desain Poster Digital
-                    </h3>
-                    <p class="text-gray-500 text-xs leading-relaxed mb-4 line-clamp-2">
-                        Alhamdulillah perwakilan sekolah melalui wakilnya atas nama Moh. Raditya berhasil menjadi juara...
-                    </p>
-                    <div class="pt-4 border-t border-gray-100 flex items-center justify-between gap-2">
-                        <div class="flex items-center gap-2 truncate">
-                            <div class="w-6 h-6 rounded-full bg-gray-50 text-gray-400 border border-gray-100 flex items-center justify-center shrink-0">
-                                <i class="fa-regular fa-user text-[10px]"></i>
-                            </div>
-                            <span class="font-bold text-gray-600 text-xs truncate">Moh. Raditya F.</span>
-                        </div>
-                        <div class="bg-yellow-50 text-yellow-600 px-2.5 py-1 rounded text-[11px] font-bold shrink-0">
-                            2025
-                        </div>
-                    </div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">Belum Ada Data Prestasi</h3>
+                    <p class="text-gray-500 text-sm">Data prestasi siswa akan ditampilkan di sini.</p>
                 </div>
-            </div>
+            <?php endif; ?>
 
         </div>
     </div>

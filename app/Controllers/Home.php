@@ -6,6 +6,7 @@ use App\Models\BeritaModel;
 use App\Models\TestimoniModel;
 use App\Models\ProfilWebsiteModel;
 use App\Models\HeroSliderModel;
+use App\Models\PrestasiModel;
 
 class Home extends BaseController
 {
@@ -16,6 +17,7 @@ class Home extends BaseController
         $heroModel      = new HeroSliderModel();
         $testimoniModel = new TestimoniModel();
         $profilModel    = new ProfilWebsiteModel();
+        $prestasiModel  = new PrestasiModel();
 
         // 2. Kumpulkan SEMUA data ke dalam SATU array $data
         $data = [
@@ -37,6 +39,9 @@ class Home extends BaseController
                 ->orderBy('berita.waktu_tayang', 'DESC')
                 ->limit(3)
                 ->find(),
+
+            // <-- MENGAMBIL 3 DATA PRESTASI TERBARU -->
+            'prestasi'          => $prestasiModel->orderBy('created_at', 'DESC')->limit(3)->findAll(),
 
             // Mengambil data slider
             'sliders'           => $heroModel->findAll(),
