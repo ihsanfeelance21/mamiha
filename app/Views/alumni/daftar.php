@@ -16,11 +16,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="nama_alumni">Nama Lengkap <span class="text-red-500">*</span></label>
-                        <input type="text" name="nama_alumni" id="nama_alumni" required placeholder="Cth: Budi Santoso" class="shadow-sm border border-gray-300 rounded-lg w-full py-2.5 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition">
+                        <input type="text" name="nama_alumni" id="nama_alumni" required placeholder="Cth: Muhamad Ihsan Kurniawan" class="shadow-sm border border-gray-300 rounded-lg w-full py-2.5 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition">
                     </div>
                     <div>
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="tahun_lulus">Tahun Lulus SMA <span class="text-red-500">*</span></label>
-                        <input type="number" name="tahun_lulus" id="tahun_lulus" required placeholder="Cth: 2022" class="shadow-sm border border-gray-300 rounded-lg w-full py-2.5 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="tahun_lulus">Tahun Lulus <span class="text-red-500">*</span></label>
+                        <input type="number" name="tahun_lulus" id="tahun_lulus" required placeholder="Cth: 2023" class="shadow-sm border border-gray-300 rounded-lg w-full py-2.5 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition">
                     </div>
                 </div>
 
@@ -42,17 +42,17 @@
                 </div>
 
                 <div class="mb-6">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="jurusan">Pekerjaan / Jurusan Anda Saat Ini</label>
-                    <input type="text" name="jurusan" id="jurusan" placeholder="Cth: S1 Teknik Informatika" class="shadow-sm border border-gray-300 rounded-lg w-full py-2.5 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="jurusan">Jurusan Anda Saat Ini</label>
+                    <input type="text" name="jurusan" id="jurusan" placeholder="Cth: S1 Informatika" class="shadow-sm border border-gray-300 rounded-lg w-full py-2.5 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition">
                 </div>
 
                 <div class="mb-6">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="pesan_kesan">Testimoni / Pesan Kesan (Opsional)</label>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="pesan_kesan">Pesan Kesan (Opsional)</label>
                     <textarea name="pesan_kesan" id="pesan_kesan" rows="4" placeholder="Bagikan pengalaman menarik Anda..." class="shadow-sm border border-gray-300 rounded-lg w-full py-2.5 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition"></textarea>
                 </div>
 
                 <div class="mb-8 p-4 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="foto">Upload Foto Profil Terbaru (Opsional)</label>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="foto">Upload Foto Profil Terbaru</label>
                     <input type="file" name="foto" id="foto" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-600 file:text-white hover:file:bg-green-700 transition">
                 </div>
 

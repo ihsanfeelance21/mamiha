@@ -27,6 +27,27 @@ $currentUri = uri_string(); // Mengambil url saat ini (misal: 'profil/madrasah')
 $isBeranda = ($currentUri == '' || $currentUri == '/');
 $isProfil  = (strpos($currentUri, 'profil') === 0);
 $isBerita  = (strpos($currentUri, 'kegiatan') === 0);
+
+// ==============================================================
+// ðŸš€ LOGIKA SETUP META SEO & SHARE SOSMED
+// ==============================================================
+$metaTitle = $title ?? $pengaturan['nama_sekolah'] ?? 'MA Mabadi\'ul Ihsan';
+$metaDesc = $pengaturan['meta_deskripsi'] ?? $pengaturan['deskripsi_footer'] ?? 'Madrasah Aliyah berbasis pesantren Islam yang menggabungkan pendidikan agama dan umum modern.';
+$metaKeywords = $pengaturan['meta_keywords'] ?? 'madrasah aliyah, ma mabadiul ihsan, pesantren banyuwangi, sekolah tegalsari, pendaftaran siswa baru';
+$metaAuthor = $pengaturan['nama_sekolah'] ?? 'MA Mabadi\'ul Ihsan';
+$currentUrl = current_url();
+
+// Penentuan Gambar untuk Share (Penting!)
+if (isset($meta_image)) {
+    // 1. Jika dikirim dari Controller (misal halaman detail berita), pakai gambar berita
+    $ogImage = base_url($meta_image);
+} elseif (!empty($pengaturan['logo'])) {
+    // 2. Jika tidak ada gambar khusus, pakai Logo dari tabel pengaturan
+    $ogImage = base_url('uploads/pengaturan/' . $pengaturan['logo']);
+} else {
+    // 3. Fallback terakhir jika semua kosong
+    $ogImage = base_url('uploads/default-share.jpg');
+}
 ?>
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
@@ -34,11 +55,27 @@ $isBerita  = (strpos($currentUri, 'kegiatan') === 0);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="<?= esc($pengaturan['meta_deskripsi'] ?? $pengaturan['deskripsi_footer']) ?>">
-    <meta name="keywords" content="<?= esc($pengaturan['meta_keywords'] ?? 'madrasah, sekolah') ?>">
-    <meta name="author" content="<?= esc($pengaturan['nama_sekolah']) ?>">
 
-    <title><?= $title ?? $pengaturan['nama_sekolah'] ?></title>
+    <title><?= esc($metaTitle) ?></title>
+    <meta name="description" content="<?= esc($metaDesc) ?>">
+    <meta name="keywords" content="<?= esc($metaKeywords) ?>">
+    <meta name="author" content="<?= esc($metaAuthor) ?>">
+    <link rel="canonical" href="<?= esc($currentUrl) ?>">
+
+    <meta property="og:site_name" content="<?= esc($metaAuthor) ?>">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<?= esc($currentUrl) ?>">
+    <meta property="og:title" content="<?= esc($metaTitle) ?>">
+    <meta property="og:description" content="<?= esc($metaDesc) ?>">
+    <meta property="og:image" content="<?= esc($ogImage) ?>">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="<?= esc($currentUrl) ?>">
+    <meta name="twitter:title" content="<?= esc($metaTitle) ?>">
+    <meta name="twitter:description" content="<?= esc($metaDesc) ?>">
+    <meta name="twitter:image" content="<?= esc($ogImage) ?>">
 
     <?php if (!empty($pengaturan['favicon'])) : ?>
         <link rel="icon" type="image/png" href="<?= base_url('uploads/pengaturan/' . $pengaturan['favicon']) ?>">
@@ -49,6 +86,7 @@ $isBerita  = (strpos($currentUri, 'kegiatan') === 0);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     <?= $this->renderSection('meta') ?>
     <?= $this->renderSection('styles') ?>
 </head>
@@ -265,38 +303,6 @@ $isBerita  = (strpos($currentUri, 'kegiatan') === 0);
                         <i class="fa-brands fa-whatsapp text-2xl text-[#00A859] group-hover:scale-110 transition-transform"></i>
                         Konsultasi Program
                     </a>
-                    <?php if (!$isBuka): ?>
-                        <div id="modalTutup" class="fixed inset-0 z-9999 hidden bg-black/70 items-center justify-center p-4">
-                            <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-8 text-center animate__animated animate__zoomIn">
-
-                                <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-5">
-                                    <i class="fa-solid fa-lock text-red-500 text-4xl"></i>
-                                </div>
-
-                                <?php
-                                // Logika default jika kosong
-                                $pesanTutup = !empty($ppdb['pesan_tutup']) ? $ppdb['pesan_tutup'] : 'Mohon maaf, pendaftaran siswa baru saat ini belum dibuka / telah ditutup. Untuk informasi lebih lanjut, silakan hubungi admin kami.';
-
-                                // Prioritaskan WA PPDB, jika kosong pakai WA Utama
-                                $linkAdminPPDB = !empty($ppdb['link_admin_ppdb']) ? $ppdb['link_admin_ppdb'] : ($pengaturan['link_whatsapp'] ?? '#');
-                                ?>
-
-                                <h3 class="text-2xl font-bold text-gray-800 mb-2">Pendaftaran Ditutup</h3>
-                                <p class="text-gray-600 mb-8 leading-relaxed text-sm"><?= esc($pesanTutup) ?></p>
-
-                                <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                                    <a href="<?= esc($linkAdminPPDB) ?>" target="_blank" class="bg-[#00A859] hover:bg-green-600 text-white px-5 py-2.5 rounded-lg font-semibold transition flex items-center justify-center gap-2">
-                                        <i class="fa-brands fa-whatsapp text-lg"></i> Hubungi Admin
-                                    </a>
-
-                                    <button onclick="document.getElementById('modalTutup').classList.add('hidden'); document.getElementById('modalTutup').classList.remove('flex');" class="bg-gray-100 hover:bg-gray-200 text-gray-800 px-5 py-2.5 rounded-lg font-semibold transition">
-                                        Kembali
-                                    </button>
-                                </div>
-
-                            </div>
-                        </div>
-                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -437,7 +443,7 @@ $isBerita  = (strpos($currentUri, 'kegiatan') === 0);
     </footer>
 
     <?php if ($ppdb && !empty($ppdb['poster'])): ?>
-        <div id="modalPoster" class="fixed inset-0 z-9999 hidden bg-black/80 items-center justify-center p-4">
+        <div id="modalPoster" class="fixed inset-0 z-50 hidden bg-black/80 items-center justify-center p-4" style="z-index: 9999;">
             <div class="relative inline-block max-w-[90vw] max-h-[90vh] animate__animated animate__zoomIn">
                 <img src="<?= base_url('uploads/ppdb/' . $ppdb['poster']) ?>" alt="Poster PPDB" class="max-w-full max-h-[90vh] block rounded-lg shadow-2xl object-contain">
                 <button onclick="closePoster()" class="absolute top-3 right-3 w-8 h-8 flex items-center justify-center bg-black/50 hover:bg-black/80 text-white rounded-full text-xl transition duration-300 focus:outline-none shadow-md">
@@ -469,7 +475,7 @@ $isBerita  = (strpos($currentUri, 'kegiatan') === 0);
     <?php endif; ?>
 
     <?php if (!$isBuka): ?>
-        <div id="modalTutup" class="fixed inset-0 z-9999 hidden bg-black/70 items-center justify-center p-4">
+        <div id="modalTutup" class="fixed inset-0 z-50 hidden bg-black/70 items-center justify-center p-4" style="z-index: 9999;">
             <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-8 text-center animate__animated animate__zoomIn">
 
                 <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-5">
@@ -500,6 +506,7 @@ $isBerita  = (strpos($currentUri, 'kegiatan') === 0);
             </div>
         </div>
     <?php endif; ?>
+
     <button id="btnBackToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-6 right-6 md:bottom-10 md:right-10 bg-[#00A859] text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center opacity-0 invisible transition-all duration-300 z-50 hover:bg-green-600 hover:-translate-y-1 hover:shadow-xl focus:outline-none">
         <i class="fa-solid fa-arrow-up text-lg"></i>
     </button>
