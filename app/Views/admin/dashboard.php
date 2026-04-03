@@ -10,7 +10,7 @@
 
         <h1 class="text-3xl md:text-4xl font-black mb-3 leading-tight">
             Selamat Datang, <br class="md:hidden">
-            <span class="text-yellow-300"><?= session()->get('nama_lengkap') ?>!</span> 👋
+            <span class="text-yellow-300"><?= session()->get('nama_lengkap') ?>!</span> ðŸ‘‹
         </h1>
         <p class="text-green-50/80 max-w-2xl text-sm md:text-base leading-relaxed mb-8">
             Ini adalah pusat kendali utama Anda. Pantau perkembangan data akademik, publikasikan berita terbaru, dan kelola konfigurasi website dengan mudah.

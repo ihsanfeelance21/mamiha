@@ -15,7 +15,7 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
             <h2 class="text-lg font-semibold mb-4 border-b pb-2">Tambah Universitas</h2>
-            <form action="<?= base_url('admin/universitas/store'); ?>" method="post" enctype="multipart/form-data">
+            <form action="<?= base_url('admin/universitas/simpan'); ?>" method="post" enctype="multipart/form-data">
                 <?= csrf_field(); ?>
 
                 <div class="mb-4">
@@ -71,7 +71,7 @@
                             <td class="py-3 px-4 font-medium text-gray-700"><?= esc($u['nama_universitas']); ?></td>
                             <td class="py-3 px-4 text-center">
                                 <a href="<?= base_url('admin/universitas/edit/' . $u['id_universitas']); ?>" class="bg-yellow-100 text-yellow-600 hover:bg-yellow-500 hover:text-white py-1 px-3 rounded text-xs transition duration-150 mr-1">Edit</a>
-                                <a href="<?= base_url('admin/universitas/delete/' . $u['id_universitas']); ?>" class="bg-red-100 text-red-600 hover:bg-red-500 hover:text-white py-1 px-3 rounded text-xs transition duration-150" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
+                                <a href="<?= base_url('admin/universitas/hapus/' . $u['id_universitas']); ?>" class="bg-red-100 text-red-600 hover:bg-red-500 hover:text-white py-1 px-3 rounded text-xs transition duration-150" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

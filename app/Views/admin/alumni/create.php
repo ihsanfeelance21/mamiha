@@ -16,7 +16,7 @@
                     <input type="text" name="nama_alumni" id="nama_alumni" required class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="tahun_lulus">Tahun Lulus SMA</label>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="tahun_lulus">Tahun Lulus</label>
                     <input type="number" name="tahun_lulus" id="tahun_lulus" required class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
             </div>
@@ -32,7 +32,7 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="jurusan">Pekerjaan/Jurusan Saat Ini</label>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="jurusan">Jurusan Saat Ini</label>
                     <input type="text" name="jurusan" id="jurusan" class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
             </div>
