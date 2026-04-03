@@ -127,7 +127,7 @@
                 </div>
                 <h3 class="text-2xl font-bold text-[#0B4A2D] mb-4 relative z-10">Visi Madrasah</h3>
                 <p class="text-lg md:text-xl text-gray-600 font-medium leading-relaxed relative z-10 italic">
-                    "Terwujudnya generasi muslim yang Berakhlakul Karimah, Unggul dalam Prestasi, Mandiri, dan Berwawasan Lingkungan Global."
+                    "<?= nl2br(esc($profil['visi'])) ?>"
                 </p>
             </div>
 
@@ -138,22 +138,22 @@
                 </div>
                 <h3 class="text-2xl font-bold text-[#0B4A2D] mb-5 relative z-10">Misi Madrasah</h3>
                 <ul class="space-y-3 relative z-10 text-sm md:text-base">
-                    <li class="flex items-start gap-3">
-                        <i class="fa-solid fa-circle-check text-[#00A859] mt-1 text-base shrink-0"></i>
-                        <span class="text-gray-600">Menyelenggarakan pembelajaran yang aktif, inovatif, kreatif, dan menyenangkan.</span>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <i class="fa-solid fa-circle-check text-[#00A859] mt-1 text-base shrink-0"></i>
-                        <span class="text-gray-600">Menumbuhkembangkan karakter Islami melalui pembiasaan ibadah dan amaliah sehari-hari.</span>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <i class="fa-solid fa-circle-check text-[#00A859] mt-1 text-base shrink-0"></i>
-                        <span class="text-gray-600">Meningkatkan kompetensi pendidik dan tenaga kependidikan sesuai perkembangan zaman.</span>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <i class="fa-solid fa-circle-check text-[#00A859] mt-1 text-base shrink-0"></i>
-                        <span class="text-gray-600">Menciptakan lingkungan sekolah yang bersih, asri, dan nyaman untuk belajar.</span>
-                    </li>
+                    <?php
+                    // Memecah teks Misi berdasarkan baris baru (enter)
+                    $listMisi = explode("\n", $profil['misi']);
+                    foreach ($listMisi as $misiItem) :
+                        $misiItem = trim($misiItem);
+                        // Hanya tampilkan jika barisnya tidak kosong
+                        if (!empty($misiItem)) :
+                    ?>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-circle-check text-[#00A859] mt-1 text-base shrink-0"></i>
+                                <span class="text-gray-600"><?= esc($misiItem) ?></span>
+                            </li>
+                    <?php
+                        endif;
+                    endforeach;
+                    ?>
                 </ul>
             </div>
         </div>
