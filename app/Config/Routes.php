@@ -58,7 +58,14 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     $routes->get('dashboard', 'Admin::dashboard');
 
     // Manajemen User
-    $routes->get('users', 'Admin\User::index');
+    $routes->group('users', function ($routes) {
+        $routes->get('/', 'Admin\User::index');
+        $routes->get('tambah', 'Admin\User::tambah');
+        $routes->post('simpan', 'Admin\User::simpan');
+        $routes->get('edit/(:num)', 'Admin\User::edit/$1');
+        $routes->post('update/(:num)', 'Admin\User::update/$1');
+        $routes->get('hapus/(:num)', 'Admin\User::hapus/$1');
+    });
 
     // Pengaturan
     $routes->get('pengaturan', 'Admin::pengaturan');

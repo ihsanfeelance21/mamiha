@@ -28,9 +28,7 @@
                 <div>
                     <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Role Utama</label>
                     <select name="role" class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 focus:outline-none">
-                        <option value="admin">Admin Umum</option>
-                        <option value="admin media">Admin Media</option>
-                        <option value="admin artikel">Admin Artikel</option>
+                        <option value="admin">Admin Biasa</option>
                         <option value="superadmin">Superadmin</option>
                     </select>
                 </div>
@@ -49,19 +47,11 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
-                            <?php
-                            $menus = [
-                                'beranda' => 'Slider Beranda',
-                                'kegiatan' => 'Berita & Kegiatan',
-                                'pendaftaran' => 'Manajemen PPDB',
-                                'pengaturan' => 'Konfigurasi Web',
-                                'akses_cepat' => 'Link Akses Cepat'
-                            ];
-                            foreach ($menus as $slug => $nama) : ?>
+                            <?php foreach ($menus as $menu) : ?>
                                 <tr>
-                                    <td class="px-4 py-3 font-medium text-gray-600"><?= $nama ?></td>
+                                    <td class="px-4 py-3 font-medium text-gray-600"><?= esc($menu['nama']) ?></td>
                                     <td class="px-4 py-3 text-center">
-                                        <input type="checkbox" name="permissions[]" value="<?= $slug ?>" class="w-5 h-5 accent-[#00A859] rounded border-gray-300">
+                                        <input type="checkbox" name="permissions[]" value="<?= esc($menu['slug']) ?>" class="w-5 h-5 accent-[#00A859] rounded border-gray-300">
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

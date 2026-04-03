@@ -2,16 +2,13 @@
 $pengaturan = (new \App\Models\PengaturanModel())->first();
 $currentUri = uri_string();
 
-// Cek agar fungsi tidak dideklarasikan dua kali
+// Menggunakan Session untuk mengecek hak akses (Sangat Ringan & Cepat)
 if (!function_exists('hasAccess')) {
     function hasAccess($slug)
     {
         if (session()->get('role') === 'superadmin') return true;
-        $db = \Config\Database::connect();
-        return $db->table('user_permissions')
-            ->where('id_user', session()->get('id_user'))
-            ->where('menu_slug', $slug)
-            ->countAllResults() > 0;
+        $perms = session()->get('permissions') ?? [];
+        return in_array($slug, $perms);
     }
 }
 ?>
@@ -38,7 +35,6 @@ if (!function_exists('hasAccess')) {
             display: none !important;
         }
 
-        /* Custom scrollbar untuk sidebar agar rapi di desktop & mobile */
         .sidebar-scroll::-webkit-scrollbar {
             width: 5px;
         }
@@ -92,135 +88,161 @@ if (!function_exists('hasAccess')) {
                 <span class="text-sm">Dashboard</span>
             </a>
 
-            <div x-data="{ open: <?= (strpos($currentUri, 'admin/beranda') !== false || strpos($currentUri, 'admin/profil') !== false || strpos($currentUri, 'admin/guru') !== false || strpos($currentUri, 'admin/testimoni') !== false || strpos($currentUri, 'admin/berita') !== false || strpos($currentUri, 'admin/kategori-berita') !== false || strpos($currentUri, 'admin/prestasi') !== false || strpos($currentUri, 'admin/pengumuman') !== false || strpos($currentUri, 'admin/kalender') !== false) ? 'true' : 'false' ?> }">
+            <?php if (hasAccess('beranda') || hasAccess('profil') || hasAccess('guru') || hasAccess('kegiatan')) : ?>
+                <div x-data="{ open: <?= (strpos($currentUri, 'admin/beranda') !== false || strpos($currentUri, 'admin/profil') !== false || strpos($currentUri, 'admin/guru') !== false || strpos($currentUri, 'admin/testimoni') !== false || strpos($currentUri, 'admin/berita') !== false || strpos($currentUri, 'admin/kategori-berita') !== false || strpos($currentUri, 'admin/prestasi') !== false || strpos($currentUri, 'admin/pengumuman') !== false || strpos($currentUri, 'admin/kalender') !== false) ? 'true' : 'false' ?> }">
 
-                <button @click="open = !open" class="w-full flex justify-between items-center text-green-100 hover:bg-white/10 hover:text-white px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none <?= (strpos($currentUri, 'admin/beranda') !== false || strpos($currentUri, 'admin/profil') !== false || strpos($currentUri, 'admin/guru') !== false || strpos($currentUri, 'admin/testimoni') !== false || strpos($currentUri, 'admin/berita') !== false || strpos($currentUri, 'admin/kategori-berita') !== false || strpos($currentUri, 'admin/prestasi') !== false || strpos($currentUri, 'admin/pengumuman') !== false || strpos($currentUri, 'admin/kalender') !== false) ? 'bg-white/5' : '' ?>">
-                    <div class="flex items-center gap-3">
-                        <i class="fa-solid fa-layer-group w-5 text-center text-sm"></i>
-                        <span class="text-sm font-medium">Manajemen Halaman</span>
-                    </div>
-                    <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300" :class="open ? 'rotate-180' : ''"></i>
-                </button>
+                    <button @click="open = !open" class="w-full flex justify-between items-center text-green-100 hover:bg-white/10 hover:text-white px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none <?= (strpos($currentUri, 'admin/beranda') !== false || strpos($currentUri, 'admin/profil') !== false || strpos($currentUri, 'admin/guru') !== false || strpos($currentUri, 'admin/testimoni') !== false || strpos($currentUri, 'admin/berita') !== false || strpos($currentUri, 'admin/kategori-berita') !== false || strpos($currentUri, 'admin/prestasi') !== false || strpos($currentUri, 'admin/pengumuman') !== false || strpos($currentUri, 'admin/kalender') !== false) ? 'bg-white/5' : '' ?>">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-layer-group w-5 text-center text-sm"></i>
+                            <span class="text-sm font-medium">Manajemen Halaman</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300" :class="open ? 'rotate-180' : ''"></i>
+                    </button>
 
-                <div x-show="open" x-collapse x-cloak class="mt-1 space-y-1">
-                    <a href="<?= base_url('admin/beranda') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/beranda*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
-                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Slider Beranda
-                    </a>
-                    <a href="<?= base_url('admin/profil') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/profil*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
-                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Profil Madrasah
-                    </a>
-                    <a href="<?= base_url('admin/guru') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/guru*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
-                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Data Guru & Staff
-                    </a>
-                    <a href="<?= base_url('admin/bakat-minat') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/bakat-minat*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
-                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Bakat Minat
-                    </a>
-                    <a href="<?= base_url('admin/testimoni') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/testimoni*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
-                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Testimoni
-                    </a>
+                    <div x-show="open" x-collapse x-cloak class="mt-1 space-y-1">
+                        <?php if (hasAccess('beranda')): ?>
+                            <a href="<?= base_url('admin/beranda') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/beranda*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                                <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Slider Beranda
+                            </a>
+                        <?php endif; ?>
 
-                    <div x-data="{ openBerita: <?= (url_is('admin/berita*') || url_is('admin/kategori-berita*') || url_is('admin/prestasi*') || url_is('admin/pengumuman*')) ? 'true' : 'false' ?> }">
-                        <button @click="openBerita = !openBerita" class="w-full flex items-center justify-between py-2.5 px-10 text-sm rounded-lg transition-colors <?= (url_is('admin/berita*') || url_is('admin/kategori-berita*') || url_is('admin/prestasi*') || url_is('admin/pengumuman*')) ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
-                            <div class="flex items-center">
-                                <i class="fa-solid fa-newspaper text-xs mr-2 opacity-70"></i> Portal Berita
+                        <?php if (hasAccess('profil')): ?>
+                            <a href="<?= base_url('admin/profil') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/profil*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                                <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Profil Madrasah
+                            </a>
+                            <a href="<?= base_url('admin/bakat-minat') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/bakat-minat*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                                <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Bakat Minat
+                            </a>
+                            <a href="<?= base_url('admin/testimoni') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/testimoni*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                                <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Testimoni
+                            </a>
+                        <?php endif; ?>
+
+                        <?php if (hasAccess('guru')): ?>
+                            <a href="<?= base_url('admin/guru') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/guru*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                                <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Data Guru & Staff
+                            </a>
+                        <?php endif; ?>
+
+                        <?php if (hasAccess('kegiatan')): ?>
+                            <div x-data="{ openBerita: <?= (url_is('admin/berita*') || url_is('admin/kategori-berita*') || url_is('admin/prestasi*') || url_is('admin/pengumuman*')) ? 'true' : 'false' ?> }">
+                                <button @click="openBerita = !openBerita" class="w-full flex items-center justify-between py-2.5 px-10 text-sm rounded-lg transition-colors <?= (url_is('admin/berita*') || url_is('admin/kategori-berita*') || url_is('admin/prestasi*') || url_is('admin/pengumuman*')) ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                                    <div class="flex items-center">
+                                        <i class="fa-solid fa-newspaper text-xs mr-2 opacity-70"></i> Portal Berita
+                                    </div>
+                                    <i class="fa-solid fa-angle-down text-[10px] transition-transform duration-300" :class="openBerita ? 'rotate-180' : ''"></i>
+                                </button>
+
+                                <div x-show="openBerita" x-collapse x-cloak class="pl-14 pr-4 py-1.5 space-y-1 bg-black/15 rounded-lg mx-4 mt-1 mb-2">
+                                    <a href="<?= base_url('admin/berita/tambah') ?>" class="block py-2 text-[13px] transition-colors <?= url_is('admin/berita/tambah') ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Tulis Berita Baru</a>
+                                    <a href="<?= base_url('admin/berita') ?>" class="block py-2 text-[13px] transition-colors <?= (url_is('admin/berita*') && !url_is('admin/berita/tambah') && !url_is('admin/berita/tags*')) ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Daftar Berita</a>
+                                    <a href="<?= base_url('admin/kategori-berita') ?>" class="block py-2 text-[13px] transition-colors <?= url_is('admin/kategori-berita*') ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Kategori Berita</a>
+                                    <a href="<?= base_url('admin/berita/tags') ?>" class="block py-2 text-[13px] transition-colors <?= url_is('admin/berita/tags*') ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Kelola Tags</a>
+                                    <a href="<?= base_url('admin/prestasi') ?>" class="block py-2 text-[13px] transition-colors <?= url_is('admin/prestasi*') ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Data Prestasi</a>
+                                    <a href="<?= base_url('admin/pengumuman') ?>" class="block py-2 text-[13px] transition-colors <?= url_is('admin/pengumuman*') ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Pengumuman</a>
+                                </div>
                             </div>
-                            <i class="fa-solid fa-angle-down text-[10px] transition-transform duration-300" :class="openBerita ? 'rotate-180' : ''"></i>
+
+                            <a href="<?= base_url('admin/kalender') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/kalender*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                                <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Kalender Akademik
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <?php if (hasAccess('galeri')) : ?>
+                <div x-data="{ open: <?= url_is('admin/galeri*') ? 'true' : 'false' ?> }">
+
+                    <button @click="open = !open" class="w-full flex justify-between items-center text-green-100 hover:bg-white/10 hover:text-white px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none <?= url_is('admin/galeri*') ? 'bg-white/5' : '' ?>">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-images w-5 text-center text-sm"></i>
+                            <span class="text-sm font-medium">Kelola Galeri</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300" :class="open ? 'rotate-180' : ''"></i>
+                    </button>
+
+                    <div x-show="open" x-collapse x-cloak class="mt-1 space-y-1">
+                        <a href="<?= base_url('admin/galeri') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= (url_is('admin/galeri*') && !url_is('admin/galeri-video*')) ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                            <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Galeri Foto
+                        </a>
+                        <a href="<?= base_url('admin/galeri-video') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/galeri-video*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                            <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Galeri Video
+                        </a>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <?php if (hasAccess('pendaftaran')) : ?>
+                <a href="<?= base_url('admin/pendaftaran') ?>"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 <?= url_is('admin/pendaftaran*') ? 'bg-[#00A859] text-white shadow-md font-semibold' : 'text-green-100 hover:bg-white/10 hover:text-white' ?>">
+                    <i class="fa-solid fa-user-plus w-5 text-center text-sm"></i>
+                    <span class="text-sm">Manajemen PPDB</span>
+                </a>
+            <?php endif; ?>
+
+            <?php if (hasAccess('alumni')) : ?>
+                <div x-data="{ open: <?= url_is('admin/alumni*') ? 'true' : 'false' ?> }">
+
+                    <button @click="open = !open" class="w-full flex justify-between items-center text-green-100 hover:bg-white/10 hover:text-white px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none <?= url_is('admin/alumni*') ? 'bg-white/5' : '' ?>">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-graduation-cap w-5 text-center text-sm"></i>
+                            <span class="text-sm font-medium">Manajemen Alumni</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300" :class="open ? 'rotate-180' : ''"></i>
+                    </button>
+
+                    <div x-show="open" x-collapse x-cloak class="mt-1 space-y-1">
+                        <a href="<?= base_url('admin/alumni') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= (url_is('admin/alumni*') && !url_is('admin/universitas*')) ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                            <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Daftar Alumni
+                        </a>
+                        <a href="<?= base_url('admin/universitas') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/universitas*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                            <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Kelola Universitas
+                        </a>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <?php if (hasAccess('kontak')) : ?>
+                <a href="<?= base_url('admin/kontak') ?>"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 <?= url_is('admin/kontak*') ? 'bg-[#00A859] text-white shadow-md font-semibold' : 'text-green-100 hover:bg-white/10 hover:text-white' ?>">
+                    <i class="fa-solid fa-envelope-open-text w-5 text-center text-sm"></i>
+                    <span class="text-sm">Kotak Masuk</span>
+                </a>
+            <?php endif; ?>
+
+            <?php if (hasAccess('pengaturan') || session()->get('role') === 'superadmin') : ?>
+                <div x-data="{ open: <?= (strpos($currentUri, 'admin/pengaturan') !== false || strpos($currentUri, 'admin/akses-cepat') !== false || strpos($currentUri, 'admin/unduhan') !== false) ? 'true' : 'false' ?> }">
+
+                    <?php if (hasAccess('pengaturan')): ?>
+                        <button @click="open = !open" class="w-full flex justify-between items-center text-green-100 hover:bg-white/10 hover:text-white px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none <?= (strpos($currentUri, 'admin/pengaturan') !== false || strpos($currentUri, 'admin/akses-cepat') !== false || strpos($currentUri, 'admin/unduhan') !== false) ? 'bg-white/5' : '' ?>">
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-gear w-5 text-center text-sm"></i>
+                                <span class="text-sm font-medium">Pengaturan Sistem</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300" :class="open ? 'rotate-180' : ''"></i>
                         </button>
 
-                        <div x-show="openBerita" x-collapse x-cloak class="pl-14 pr-4 py-1.5 space-y-1 bg-black/15 rounded-lg mx-4 mt-1 mb-2">
-                            <a href="<?= base_url('admin/berita/tambah') ?>" class="block py-2 text-[13px] transition-colors <?= url_is('admin/berita/tambah') ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Tulis Berita Baru</a>
-                            <a href="<?= base_url('admin/berita') ?>" class="block py-2 text-[13px] transition-colors <?= (url_is('admin/berita*') && !url_is('admin/berita/tambah') && !url_is('admin/berita/tags*')) ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Daftar Berita</a>
-                            <a href="<?= base_url('admin/kategori-berita') ?>" class="block py-2 text-[13px] transition-colors <?= url_is('admin/kategori-berita*') ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Kategori Berita</a>
-                            <a href="<?= base_url('admin/berita/tags') ?>" class="block py-2 text-[13px] transition-colors <?= url_is('admin/berita/tags*') ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Kelola Tags</a>
-                            <a href="<?= base_url('admin/prestasi') ?>" class="block py-2 text-[13px] transition-colors <?= url_is('admin/prestasi*') ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Data Prestasi</a>
-                            <a href="<?= base_url('admin/pengumuman') ?>" class="block py-2 text-[13px] transition-colors <?= url_is('admin/pengumuman*') ? 'text-[#00A859] font-bold' : 'text-green-200/70 hover:text-white' ?>">Pengumuman</a>
+                        <div x-show="open" x-collapse x-cloak class="mt-1 space-y-1">
+                            <a href="<?= base_url('admin/pengaturan') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/pengaturan*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                                <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Profil Web
+                            </a>
+                            <a href="<?= base_url('admin/akses-cepat') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/akses-cepat*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                                <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Menu Akses Cepat
+                            </a>
+                            <a href="<?= base_url('admin/unduhan') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/unduhan*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
+                                <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Pusat Unduhan
+                            </a>
                         </div>
-                    </div>
+                    <?php endif; ?>
 
-                    <a href="<?= base_url('admin/kalender') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/kalender*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
-                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Kalender Akademik
-                    </a>
+                    <?php if (session()->get('role') === 'superadmin'): ?>
+                        <a href="<?= base_url('admin/users') ?>" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-200 hover:bg-red-500/20 <?= url_is('admin/users*') ? 'bg-red-500/20 font-bold' : '' ?>">
+                            <i class="fa-solid fa-user-shield w-5 text-center text-sm"></i> <span class="text-sm">Manajemen User</span>
+                        </a>
+                    <?php endif; ?>
                 </div>
-            </div>
-
-            <div x-data="{ open: <?= url_is('admin/galeri*') ? 'true' : 'false' ?> }">
-
-                <button @click="open = !open" class="w-full flex justify-between items-center text-green-100 hover:bg-white/10 hover:text-white px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none <?= url_is('admin/galeri*') ? 'bg-white/5' : '' ?>">
-                    <div class="flex items-center gap-3">
-                        <i class="fa-solid fa-images w-5 text-center text-sm"></i>
-                        <span class="text-sm font-medium">Kelola Galeri</span>
-                    </div>
-                    <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300" :class="open ? 'rotate-180' : ''"></i>
-                </button>
-
-                <div x-show="open" x-collapse x-cloak class="mt-1 space-y-1">
-                    <a href="<?= base_url('admin/galeri') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= (url_is('admin/galeri*') && !url_is('admin/galeri-video*')) ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
-                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Galeri Foto
-                    </a>
-                    <a href="<?= base_url('admin/galeri-video') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/galeri-video*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
-                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Galeri Video
-                    </a>
-                </div>
-            </div>
-
-            <a href="<?= base_url('admin/pendaftaran') ?>"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 <?= url_is('admin/pendaftaran*') ? 'bg-[#00A859] text-white shadow-md font-semibold' : 'text-green-100 hover:bg-white/10 hover:text-white' ?>">
-                <i class="fa-solid fa-user-plus w-5 text-center text-sm"></i>
-                <span class="text-sm">Manajemen PPDB</span>
-            </a>
-
-            <div x-data="{ open: <?= url_is('admin/alumni*') ? 'true' : 'false' ?> }">
-
-                <button @click="open = !open" class="w-full flex justify-between items-center text-green-100 hover:bg-white/10 hover:text-white px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none <?= url_is('admin/alumni*') ? 'bg-white/5' : '' ?>">
-                    <div class="flex items-center gap-3">
-                        <i class="fa-solid fa-graduation-cap w-5 text-center text-sm"></i>
-                        <span class="text-sm font-medium">Manajemen Alumni</span>
-                    </div>
-                    <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300" :class="open ? 'rotate-180' : ''"></i>
-                </button>
-
-                <div x-show="open" x-collapse x-cloak class="mt-1 space-y-1">
-                    <a href="<?= base_url('admin/alumni') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= (url_is('admin/alumni*') && !url_is('admin/universitas*')) ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
-                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Daftar Alumni
-                    </a>
-                    <a href="<?= base_url('admin/universitas') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/universitas*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
-                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Kelola Universitas
-                    </a>
-                </div>
-            </div>
-
-            <a href="<?= base_url('admin/kontak') ?>"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 <?= url_is('admin/kontak*') ? 'bg-[#00A859] text-white shadow-md font-semibold' : 'text-green-100 hover:bg-white/10 hover:text-white' ?>">
-                <i class="fa-solid fa-envelope-open-text w-5 text-center text-sm"></i>
-                <span class="text-sm">Kotak Masuk</span>
-            </a>
-
-            <div x-data="{ open: <?= (strpos($currentUri, 'admin/pengaturan') !== false || strpos($currentUri, 'admin/akses-cepat') !== false || strpos($currentUri, 'admin/unduhan') !== false) ? 'true' : 'false' ?> }">
-
-                <button @click="open = !open" class="w-full flex justify-between items-center text-green-100 hover:bg-white/10 hover:text-white px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none <?= (strpos($currentUri, 'admin/pengaturan') !== false || strpos($currentUri, 'admin/akses-cepat') !== false || strpos($currentUri, 'admin/unduhan') !== false) ? 'bg-white/5' : '' ?>">
-                    <div class="flex items-center gap-3">
-                        <i class="fa-solid fa-gear w-5 text-center text-sm"></i>
-                        <span class="text-sm font-medium">Pengaturan Sistem</span>
-                    </div>
-                    <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300" :class="open ? 'rotate-180' : ''"></i>
-                </button>
-
-                <div x-show="open" x-collapse x-cloak class="mt-1 space-y-1">
-                    <a href="<?= base_url('admin/pengaturan') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/pengaturan*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
-                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Profil Web
-                    </a>
-                    <a href="<?= base_url('admin/akses-cepat') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/akses-cepat*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
-                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Menu Akses Cepat
-                    </a>
-                    <a href="<?= base_url('admin/unduhan') ?>" class="flex items-center py-2.5 px-10 text-sm rounded-lg transition-colors <?= url_is('admin/unduhan*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
-                        <i class="fa-solid fa-minus text-[10px] mr-2 opacity-50"></i> Pusat Unduhan
-                    </a>
-
-                </div>
-                <a href="<?= base_url('admin/users') ?>" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-200 hover:bg-red-500/20 <?= url_is('admin/users*') ? 'bg-red-500/20 font-bold' : '' ?>">
-                    <i class="fa-solid fa-user-shield w-5 text-center text-sm"></i> <span class="text-sm">Manajemen User</span>
-                </a>
-            </div>
+            <?php endif; ?>
 
         </nav>
 
@@ -250,8 +272,8 @@ if (!function_exists('hasAccess')) {
 
                 <div class="flex items-center gap-3">
                     <div class="text-right hidden md:block">
-                        <p class="text-xs font-bold text-gray-900 leading-none">Admin Madrasah</p>
-                        <p class="text-[10px] text-[#00A859] mt-1 font-semibold uppercase tracking-widest">Administrator</p>
+                        <p class="text-xs font-bold text-gray-900 leading-none"><?= esc(session()->get('nama_lengkap') ?? 'Admin') ?></p>
+                        <p class="text-[10px] text-[#00A859] mt-1 font-semibold uppercase tracking-widest"><?= esc(session()->get('role') ?? 'Administrator') ?></p>
                     </div>
                     <div class="w-9 h-9 lg:w-10 lg:h-10 bg-linear-to-br from-[#0B4A2D] to-[#00A859] rounded-full flex items-center justify-center text-white shadow-md border-2 border-green-100">
                         <i class="fa-solid fa-user-shield text-sm"></i>
