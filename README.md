@@ -40,10 +40,10 @@ Ikuti langkah-langkah di bawah ini untuk menjalankan proyek ini di mesin lokal A
 
 **1. Clone Repositori**
 Buka terminal dan jalankan perintah berikut untuk mengunduh *source code*:
-
+```bash
 git clone https://github.com/ihsanfeelance21/mamiha.git
 cd mamiha
-
+```
 
 **2. Instalasi Dependensi Backend**
 Pastikan Anda sudah menginstal [Composer](https://getcomposer.org/). Jalankan perintah berikut untuk menginstal dependensi CodeIgniter 4:
