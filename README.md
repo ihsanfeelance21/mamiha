@@ -6,7 +6,7 @@ Proyek ini dibangun dari nol dan merupakan salah satu proyek utama dalam portofo
 
 ## Live Preview
 
-[Tautan ke Website Live] https://mamabadiulihsan.sch.id
+Preview Website : https://mamabadiulihsan.sch.id
 
 ## Tech Stack
 
