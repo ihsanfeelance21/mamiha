@@ -1,69 +1,96 @@
-# CodeIgniter 4 Application Starter
+# Website Profil MA Mabadi'ul Ihsan
 
-## What is CodeIgniter?
+Repositori ini berisi *source code* untuk Website Profil Madrasah Aliyah (MA) Mabadi'ul Ihsan. Sistem ini dirancang untuk menjadi platform informasi sekolah yang dinamis, cepat, dan responsif, mengelola konten publik seperti berita terkini, data prestasi siswa, profil madrasah, hingga testimoni.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+Proyek ini dibangun dari nol dan merupakan salah satu proyek utama dalam portofolio saya sebagai Junior Web Developer, mendemonstrasikan implementasi *framework* MVC di sisi *backend* dan *utility-first* CSS di sisi *frontend*.
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+## Tech Stack
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+Proyek ini dibangun menggunakan teknologi berikut:
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+- **Backend:** CodeIgniter 4 (PHP Framework)
+- **Frontend:** HTML5, Tailwind CSS (Utility-first CSS framework)
+- **JavaScript Libraries:** - Alpine.js (Untuk interaktivitas UI ringan seperti *dropdown* dan *mobile menu*)
+                            - Swiper.js (Untuk fitur *slider* karosel yang responsif)
+- **Database:** MySQL / MariaDB
+- **Icons:** FontAwesome 6
 
-## Installation & updates
+## Fitur Utama
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
-
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
-
-## Setup
-
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
-
-## Important Change with index.php
-
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
-
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
-
-**Please** read the user guide for a better explanation of how CI4 works!
-
-## Repository Management
-
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
-
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+- **Halaman Publik Dinamis:** Menampilkan data secara *real-time* dari *database* (Hero Slider, Berita/Kabar Sekolah, Prestasi Siswa, Testimoni, dan Video Profil).
+- **Manajemen Konten (CMS):** Sistem *backend* yang memungkinkan admin untuk menjadwalkan perilisan berita, menambah data prestasi, dan menyetujui testimoni.
+- **Responsif & Modern UI:** Antarmuka yang dioptimalkan untuk perangkat seluler (*mobile-first*) dengan animasi halus dan tata letak yang rapi berkat Tailwind CSS.
+- **Keamanan:** Implementasi filter rilis konten (hanya menampilkan status 'terbit' dan waktu rilis yang valid) serta proteksi *query builder* bawaan CodeIgniter 4.
 
 ## Server Requirements
 
-PHP version 8.2 or higher is required, with the following extensions installed:
+Pastikan *environment* server atau lokal Anda memenuhi persyaratan minimum berikut sebelum menjalankan aplikasi:
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+- **PHP:** Versi 8.2 atau yang lebih baru.
+- **Database:** MySQL (dengan ekstensi `mysqlnd` diaktifkan).
+- **Ekstensi PHP yang Wajib Aktif:**
+  - `intl`
+  - `mbstring`
+  - `json` (aktif secara bawaan)
+  - `libcurl` (jika menggunakan fitur HTTP\CURLRequest)
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - The end of life date for PHP 8.1 was December 31, 2025.
-> - If you are still using below PHP 8.2, you should upgrade immediately.
-> - The end of life date for PHP 8.2 will be December 31, 2026.
+## Installation and Local Setup
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+Ikuti langkah-langkah di bawah ini untuk menjalankan proyek ini di mesin lokal Anda (localhost):
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+**1. Clone Repositori**
+Buka terminal dan jalankan perintah berikut untuk mengunduh *source code*:
+
+git clone https://github.com/ihsanfeelance21/mamiha.git
+cd mamiha
+
+
+**2. Instalasi Dependensi Backend**
+Pastikan Anda sudah menginstal [Composer](https://getcomposer.org/). Jalankan perintah berikut untuk menginstal dependensi CodeIgniter 4:
+```bash
+composer install
+```
+
+**3. Konfigurasi Environment**
+Gandakan (copy) file `env` bawaan CI4 menjadi `.env` agar dapat dikonfigurasi:
+```bash
+cp env .env
+```
+Buka file `.env` menggunakan *code editor* Anda dan sesuaikan pengaturan berikut:
+- Hilangkan tanda pagar (`#`) pada baris `CI_ENVIRONMENT` dan ubah menjadi `development` (untuk melihat pesan *error* secara detail saat proses *development*).
+- Konfigurasi URL utama:
+  `app.baseURL = 'http://localhost:8080/'`
+- Konfigurasi *Database*:
+  ```env
+  database.default.hostname = localhost
+  database.default.database = nama_database_anda
+  database.default.username = root
+  database.default.password = 
+  database.default.DBDriver = MySQLi
+  database.default.port     = 3306
+  ```
+
+**4. Persiapan Database**
+- Buat *database* kosong di MySQL/phpMyAdmin Anda dengan nama sesuai konfigurasi `.env`.
+- Lakukan *import* struktur tabel dan data sampel dari file SQL yang telah disediakan (jika ada, misalnya `database.sql`), atau jalankan migrasi database CodeIgniter jika Anda menggunakan fitur *Migrations*:
+```bash
+php spark migrate
+```
+
+**5. Tailwind CSS (Opsional / Development)**
+Aplikasi ini sudah menyertakan file CSS yang telah dikompilasi di `public/css/app.css`. Namun, jika Anda ingin memodifikasi tampilan Tailwind, Anda perlu menginstal dependensi Node.js dan menjalankan *watcher*:
+```bash
+npm install
+npm run watch
+```
+
+**6. Menjalankan Development Server**
+Setelah semua konfigurasi selesai, jalankan server bawaan CodeIgniter 4:
+```bash
+php spark serve
+```
+Buka *browser* Anda dan akses `http://localhost:8080`.
+
+## Dokumentasi Framework
+
+Informasi lebih lanjut mengenai tata cara penggunaan dan arsitektur CodeIgniter 4 dapat ditemukan di [User Guide Resmi CodeIgniter](https://codeigniter.com/user_guide/).
