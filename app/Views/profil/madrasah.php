@@ -347,14 +347,12 @@
                 }
                 ?>
 
-                <div class="relative w-full aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-gray-800 z-20 transition-transform duration-500 group-hover:scale-[1.02]">
-                    <iframe
+                <div class="relative w-full aspect-video rounded-4xl overflow-hidden shadow-2xl border-4 border-white bg-gray-800 z-20 transition-transform duration-500 group-hover:scale-[1.02]">
+                    <iframe class="absolute top-0 left-0 w-full h-full"
                         src="<?= esc($videoUrl) ?>"
-                        title="<?= esc($profil['tentang_kami_judul']) ?>"
+                        title="<?= esc($profil['tentang_kami_judul'] ?? 'Video Profil Sekolah') ?>"
                         frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen
-                        class="absolute inset-0 w-full h-full">
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
                     </iframe>
                 </div>
             </div>
