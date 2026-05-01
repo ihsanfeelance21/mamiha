@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Models\UserModel;
 use App\Models\LoginLogModel;
-use App\Models\UserPermissionModel; // <-- TAMBAHAN 1: Panggil model permission
+use App\Models\UserPermissionModel;
 
 class Auth extends BaseController
 {
