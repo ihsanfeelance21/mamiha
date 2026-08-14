@@ -5,8 +5,8 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Login - Administrator Access</title>
     
-    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-    
+    <link rel="stylesheet" href="<?= base_url('css/app.css') ?>">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
@@ -42,6 +42,7 @@
                 </div>
             <?php endif; ?>
             <form action="<?= base_url('login/process') ?>" method="POST" class="space-y-5 relative z-10">
+                <?= csrf_field() ?>
                 
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">

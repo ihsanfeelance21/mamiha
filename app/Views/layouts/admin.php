@@ -27,6 +27,8 @@ if (!function_exists('hasAccess')) {
     <link rel="stylesheet" href="<?= base_url('css/app.css') ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <meta name="csrf-token" content="<?= csrf_hash() ?>">
+
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
@@ -288,6 +290,32 @@ if (!function_exists('hasAccess')) {
             </div>
         </main>
     </div>
+
+    <script>
+        (function() {
+            const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            if (!token) return;
+            const origFetch = window.fetch;
+            window.fetch = function(url, opts) {
+                opts = opts || {};
+                opts.headers = opts.headers || {};
+                opts.headers['X-CSRF-TOKEN'] = token;
+                return origFetch(url, opts);
+            };
+            const origOpen = XMLHttpRequest.prototype.open;
+            const origSend = XMLHttpRequest.prototype.send;
+            XMLHttpRequest.prototype.open = function(method, url, async, user, pass) {
+                this._csrfMethod = method;
+                return origOpen.call(this, method, url, async, user, pass);
+            };
+            XMLHttpRequest.prototype.send = function(body) {
+                if (this._csrfMethod && String(this._csrfMethod).toUpperCase() !== 'GET') {
+                    this.setRequestHeader('X-CSRF-TOKEN', token);
+                }
+                return origSend.call(this, body);
+            };
+        })();
+    </script>
 
 </body>
 

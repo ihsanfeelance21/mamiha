@@ -22,9 +22,21 @@ class GaleriController extends BaseController
         // Ambil semua data album galeri
         $galeri = $this->galeriModel->orderBy('tanggal', 'DESC')->findAll();
 
-        // Hitung jumlah foto untuk masing-masing album (untuk badge "X Foto")
+        // Hitung jumlah foto untuk masing-masing album dalam SATU query (hindari N+1)
+        $ids = array_column($galeri, 'id');
+        $jumlahFoto = [];
+        if ($ids !== []) {
+            $rows = $this->galeriFotoModel->select('galeri_id, COUNT(*) AS total')
+                ->whereIn('galeri_id', $ids)
+                ->groupBy('galeri_id')
+                ->findAll();
+            foreach ($rows as $r) {
+                $jumlahFoto[$r['galeri_id']] = (int) $r['total'];
+            }
+        }
+
         foreach ($galeri as &$item) {
-            $item['jumlah_foto'] = $this->galeriFotoModel->where('galeri_id', $item['id'])->countAllResults();
+            $item['jumlah_foto'] = $jumlahFoto[$item['id']] ?? 0;
         }
 
         $data = [

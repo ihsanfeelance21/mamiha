@@ -10,6 +10,7 @@
     </div>
 
     <form action="<?= base_url('admin/users/update/' . $user['id_user']) ?>" method="POST">
+        <?= csrf_field() ?>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 space-y-4">
                 <h3 class="font-bold text-gray-800 border-b border-gray-50 pb-3 mb-4 text-sm uppercase tracking-wider">Informasi Akun</h3>

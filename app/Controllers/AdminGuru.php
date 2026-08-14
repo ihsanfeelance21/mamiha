@@ -15,6 +15,7 @@ class AdminGuru extends BaseController
 
     public function index()
     {
+        $this->cekIzin('guru');
         $data = [
             'title' => 'Kelola Data Pimpinan & Guru',
             // Ambil semua data dan urutkan berdasarkan urutan, lalu nama
@@ -26,6 +27,7 @@ class AdminGuru extends BaseController
 
     public function tambah()
     {
+        $this->cekIzin('guru');
         $data = [
             'title'      => 'Tambah Data Guru & Staff',
             'validation' => \Config\Services::validation()
@@ -35,6 +37,7 @@ class AdminGuru extends BaseController
 
     public function simpan()
     {
+        $this->cekIzin('guru');
         // 1. Validasi Input (Bisa tambahkan validasi PDF di sini jika mau)
         if (!$this->validate([
             'nama'    => 'required',
@@ -61,21 +64,16 @@ class AdminGuru extends BaseController
 
         // 3. Kelola Upload Foto
         $fileFoto = $this->request->getFile('foto');
-        if ($fileFoto->getError() == 4) {
+        if ($fileFoto && $fileFoto->getError() == 4) {
             $dataSimpan['foto'] = 'default.jpg'; // Jika tidak upload foto
         } else {
-            $namaFoto = $fileFoto->getRandomName();
-            $fileFoto->move('uploads/guru', $namaFoto);
-            $dataSimpan['foto'] = $namaFoto;
+            $dataSimpan['foto'] = $this->prosesUpload($fileFoto, 'guru', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp'], 2) ?? 'default.jpg';
         }
 
         // 4. Kelola Upload CV (PDF)
         $fileCv = $this->request->getFile('cv_file');
         if ($fileCv && $fileCv->isValid() && !$fileCv->hasMoved()) {
-            $namaCv = $fileCv->getRandomName();
-            // Pindahkan file ke folder uploads/cv
-            $fileCv->move('uploads/cv', $namaCv);
-            $dataSimpan['cv_file'] = $namaCv;
+            $dataSimpan['cv_file'] = $this->prosesUpload($fileCv, 'cv', ['application/pdf'], ['pdf'], 5);
         }
 
         // 5. Simpan ke Database (Hanya 1 kali panggil save)
@@ -87,6 +85,7 @@ class AdminGuru extends BaseController
 
     public function edit($id)
     {
+        $this->cekIzin('guru');
         $data = [
             'title'      => 'Edit Data Guru & Staff',
             'validation' => \Config\Services::validation(),
@@ -103,6 +102,7 @@ class AdminGuru extends BaseController
 
     public function update($id)
     {
+        $this->cekIzin('guru');
         // 1. Validasi Input (Pastikan rules-nya sama dengan tambah data)
         if (!$this->validate([
             'nama'       => 'required',
@@ -136,27 +136,28 @@ class AdminGuru extends BaseController
         $fileFoto = $this->request->getFile('foto');
         if ($fileFoto && $fileFoto->isValid() && !$fileFoto->hasMoved()) {
             // Jika admin upload foto baru
-            $namaFoto = $fileFoto->getRandomName();
-            $fileFoto->move('uploads/guru', $namaFoto);
-            $dataUpdate['foto'] = $namaFoto;
+            $baruFoto = $this->prosesUpload($fileFoto, 'guru', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp'], 2);
+            if ($baruFoto) {
+                $dataUpdate['foto'] = $baruFoto;
 
-            // Hapus file foto lama dari folder (Kecuali default.jpg)
-            if ($guruLama['foto'] != 'default.jpg' && !empty($guruLama['foto']) && file_exists('uploads/guru/' . $guruLama['foto'])) {
-                unlink('uploads/guru/' . $guruLama['foto']);
+                // Hapus file foto lama dari folder (Kecuali default.jpg)
+                if ($guruLama['foto'] != 'default.jpg' && !empty($guruLama['foto']) && file_exists(FCPATH . 'uploads/guru/' . $guruLama['foto'])) {
+                    unlink(FCPATH . 'uploads/guru/' . $guruLama['foto']);
+                }
             }
         }
 
         // 5. Kelola Update CV (PDF) (Jika ada upload file CV baru)
         $fileCv = $this->request->getFile('cv_file');
         if ($fileCv && $fileCv->isValid() && !$fileCv->hasMoved()) {
-            // Jika admin upload file CV baru
-            $namaCv = $fileCv->getRandomName();
-            $fileCv->move('uploads/cv', $namaCv);
-            $dataUpdate['cv_file'] = $namaCv;
+            $baruCv = $this->prosesUpload($fileCv, 'cv', ['application/pdf'], ['pdf'], 5);
+            if ($baruCv) {
+                $dataUpdate['cv_file'] = $baruCv;
 
-            // Hapus file CV lama jika ada di folder
-            if (!empty($guruLama['cv_file']) && file_exists('uploads/cv/' . $guruLama['cv_file'])) {
-                unlink('uploads/cv/' . $guruLama['cv_file']);
+                // Hapus file CV lama jika ada di folder
+                if (!empty($guruLama['cv_file']) && file_exists(FCPATH . 'uploads/cv/' . $guruLama['cv_file'])) {
+                    unlink(FCPATH . 'uploads/cv/' . $guruLama['cv_file']);
+                }
             }
         }
 
@@ -171,6 +172,7 @@ class AdminGuru extends BaseController
 
     public function hapus($id)
     {
+        $this->cekIzin('guru');
         // Cari data guru berdasarkan id
         $guru = $this->guruModel->find($id);
 

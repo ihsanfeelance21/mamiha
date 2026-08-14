@@ -11,26 +11,6 @@ use App\Models\LoginLogModel;
 
 class Admin extends BaseController
 {
-    /**
-     * Fungsi Private untuk mengecek hak akses user secara internal di Controller
-     */
-    private function cekIzin($slug)
-    {
-        if (session()->get('role') === 'superadmin') return true;
-
-        $db = \Config\Database::connect();
-        $hasAccess = $db->table('user_permissions')
-            ->where('id_user', session()->get('id_user'))
-            ->where('menu_slug', $slug)
-            ->countAllResults() > 0;
-
-        if (!$hasAccess) {
-            // Jika tidak punya akses, paksa tendang ke dashboard dengan pesan error
-            header('Location: ' . base_url('admin/dashboard?error=restricted'));
-            exit;
-        }
-    }
-
     public function dashboard()
     {
         $logModel = new LoginLogModel();
@@ -41,11 +21,22 @@ class Admin extends BaseController
             ->get()->getResultArray();
 
         $data['title'] = 'Dashboard Utama';
+
+        // Hitung statistik REAL dari database
+        $beritaModel = new \App\Models\BeritaModel();
+        $prestasiModel = new \App\Models\PrestasiModel();
+        $alumniModel = new \App\Models\AlumniModel();
+        $guruModel = new \App\Models\GuruStaffModel();
+        $pesanModel = new \App\Models\PesanKontakModel();
+        $galeriModel = new \App\Models\GaleriModel();
+
         $data['stats'] = [
-            'pendaftar' => 142,
-            'berita'    => 24,
-            'pesan'     => 5,
-            'alumni'    => 89
+            'berita'  => $beritaModel->countAll(),
+            'prestasi' => $prestasiModel->countAll(),
+            'pesan'   => $pesanModel->countAll(),
+            'alumni'  => $alumniModel->countAll(),
+            'guru'    => $guruModel->countAll(),
+            'galeri'  => $galeriModel->countAll(),
         ];
 
         return view('admin/dashboard', $data);
@@ -84,12 +75,7 @@ class Admin extends BaseController
             return redirect()->back()->withInput()->with('error', 'Validasi gagal. Cek judul (harus unik) dan ukuran gambar.');
         }
 
-        $namaGambar = null;
-        $fileGambar = $this->request->getFile('gambar');
-        if ($fileGambar && $fileGambar->isValid()) {
-            $namaGambar = $fileGambar->getRandomName();
-            $fileGambar->move('uploads/kegiatan', $namaGambar);
-        }
+        $namaGambar = $this->prosesUpload($this->request->getFile('gambar'), 'kegiatan', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5);
 
         $kegiatanModel->save([
             'judul'  => $this->request->getPost('judul'),
@@ -146,10 +132,11 @@ class Admin extends BaseController
         // Upload Favicon/Logo
         $favicon = $this->request->getFile('favicon');
         if ($favicon && $favicon->isValid()) {
-            $namaF = $favicon->getRandomName();
-            $favicon->move('uploads/pengaturan', $namaF);
-            $data['favicon'] = $namaF;
-            if (!empty($lama['favicon'])) @unlink('uploads/pengaturan/' . $lama['favicon']);
+            $namaF = $this->prosesUpload($favicon, 'pengaturan', ['image/png', 'image/x-icon', 'image/vnd.microsoft.icon', 'image/jpeg', 'image/webp'], ['png', 'ico', 'jpg', 'jpeg', 'webp'], 2);
+            if ($namaF) {
+                $data['favicon'] = $namaF;
+                if (!empty($lama['favicon'])) @unlink(FCPATH . 'uploads/pengaturan/' . $lama['favicon']);
+            }
         }
 
         $model->update(1, $data);
@@ -218,11 +205,36 @@ class Admin extends BaseController
     {
         $this->cekIzin('pendaftaran');
         $model = new PendaftaranModel();
+        $lama = $model->first();
         $data = [
             'status_ppdb' => $this->request->getPost('status_ppdb'),
             'link_daftar' => $this->request->getPost('link_daftar'),
+            'pesan_tutup' => $this->request->getPost('pesan_tutup'),
+            'link_admin_ppdb' => $this->request->getPost('link_admin_ppdb'),
+            'tipe_daftar' => $this->request->getPost('tipe_daftar'),
             'updated_at'  => date('Y-m-d H:i:s')
         ];
+
+        // Upload Poster PPDB
+        $poster = $this->request->getFile('poster');
+        if ($poster && $poster->isValid()) {
+            $namaPoster = $this->prosesUpload($poster, 'ppdb', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5);
+            if ($namaPoster) {
+                $data['poster'] = $namaPoster;
+                if (!empty($lama['poster'])) @unlink(FCPATH . 'uploads/ppdb/' . $lama['poster']);
+            }
+        }
+
+        // Upload Brosur PPDB
+        $brosur = $this->request->getFile('brosur');
+        if ($brosur && $brosur->isValid()) {
+            $namaBrosur = $this->prosesUpload($brosur, 'ppdb', ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'], ['pdf', 'jpg', 'jpeg', 'png', 'webp'], 5);
+            if ($namaBrosur) {
+                $data['brosur'] = $namaBrosur;
+                if (!empty($lama['brosur'])) @unlink(FCPATH . 'uploads/ppdb/' . $lama['brosur']);
+            }
+        }
+
         $model->update(1, $data);
         return redirect()->back()->with('pesan', 'Data PPDB berhasil diperbarui!');
     }
@@ -244,10 +256,9 @@ class Admin extends BaseController
         $heroModel = new HeroSliderModel();
         $file = $this->request->getFile('gambar');
 
-        if ($file->isValid()) {
-            $nama = $file->getRandomName();
-            $file->move('uploads/hero', $nama);
+        $nama = $this->prosesUpload($file, 'hero', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5);
 
+        if ($nama) {
             $heroModel->save([
                 'gambar' => $nama,
                 'judul'  => $this->request->getPost('judul'),
@@ -255,7 +266,7 @@ class Admin extends BaseController
             ]);
             return redirect()->to('admin/beranda')->with('pesan', 'Slide ditambahkan!');
         }
-        return redirect()->back()->with('error', 'Gagal upload.');
+        return redirect()->back()->with('error', 'Gagal upload. Pastikan file berupa gambar (maks 5MB).');
     }
 
     public function beranda_edit($id)
@@ -291,10 +302,12 @@ class Admin extends BaseController
         $namaGambar = $slideLama['gambar']; // Default pakai yang lama
 
         if ($fileGambar && $fileGambar->isValid()) {
-            $namaGambar = $fileGambar->getRandomName();
-            $fileGambar->move('uploads/hero', $namaGambar);
-            if (!empty($slideLama['gambar']) && file_exists('uploads/hero/' . $slideLama['gambar'])) {
-                unlink('uploads/hero/' . $slideLama['gambar']);
+            $baru = $this->prosesUpload($fileGambar, 'hero', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5);
+            if ($baru) {
+                $namaGambar = $baru;
+                if (!empty($slideLama['gambar']) && file_exists(FCPATH . 'uploads/hero/' . $slideLama['gambar'])) {
+                    unlink(FCPATH . 'uploads/hero/' . $slideLama['gambar']);
+                }
             }
         }
 
@@ -303,10 +316,12 @@ class Admin extends BaseController
         $namaMobile = $slideLama['gambar_mobile']; // Default pakai yang lama
 
         if ($fileMobile && $fileMobile->isValid()) {
-            $namaMobile = $fileMobile->getRandomName();
-            $fileMobile->move('uploads/hero', $namaMobile);
-            if (!empty($slideLama['gambar_mobile']) && file_exists('uploads/hero/' . $slideLama['gambar_mobile'])) {
-                unlink('uploads/hero/' . $slideLama['gambar_mobile']);
+            $baruMobile = $this->prosesUpload($fileMobile, 'hero', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5);
+            if ($baruMobile) {
+                $namaMobile = $baruMobile;
+                if (!empty($slideLama['gambar_mobile']) && file_exists(FCPATH . 'uploads/hero/' . $slideLama['gambar_mobile'])) {
+                    unlink(FCPATH . 'uploads/hero/' . $slideLama['gambar_mobile']);
+                }
             }
         }
 

@@ -19,6 +19,7 @@ class Alumni extends BaseController
 
     public function index()
     {
+        $this->cekIzin('alumni');
         // 1. Tangkap request dari URL (GET)
         $keyword = $this->request->getGet('keyword');
         $limit = $this->request->getGet('limit') ?? 10; // Default tampil 10 data
@@ -65,22 +66,19 @@ class Alumni extends BaseController
 
     public function create()
     {
+        $this->cekIzin('alumni');
         $data = [
             'title' => 'Tambah Data Alumni',
             'universitas' => $this->universitasModel->orderBy('nama_universitas', 'ASC')->findAll()
         ];
         return view('admin/alumni/create', $data);
     }
-
     public function store()
     {
-        $fileFoto = $this->request->getFile('foto');
-        $namaFoto = null;
+        $this->cekIzin('alumni');
 
-        if ($fileFoto && $fileFoto->isValid() && !$fileFoto->hasMoved()) {
-            $namaFoto = $fileFoto->getRandomName();
-            $fileFoto->move('uploads/alumni', $namaFoto);
-        }
+        $fileFoto = $this->request->getFile('foto');
+        $namaFoto = $this->prosesUpload($fileFoto, 'alumni', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 2);
 
         $this->alumniModel->insert([
             'nama_alumni' => $this->request->getPost('nama_alumni'),
@@ -100,6 +98,7 @@ class Alumni extends BaseController
 
     public function edit($id)
     {
+        $this->cekIzin('alumni');
         $alumni = $this->alumniModel->find($id);
         if (empty($alumni)) {
             return redirect()->to('admin/alumni')->with('error', 'Data alumni tidak ditemukan.');
@@ -112,19 +111,19 @@ class Alumni extends BaseController
         ];
         return view('admin/alumni/edit', $data);
     }
-
     public function update($id)
     {
+        $this->cekIzin('alumni');
+
         $alumniLama = $this->alumniModel->find($id);
         $fileFoto = $this->request->getFile('foto');
         $namaFoto = $alumniLama['foto'];
 
-        if ($fileFoto && $fileFoto->isValid() && !$fileFoto->hasMoved()) {
-            $namaFoto = $fileFoto->getRandomName();
-            $fileFoto->move('uploads/alumni', $namaFoto);
-
-            if ($alumniLama['foto'] && file_exists('uploads/alumni/' . $alumniLama['foto'])) {
-                unlink('uploads/alumni/' . $alumniLama['foto']);
+        $baru = $this->prosesUpload($fileFoto, 'alumni', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 2);
+        if ($baru) {
+            $namaFoto = $baru;
+            if ($alumniLama['foto'] && file_exists(FCPATH . 'uploads/alumni/' . $alumniLama['foto'])) {
+                unlink(FCPATH . 'uploads/alumni/' . $alumniLama['foto']);
             }
         }
 
@@ -152,6 +151,7 @@ class Alumni extends BaseController
 
     public function approve($id)
     {
+        $this->cekIzin('alumni');
         $alumni = $this->alumniModel->find($id);
         if ($alumni) {
             $this->alumniModel->update($id, ['status' => 'approved']);
@@ -162,12 +162,14 @@ class Alumni extends BaseController
 
     public function reject($id)
     {
+        $this->cekIzin('alumni');
         $this->alumniModel->update($id, ['status' => 'rejected']);
         return redirect()->to('admin/alumni')->with('error', 'Data alumni ditolak.');
     }
 
     public function toggleFeatured($id)
     {
+        $this->cekIzin('alumni');
         $alumni = $this->alumniModel->find($id);
         if ($alumni) {
             $newStatus = $alumni['is_featured'] == 1 ? 0 : 1;
@@ -181,6 +183,7 @@ class Alumni extends BaseController
 
     public function delete($id)
     {
+        $this->cekIzin('alumni');
         $alumni = $this->alumniModel->find($id);
         if ($alumni['foto'] && file_exists('uploads/alumni/' . $alumni['foto'])) {
             unlink('uploads/alumni/' . $alumni['foto']);

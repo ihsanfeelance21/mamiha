@@ -16,6 +16,7 @@ class KontakController extends BaseController
 
     public function index()
     {
+        $this->cekIzin('kontak');
         $data = [
             'title' => 'Kotak Masuk Pesan | Admin',
             // Ambil semua pesan, urutkan dari yang terbaru
@@ -27,6 +28,7 @@ class KontakController extends BaseController
 
     public function show($id)
     {
+        $this->cekIzin('kontak');
         $pesan = $this->pesanModel->find($id);
 
         // Jika pesan tidak ditemukan
@@ -51,6 +53,7 @@ class KontakController extends BaseController
 
     public function delete($id)
     {
+        $this->cekIzin('kontak');
         $this->pesanModel->delete($id);
         session()->setFlashdata('pesan', 'Satu pesan berhasil dihapus.');
         return redirect()->to('/admin/kontak');

@@ -11,8 +11,7 @@ class DatabaseSeeder extends Seeder
         // Panggil komandan WebSeeder yang tadi kita buat
         $this->call('WebSeeder');
 
-        // Nanti kalau Mas punya seeder lain, tinggal tambahkan di bawahnya:
-        // $this->call('UserAdminSeeder');
-        // $this->call('KegiatanSeeder');
+        // Seeder User Admin (username: admin, password: admin123)
+        $this->call('UserSeeder');
     }
 }

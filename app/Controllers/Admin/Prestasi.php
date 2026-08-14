@@ -17,6 +17,7 @@ class Prestasi extends BaseController
     // 1. Menampilkan Halaman List Data (Index)
     public function index()
     {
+        $this->cekIzin('kegiatan');
         $keyword = $this->request->getVar('cari');
 
         if ($keyword) {
@@ -41,6 +42,7 @@ class Prestasi extends BaseController
     // 2. Menampilkan Form Tambah Data (Create)
     public function create()
     {
+        $this->cekIzin('kegiatan');
         $data = [
             'title'      => 'Tambah Prestasi Baru',
             'validation' => \Config\Services::validation()
@@ -51,6 +53,7 @@ class Prestasi extends BaseController
     // 3. Memproses Data yang Dikirim dari Form (Store)
     public function store()
     {
+        $this->cekIzin('kegiatan');
         // Aturan Validasi
         $rules = [
             'kategori_prestasi' => 'required',
@@ -67,13 +70,7 @@ class Prestasi extends BaseController
 
         // Proses Upload Gambar
         $fileGambar = $this->request->getFile('gambar');
-        $namaGambar = '';
-
-        if ($fileGambar && $fileGambar->getError() != 4) {
-            $namaGambar = $fileGambar->getRandomName();
-            // Simpan gambar ke folder public/uploads/prestasi
-            $fileGambar->move('uploads/prestasi', $namaGambar);
-        }
+        $namaGambar = $this->prosesUpload($fileGambar, 'prestasi', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5) ?? '';
 
         // Buat Slug
         $slug = url_title($this->request->getVar('judul'), '-', true) . '-' . uniqid();
@@ -102,6 +99,7 @@ class Prestasi extends BaseController
     // 4. Menghapus Data (Delete)
     public function delete($id)
     {
+        $this->cekIzin('kegiatan');
         $prestasi = $this->prestasiModel->find($id);
 
         if ($prestasi) {
@@ -120,6 +118,7 @@ class Prestasi extends BaseController
     // 5. Menampilkan Form Edit Data
     public function edit($id)
     {
+        $this->cekIzin('kegiatan');
         $prestasi = $this->prestasiModel->find($id);
 
         if (!$prestasi) {
@@ -139,6 +138,7 @@ class Prestasi extends BaseController
     // 6. Memproses Update Data ke Database
     public function update($id)
     {
+        $this->cekIzin('kegiatan');
         $prestasiLama = $this->prestasiModel->find($id);
 
         // Aturan Validasi (Gambar opsional saat edit)
@@ -159,14 +159,14 @@ class Prestasi extends BaseController
         $fileGambar = $this->request->getFile('gambar');
         $namaGambar = $prestasiLama['gambar']; // Default pakai gambar lama
 
-        if ($fileGambar && $fileGambar->getError() != 4) {
+        $baru = $this->prosesUpload($fileGambar, 'prestasi', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5);
+        if ($baru) {
             // Ada gambar baru yang diupload
-            $namaGambar = $fileGambar->getRandomName();
-            $fileGambar->move('uploads/prestasi', $namaGambar);
+            $namaGambar = $baru;
 
             // Hapus gambar lama jika ada
-            if ($prestasiLama['gambar'] && file_exists('uploads/prestasi/' . $prestasiLama['gambar'])) {
-                unlink('uploads/prestasi/' . $prestasiLama['gambar']);
+            if ($prestasiLama['gambar'] && file_exists(FCPATH . 'uploads/prestasi/' . $prestasiLama['gambar'])) {
+                unlink(FCPATH . 'uploads/prestasi/' . $prestasiLama['gambar']);
             }
         }
 

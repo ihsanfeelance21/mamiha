@@ -7,6 +7,7 @@ use App\Models\TestimoniModel;
 use App\Models\ProfilWebsiteModel;
 use App\Models\HeroSliderModel;
 use App\Models\PrestasiModel;
+use App\Models\KegiatanModel;
 
 class Home extends BaseController
 {
@@ -57,5 +58,42 @@ class Home extends BaseController
 
         // 3. Kirim data gabungan ke view home
         return view('home', $data);
+    }
+
+    /**
+     * Halaman daftar kegiatan sekolah.
+     */
+    public function kegiatan()
+    {
+        $kegiatanModel = new KegiatanModel();
+
+        $data = [
+            'title'    => 'Kegiatan Sekolah | MA Mabadi\'ul Ihsan',
+            'kegiatan' => $kegiatanModel->orderBy('created_at', 'DESC')->paginate(9, 'kegiatan'),
+            'pager'    => $kegiatanModel->pager,
+        ];
+
+        return view('kegiatan_index', $data);
+    }
+
+    /**
+     * Halaman detail kegiatan sekolah berdasarkan slug.
+     */
+    public function detail_kegiatan($slug)
+    {
+        $kegiatanModel = new KegiatanModel();
+
+        $kegiatan = $kegiatanModel->where('slug', $slug)->first();
+
+        if (! $kegiatan) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Kegiatan tidak ditemukan.');
+        }
+
+        $data = [
+            'title'    => $kegiatan['judul'] . ' | MA Mabadi\'ul Ihsan',
+            'kegiatan' => $kegiatan,
+        ];
+
+        return view('kegiatan_detail', $data);
     }
 }

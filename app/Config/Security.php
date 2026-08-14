@@ -70,8 +70,11 @@ class Security extends BaseConfig
      * --------------------------------------------------------------------------
      *
      * Regenerate CSRF Token on every submission.
+     *
+     * Note: Dinonaktifkan agar AJAX upload banyak file (Dropzone/Quill)
+     * tetap bisa berjalan tanpa token usang di header request.
      */
-    public bool $regenerate = true;
+    public bool $regenerate = false;
 
     /**
      * --------------------------------------------------------------------------

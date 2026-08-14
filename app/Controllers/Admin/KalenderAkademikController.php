@@ -17,6 +17,7 @@ class KalenderAkademikController extends BaseController
     // Menampilkan daftar kalender akademik
     public function index()
     {
+        $this->cekIzin('kegiatan');
         $data = [
             'title'    => 'Manajemen Kalender Akademik',
             // Kita urutkan dari tanggal_mulai yang paling baru/mendatang
@@ -29,6 +30,7 @@ class KalenderAkademikController extends BaseController
     // Menampilkan form tambah data
     public function create()
     {
+        $this->cekIzin('kegiatan');
         $data = [
             'title' => 'Tambah Agenda Kalender'
         ];
@@ -39,6 +41,7 @@ class KalenderAkademikController extends BaseController
     // Menyimpan data ke database
     public function store()
     {
+        $this->cekIzin('kegiatan');
         $judul = $this->request->getPost('judul');
         $slug = url_title($judul, '-', true) . '-' . time(); // Tambah time() agar slug pasti unik
 
@@ -57,6 +60,7 @@ class KalenderAkademikController extends BaseController
     // Menampilkan form edit data
     public function edit($id)
     {
+        $this->cekIzin('kegiatan');
         $data = [
             'title'    => 'Edit Agenda Kalender',
             'kalender' => $this->kalenderModel->find($id)
@@ -72,6 +76,7 @@ class KalenderAkademikController extends BaseController
     // Mengupdate data di database
     public function update($id)
     {
+        $this->cekIzin('kegiatan');
         $judul = $this->request->getPost('judul');
         // Slug bisa diupdate atau dibiarkan tetap. Kita buat tetap saja agar URL tidak berubah-ubah jika diakses.
 
@@ -89,6 +94,7 @@ class KalenderAkademikController extends BaseController
     // Menghapus data
     public function delete($id)
     {
+        $this->cekIzin('kegiatan');
         $this->kalenderModel->delete($id);
         session()->setFlashdata('pesan', 'Agenda berhasil dihapus.');
         return redirect()->to('/admin/kalender');

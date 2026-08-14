@@ -12,6 +12,8 @@
         <div class="bg-white p-8 rounded-xl shadow-md border border-gray-100">
             <form action="<?= base_url('alumni/simpan-mandiri'); ?>" method="post" enctype="multipart/form-data">
                 <?= csrf_field(); ?>
+                <div style="display:none" id="hpc"><label>Fill This Field</label><input type="text" name="honeypot" value="" tabindex="-1" autocomplete="off"></div>
+                <?= csrf_field(); ?>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>

@@ -43,7 +43,7 @@ Ikuti langkah-langkah di bawah ini untuk mengonfigurasi dan menjalankan proyek i
 
 **1. Clone Repositori**
 ```bash
-git clone [https://github.com/ihsanfreelance21/mamiha.git](https://github.com/ihsanfreelance21/mamiha.git)
+git clone https://github.com/ihsanfeelance21/mamiha.git
 cd mamiha
 ```
 

@@ -16,6 +16,7 @@ class PengumumanController extends BaseController
 
     public function index()
     {
+        $this->cekIzin('kegiatan');
         $data = [
             'title'      => 'Manajemen Pengumuman',
             'pengumuman' => $this->pengumumanModel->orderBy('tanggal_publish', 'DESC')->findAll()
@@ -26,6 +27,7 @@ class PengumumanController extends BaseController
 
     public function create()
     {
+        $this->cekIzin('kegiatan');
         $data = [
             'title' => 'Tambah Pengumuman'
         ];
@@ -35,17 +37,13 @@ class PengumumanController extends BaseController
 
     public function store()
     {
+        $this->cekIzin('kegiatan');
         $judul = $this->request->getPost('judul');
         $slug = url_title($judul, '-', true) . '-' . time();
 
         // Handle Upload Gambar
         $fileGambar = $this->request->getFile('gambar');
-        $namaGambar = null;
-
-        if ($fileGambar && $fileGambar->isValid() && !$fileGambar->hasMoved()) {
-            $namaGambar = $fileGambar->getRandomName();
-            $fileGambar->move('uploads/pengumuman', $namaGambar);
-        }
+        $namaGambar = $this->prosesUpload($fileGambar, 'pengumuman', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5);
 
         $this->pengumumanModel->save([
             'judul'           => $judul,
@@ -62,6 +60,7 @@ class PengumumanController extends BaseController
 
     public function edit($id)
     {
+        $this->cekIzin('kegiatan');
         $data = [
             'title'      => 'Edit Pengumuman',
             'pengumuman' => $this->pengumumanModel->find($id)
@@ -76,18 +75,19 @@ class PengumumanController extends BaseController
 
     public function update($id)
     {
+        $this->cekIzin('kegiatan');
         $pengumumanLama = $this->pengumumanModel->find($id);
         $fileGambar = $this->request->getFile('gambar');
         $namaGambar = $pengumumanLama['gambar'];
 
         // Cek jika ada gambar baru yang diupload
-        if ($fileGambar && $fileGambar->isValid() && !$fileGambar->hasMoved()) {
-            $namaGambar = $fileGambar->getRandomName();
-            $fileGambar->move('uploads/pengumuman', $namaGambar);
+        $baru = $this->prosesUpload($fileGambar, 'pengumuman', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5);
+        if ($baru) {
+            $namaGambar = $baru;
 
             // Hapus gambar lama jika ada
-            if ($pengumumanLama['gambar'] && file_exists('uploads/pengumuman/' . $pengumumanLama['gambar'])) {
-                unlink('uploads/pengumuman/' . $pengumumanLama['gambar']);
+            if ($pengumumanLama['gambar'] && file_exists(FCPATH . 'uploads/pengumuman/' . $pengumumanLama['gambar'])) {
+                unlink(FCPATH . 'uploads/pengumuman/' . $pengumumanLama['gambar']);
             }
         }
 
@@ -105,6 +105,7 @@ class PengumumanController extends BaseController
 
     public function delete($id)
     {
+        $this->cekIzin('kegiatan');
         $pengumuman = $this->pengumumanModel->find($id);
 
         // Hapus gambar dari folder jika ada

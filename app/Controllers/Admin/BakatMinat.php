@@ -20,6 +20,7 @@ class BakatMinat extends BaseController
     // 1. Menampilkan daftar data (Halaman Index)
     public function index()
     {
+        $this->cekIzin('profil');
         // Mengambil data bakat minat sekaligus men-join nama guru pembina
         $data_bakat = $this->BakatMinatModel
             ->select('bakat_minat.*, guru_staff.nama') // <-- Diubah menjadi guru_staff.nama
@@ -37,6 +38,7 @@ class BakatMinat extends BaseController
     // 2. Menampilkan Form Tambah Data
     public function create()
     {
+        $this->cekIzin('profil');
         $data = [
             'title' => 'Tambah Bakat & Minat',
             'data_guru' => $this->GuruStaffModel->findAll() // Mengambil semua guru untuk dropdown
@@ -48,6 +50,7 @@ class BakatMinat extends BaseController
     // 3. Proses Menyimpan Data ke Database
     public function store()
     {
+        $this->cekIzin('profil');
         // Menangkap pilihan tipe pembina
         $tipe_pembina = $this->request->getPost('tipe_pembina');
 
@@ -58,13 +61,7 @@ class BakatMinat extends BaseController
 
         // Proses Upload Gambar
         $fileGambar = $this->request->getFile('gambar');
-        $namaGambar = null; // Default kosong jika tidak ada gambar
-
-        if ($fileGambar && $fileGambar->isValid() && ! $fileGambar->hasMoved()) {
-            // Generate nama acak agar tidak bentrok, lalu pindahkan ke folder public/uploads/bakat
-            $namaGambar = $fileGambar->getRandomName();
-            $fileGambar->move('uploads/bakat', $namaGambar);
-        }
+        $namaGambar = $this->prosesUpload($fileGambar, 'bakat', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5);
 
         // Simpan semua data ke database
         $this->BakatMinatModel->save([
@@ -83,6 +80,7 @@ class BakatMinat extends BaseController
     // 4. Menampilkan Form Edit
     public function edit($id)
     {
+        $this->cekIzin('profil');
         $data = [
             'title' => 'Edit Bakat & Minat',
             'bakat' => $this->BakatMinatModel->find($id),
@@ -94,6 +92,7 @@ class BakatMinat extends BaseController
     // 5. Proses Update Data
     public function update($id)
     {
+        $this->cekIzin('profil');
         $tipe_pembina = $this->request->getPost('tipe_pembina');
         $guru_id = ($tipe_pembina == 'guru') ? $this->request->getPost('guru_id') : null;
         $nama_pembina_manual = ($tipe_pembina == 'manual') ? $this->request->getPost('nama_pembina_manual') : null;
@@ -102,12 +101,12 @@ class BakatMinat extends BaseController
         $fileGambar = $this->request->getFile('gambar');
         $namaGambar = $dataLama['gambar']; // Default pakai gambar lama
 
-        if ($fileGambar && $fileGambar->isValid() && ! $fileGambar->hasMoved()) {
-            $namaGambar = $fileGambar->getRandomName();
-            $fileGambar->move('uploads/bakat', $namaGambar);
+        $baru = $this->prosesUpload($fileGambar, 'bakat', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5);
+        if ($baru) {
+            $namaGambar = $baru;
             // Hapus gambar lama agar server tidak penuh
-            if ($dataLama['gambar'] && file_exists('uploads/bakat/' . $dataLama['gambar'])) {
-                unlink('uploads/bakat/' . $dataLama['gambar']);
+            if ($dataLama['gambar'] && file_exists(FCPATH . 'uploads/bakat/' . $dataLama['gambar'])) {
+                unlink(FCPATH . 'uploads/bakat/' . $dataLama['gambar']);
             }
         }
 
@@ -127,6 +126,7 @@ class BakatMinat extends BaseController
     // 6. Proses Hapus Data
     public function delete($id)
     {
+        $this->cekIzin('profil');
         $data = $this->BakatMinatModel->find($id);
         // Hapus file gambar fisiknya
         if ($data['gambar'] && file_exists('uploads/bakat/' . $data['gambar'])) {

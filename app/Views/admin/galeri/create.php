@@ -14,6 +14,7 @@
 
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
         <form action="<?= base_url('admin/galeri/store') ?>" method="post" enctype="multipart/form-data">
+            <?= csrf_field() ?>
 
             <div class="mb-6">
                 <label for="judul" class="block text-sm font-bold text-gray-700 mb-2">Judul Album <span class="text-red-500">*</span></label>

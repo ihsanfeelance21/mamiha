@@ -16,6 +16,7 @@ class GaleriVideoController extends BaseController
 
     public function index()
     {
+        $this->cekIzin('galeri');
         $data = [
             'title'  => 'Manajemen Galeri Video',
             'videos' => $this->galeriVideoModel->orderBy('tanggal', 'DESC')->findAll()
@@ -26,6 +27,7 @@ class GaleriVideoController extends BaseController
 
     public function create()
     {
+        $this->cekIzin('galeri');
         $data = [
             'title' => 'Tambah Video Baru'
         ];
@@ -34,6 +36,7 @@ class GaleriVideoController extends BaseController
 
     public function store()
     {
+        $this->cekIzin('galeri');
         $this->galeriVideoModel->save([
             'judul'      => $this->request->getPost('judul'),
             'link_video' => $this->request->getPost('link_video'),
@@ -47,6 +50,7 @@ class GaleriVideoController extends BaseController
 
     public function edit($id)
     {
+        $this->cekIzin('galeri');
         $data = [
             'title' => 'Edit Video',
             'video' => $this->galeriVideoModel->find($id)
@@ -61,6 +65,7 @@ class GaleriVideoController extends BaseController
 
     public function update($id)
     {
+        $this->cekIzin('galeri');
         $this->galeriVideoModel->update($id, [
             'judul'      => $this->request->getPost('judul'),
             'link_video' => $this->request->getPost('link_video'),
@@ -74,6 +79,7 @@ class GaleriVideoController extends BaseController
 
     public function delete($id)
     {
+        $this->cekIzin('galeri');
         $this->galeriVideoModel->delete($id);
         session()->setFlashdata('pesan', 'Video berhasil dihapus.');
         return redirect()->to('/admin/galeri-video');

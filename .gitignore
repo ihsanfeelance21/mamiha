@@ -124,3 +124,22 @@ _modules/*
 
 /results/
 /phpunit*.xml
+
+# --------------------------
+# Dependensi Node & Artefak Build
+# --------------------------
+node_modules/
+
+# --------------------------
+# Arsip & Backup
+# --------------------------
+*.zip
+backup/
+
+# --------------------------
+# Data Upload (foto/PDF produksi)
+# --------------------------
+public/uploads/*
+!public/uploads/.htaccess
+!public/uploads/index.html
+!public/uploads/**/index.html

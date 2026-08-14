@@ -42,4 +42,97 @@ abstract class BaseController extends Controller
         // Preload any models, libraries, etc, here.
         // $this->session = service('session');
     }
+
+    /**
+     * Fungsi Private untuk mengecek hak akses user secara internal di Controller
+     */
+    protected function cekIzin($slug)
+    {
+        if (session()->get('role') === 'superadmin') {
+            return true;
+        }
+
+        $db = \Config\Database::connect();
+        $hasAccess = $db->table('user_permissions')
+            ->where('id_user', session()->get('id_user'))
+            ->where('menu_slug', $slug)
+            ->countAllResults() > 0;
+
+        if (! $hasAccess) {
+            return redirect()->to('admin/dashboard')->with('error', 'Anda tidak memiliki akses ke menu tersebut.')
+                ->withInput()->send();
+        }
+
+        return true;
+    }
+
+    /**
+     * Helper aman untuk upload file gambar/PDF.
+     * Memvalidasi MIME & ekstensi untuk mencegah shell upload.
+     *
+     * @return string|null Nama file jika sukses, null jika gagal
+     */
+    protected function prosesUpload($file, string $folder, array $allowedMime = [], array $allowedExt = [], int $maxMb = 5)
+    {
+        if (! $file || ! $file->isValid() || $file->hasMoved()) {
+            return null;
+        }
+
+        // Batasi ukuran file
+        if ($file->getSize() > $maxMb * 1024 * 1024) {
+            return null;
+        }
+
+        // Deteksi MIME sesungguhnya dari file (bukan dari header klien)
+        $mime = (string) $file->getMimeType();
+        if ($allowedMime !== [] && ! in_array($mime, $allowedMime, true)) {
+            return null;
+        }
+
+        // Whitelist ekstensi
+        $ext = strtolower($file->getExtension());
+        if ($allowedExt !== [] && ! in_array($ext, $allowedExt, true)) {
+            return null;
+        }
+
+        // Nama acak + move aman
+        $nama = $file->getRandomName();
+        $tujuan = FCPATH . 'uploads/' . trim($folder, '/');
+        if (! is_dir($tujuan)) {
+            mkdir($tujuan, 0755, true);
+        }
+
+        $file->move($tujuan, $nama);
+
+        return $nama;
+    }
+
+    /**
+     * Konstanta MIME umum untuk gambar.
+     */
+    protected function mimeGambar(): array
+    {
+        return ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif'];
+    }
+
+    /**
+     * Bersihkan HTML (konten berita/pengumuman) dari serangan XSS
+     * menggunakan HTML Purifier.
+     */
+    protected function bersihkanHtml(?string $html): string
+    {
+        if (empty($html)) {
+            return '';
+        }
+
+        $config = \HTMLPurifier_Config::createDefault();
+        $config->set('HTML.Allowed', 'p,b,strong,i,em,u,s,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6,br,hr,a[href|title|target],img[src|alt|title|width|height],span[style],div[style],pre,code,table,thead,tbody,tr,td,th');
+        $config->set('Attr.AllowedFrameTargets', ['_blank', '_self', '_top']);
+        $config->set('HTML.Nofollow', true);
+        $config->set('URI.AllowedSchemes', ['http' => true, 'https' => true, 'mailto' => true]);
+
+        $purifier = new \HTMLPurifier($config);
+
+        return $purifier->purify($html);
+    }
 }

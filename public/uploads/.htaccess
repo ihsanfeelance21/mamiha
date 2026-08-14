@@ -1,0 +1,27 @@
+# =====================================================
+# KEAMANAN UPLOAD - MENCEGAH EKSEKUSI FILE BERBAHAYA
+# Berlaku juga untuk semua subfolder di bawah uploads/
+# =====================================================
+
+# Blokir eksekusi file script di folder uploads
+<FilesMatch "\.(?i:php|phtml|php3|php4|php5|php7|phps|pht|phar|pl|py|cgi|asp|aspx|jsp|sh|shtml)$">
+    Require all denied
+</FilesMatch>
+
+# Jika pakai Apache 2.2 (host lama), gunakan baris berikut sebagai alternatif
+# <FilesMatch "\.(?i:php|phtml|php3|php4|php5|php7|phps|pht|phar|pl|py|cgi|asp|aspx|jsp|sh|shtml)$">
+#     Deny from all
+# </FilesMatch>
+
+# Cegah sniffing tipe konten (mengurangi risiko XSS lewat gambar)
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+</IfModule>
+
+# Matikan PHP engine untuk folder ini bila PHP-FPM/mod_php aktif
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+
+# Cegah listing direktori
+Options -Indexes

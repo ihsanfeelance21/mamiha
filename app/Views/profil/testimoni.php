@@ -77,6 +77,8 @@
 
         <form action="<?= base_url('profil/testimoni/simpan') ?>" method="post" enctype="multipart/form-data" class="space-y-4">
             <?= csrf_field() ?>
+            <div style="display:none" id="hpc"><label>Fill This Field</label><input type="text" name="honeypot" value="" tabindex="-1" autocomplete="off"></div>
+            <?= csrf_field() ?>
 
             <div>
                 <label class="block text-sm font-bold text-gray-700 mb-1">Nama Lengkap</label>

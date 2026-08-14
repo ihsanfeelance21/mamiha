@@ -19,10 +19,25 @@ class GaleriController extends BaseController
 
     public function index()
     {
-        // Kita hitung jumlah foto untuk setiap album
+        $this->cekIzin('galeri');
+
+        // Hitung jumlah foto per album sekali query (hindari N+1)
         $galeri = $this->galeriModel->orderBy('tanggal', 'DESC')->findAll();
+        $ids = array_column($galeri, 'id');
+
+        $jumlahFoto = [];
+        if ($ids !== []) {
+            $rows = $this->galeriFotoModel->select('galeri_id, COUNT(*) AS total')
+                ->whereIn('galeri_id', $ids)
+                ->groupBy('galeri_id')
+                ->findAll();
+            foreach ($rows as $r) {
+                $jumlahFoto[$r['galeri_id']] = (int) $r['total'];
+            }
+        }
+
         foreach ($galeri as &$item) {
-            $item['jumlah_foto'] = $this->galeriFotoModel->where('galeri_id', $item['id'])->countAllResults();
+            $item['jumlah_foto'] = $jumlahFoto[$item['id']] ?? 0;
         }
 
         $data = [
@@ -35,6 +50,8 @@ class GaleriController extends BaseController
 
     public function create()
     {
+        $this->cekIzin('galeri');
+
         $data = [
             'title' => 'Tambah Album Galeri'
         ];
@@ -44,17 +61,14 @@ class GaleriController extends BaseController
 
     public function store()
     {
+        $this->cekIzin('galeri');
+
         $judul = $this->request->getPost('judul');
         $slug = url_title($judul, '-', true) . '-' . time();
 
         // Handle Upload Sampul
         $fileSampul = $this->request->getFile('sampul');
-        $namaSampul = null;
-
-        if ($fileSampul && $fileSampul->isValid() && !$fileSampul->hasMoved()) {
-            $namaSampul = $fileSampul->getRandomName();
-            $fileSampul->move('uploads/galeri', $namaSampul);
-        }
+        $namaSampul = $this->prosesUpload($fileSampul, 'galeri', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5);
 
         $this->galeriModel->save([
             'judul'     => $judul,
@@ -70,6 +84,8 @@ class GaleriController extends BaseController
 
     public function edit($id)
     {
+        $this->cekIzin('galeri');
+
         $data = [
             'title'  => 'Edit Album Galeri',
             'galeri' => $this->galeriModel->find($id),
@@ -86,18 +102,18 @@ class GaleriController extends BaseController
 
     public function update($id)
     {
+        $this->cekIzin('galeri');
+
         $galeriLama = $this->galeriModel->find($id);
         $fileSampul = $this->request->getFile('sampul');
         $namaSampul = $galeriLama['sampul'];
 
         // Cek jika ada sampul baru yang diupload
-        if ($fileSampul && $fileSampul->isValid() && !$fileSampul->hasMoved()) {
-            $namaSampul = $fileSampul->getRandomName();
-            $fileSampul->move('uploads/galeri', $namaSampul);
-
-            // Hapus sampul lama jika ada
-            if ($galeriLama['sampul'] && file_exists('uploads/galeri/' . $galeriLama['sampul'])) {
-                unlink('uploads/galeri/' . $galeriLama['sampul']);
+        $baru = $this->prosesUpload($fileSampul, 'galeri', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5);
+        if ($baru) {
+            $namaSampul = $baru;
+            if ($galeriLama['sampul'] && file_exists(FCPATH . 'uploads/galeri/' . $galeriLama['sampul'])) {
+                unlink(FCPATH . 'uploads/galeri/' . $galeriLama['sampul']);
             }
         }
 
@@ -114,18 +130,20 @@ class GaleriController extends BaseController
 
     public function delete($id)
     {
+        $this->cekIzin('galeri');
+
         $galeri = $this->galeriModel->find($id);
 
         // Hapus sampul dari folder jika ada
-        if ($galeri['sampul'] && file_exists('uploads/galeri/' . $galeri['sampul'])) {
-            unlink('uploads/galeri/' . $galeri['sampul']);
+        if ($galeri['sampul'] && file_exists(FCPATH . 'uploads/galeri/' . $galeri['sampul'])) {
+            unlink(FCPATH . 'uploads/galeri/' . $galeri['sampul']);
         }
 
         // Hapus semua foto dalam album dari folder public
         $fotos = $this->galeriFotoModel->where('galeri_id', $id)->findAll();
         foreach ($fotos as $foto) {
-            if ($foto['nama_file'] && file_exists('uploads/galeri/fotos/' . $foto['nama_file'])) {
-                unlink('uploads/galeri/fotos/' . $foto['nama_file']);
+            if ($foto['nama_file'] && file_exists(FCPATH . 'uploads/galeri/fotos/' . $foto['nama_file'])) {
+                unlink(FCPATH . 'uploads/galeri/fotos/' . $foto['nama_file']);
             }
         }
 
@@ -139,13 +157,14 @@ class GaleriController extends BaseController
     // Metode khusus untuk mengupload foto-foto dalam album sekaligus
     public function uploadPhotos($id)
     {
+        $this->cekIzin('galeri');
+
         if ($this->request->isAJAX()) {
             $fileFoto = $this->request->getFile('file'); // 'file' adalah nama field dari library Dropzone.js
 
-            if ($fileFoto->isValid() && !$fileFoto->hasMoved()) {
-                $namaFoto = $fileFoto->getRandomName();
-                $fileFoto->move('uploads/galeri/fotos', $namaFoto);
+            $namaFoto = $this->prosesUpload($fileFoto, 'galeri/fotos', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5);
 
+            if ($namaFoto) {
                 $this->galeriFotoModel->save([
                     'galeri_id' => $id,
                     'nama_file' => $namaFoto
@@ -160,14 +179,16 @@ class GaleriController extends BaseController
     // Metode khusus untuk menghapus foto tertentu dalam album
     public function deletePhoto($id)
     {
+        $this->cekIzin('galeri');
+
         if ($this->request->isAJAX()) {
             $photoId = $this->request->getPost('id');
             $foto = $this->galeriFotoModel->find($photoId);
 
             if ($foto) {
                 // Hapus foto dari folder
-                if ($foto['nama_file'] && file_exists('uploads/galeri/fotos/' . $foto['nama_file'])) {
-                    unlink('uploads/galeri/fotos/' . $foto['nama_file']);
+                if ($foto['nama_file'] && file_exists(FCPATH . 'uploads/galeri/fotos/' . $foto['nama_file'])) {
+                    unlink(FCPATH . 'uploads/galeri/fotos/' . $foto['nama_file']);
                 }
                 // Hapus foto dari database
                 $this->galeriFotoModel->delete($photoId);

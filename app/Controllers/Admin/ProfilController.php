@@ -22,6 +22,7 @@ class ProfilController extends BaseController
 
     public function index()
     {
+        $this->cekIzin('profil');
         // Ambil data profil baris pertama (karena kita cuma pakai 1 baris)
         $data['profil'] = $this->profilModel->first();
 
@@ -34,6 +35,7 @@ class ProfilController extends BaseController
     // Fungsi untuk menyimpan perubahan Kilas Balik, Visi Misi, Tentang Kami
     public function updateUmum()
     {
+        $this->cekIzin('profil');
         $profilLama = $this->profilModel->first();
 
         // Atur data yang akan diupdate
@@ -50,13 +52,11 @@ class ProfilController extends BaseController
 
         // Cek apakah ada upload foto kilas balik baru
         $fotoKilasBalik = $this->request->getFile('kilas_balik_foto');
-        if ($fotoKilasBalik && $fotoKilasBalik->isValid() && ! $fotoKilasBalik->hasMoved()) {
-            $namaFotoBaru = $fotoKilasBalik->getRandomName();
-            $fotoKilasBalik->move('uploads/profil', $namaFotoBaru);
-
+        $namaFotoBaru = $this->prosesUpload($fotoKilasBalik, 'profil', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5);
+        if ($namaFotoBaru) {
             // Hapus foto lama jika ada
-            if ($profilLama['kilas_balik_foto'] && file_exists('uploads/profil/' . $profilLama['kilas_balik_foto'])) {
-                unlink('uploads/profil/' . $profilLama['kilas_balik_foto']);
+            if ($profilLama['kilas_balik_foto'] && file_exists(FCPATH . 'uploads/profil/' . $profilLama['kilas_balik_foto'])) {
+                unlink(FCPATH . 'uploads/profil/' . $profilLama['kilas_balik_foto']);
             }
 
             $dataUpdate['kilas_balik_foto'] = $namaFotoBaru;
@@ -73,13 +73,9 @@ class ProfilController extends BaseController
 
     public function simpanFasilitas()
     {
+        $this->cekIzin('profil');
         $fotoCover = $this->request->getFile('foto_cover');
-        $namaFoto = null;
-
-        if ($fotoCover && $fotoCover->isValid() && ! $fotoCover->hasMoved()) {
-            $namaFoto = $fotoCover->getRandomName();
-            $fotoCover->move('uploads/fasilitas', $namaFoto); // Pastikan folder public/uploads/fasilitas ada
-        }
+        $namaFoto = $this->prosesUpload($fotoCover, 'fasilitas', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5);
 
         $this->fasilitasModel->save([
             'judul'      => $this->request->getPost('judul'),
@@ -93,18 +89,19 @@ class ProfilController extends BaseController
 
     public function updateFasilitas($id)
     {
+        $this->cekIzin('profil');
         $fasilitasLama = $this->fasilitasModel->find($id);
         $fotoCover = $this->request->getFile('foto_cover');
         $namaFoto = $fasilitasLama['foto_cover'];
 
         // Jika admin upload foto cover baru
-        if ($fotoCover && $fotoCover->isValid() && ! $fotoCover->hasMoved()) {
-            $namaFoto = $fotoCover->getRandomName();
-            $fotoCover->move('uploads/fasilitas', $namaFoto);
+        $baru = $this->prosesUpload($fotoCover, 'fasilitas', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5);
+        if ($baru) {
+            $namaFoto = $baru;
 
             // Hapus foto lama
-            if ($fasilitasLama['foto_cover'] && file_exists('uploads/fasilitas/' . $fasilitasLama['foto_cover'])) {
-                unlink('uploads/fasilitas/' . $fasilitasLama['foto_cover']);
+            if ($fasilitasLama['foto_cover'] && file_exists(FCPATH . 'uploads/fasilitas/' . $fasilitasLama['foto_cover'])) {
+                unlink(FCPATH . 'uploads/fasilitas/' . $fasilitasLama['foto_cover']);
             }
         }
 
@@ -120,6 +117,7 @@ class ProfilController extends BaseController
 
     public function hapusFasilitas($id)
     {
+        $this->cekIzin('profil');
         $fasilitas = $this->fasilitasModel->find($id);
 
         // Hapus file fisik foto cover
@@ -138,6 +136,7 @@ class ProfilController extends BaseController
 
     public function galeriFasilitas($id)
     {
+        $this->cekIzin('profil');
         $data['fasilitas'] = $this->fasilitasModel->find($id);
 
         // Jika fasilitas tidak ditemukan, kembalikan ke halaman profil
@@ -152,14 +151,13 @@ class ProfilController extends BaseController
 
     public function simpanGaleri()
     {
+        $this->cekIzin('profil');
         $fasilitas_id = $this->request->getPost('fasilitas_id');
         $foto = $this->request->getFile('foto');
 
-        if ($foto && $foto->isValid() && ! $foto->hasMoved()) {
-            $namaFoto = $foto->getRandomName();
-            // Kita simpan di subfolder khusus galeri
-            $foto->move('uploads/fasilitas/galeri', $namaFoto);
+        $namaFoto = $this->prosesUpload($foto, 'fasilitas/galeri', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5);
 
+        if ($namaFoto) {
             $this->galeriModel->save([
                 'fasilitas_id' => $fasilitas_id,
                 'foto'         => $namaFoto,
@@ -174,6 +172,7 @@ class ProfilController extends BaseController
 
     public function hapusGaleri($id)
     {
+        $this->cekIzin('profil');
         $galeri = $this->galeriModel->find($id);
 
         if ($galeri) {

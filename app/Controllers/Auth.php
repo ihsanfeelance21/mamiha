@@ -19,6 +19,18 @@ class Auth extends BaseController
         $userModel = new UserModel();
         $logModel = new LoginLogModel();
 
+        // ==========================================
+        // 🛡️ PROTEKSI BRUTE FORCE (Rate Limiting)
+        // ==========================================
+        $keyGagal = 'login_failed_' . md5($this->request->getIPAddress());
+        $gagal = (int) (session()->get($keyGagal) ?? 0);
+        $terkunci = session()->get($keyGagal . '_lock');
+
+        if ($terkunci && strtotime($terkunci) > time()) {
+            $sisa = ceil((strtotime($terkunci) - time()) / 60);
+            return redirect()->back()->with('error', "Terlalu banyak percobaan gagal. Coba lagi dalam {$sisa} menit.");
+        }
+
         $username = $this->request->getPost('username');
         $password = $this->request->getPost('password');
         $user = $userModel->where('username', $username)->first();
@@ -35,6 +47,10 @@ class Auth extends BaseController
         // ==========================================
 
         if ($user && password_verify($password, $user['password'])) {
+
+            // Reset counter percobaan gagal setelah berhasil login
+            session()->remove($keyGagal);
+            session()->remove($keyGagal . '_lock');
 
             // --- TAMBAHAN 2: Ambil Permission User dari Database ---
             $permModel = new UserPermissionModel();
@@ -57,11 +73,23 @@ class Auth extends BaseController
             $logModel->save([
                 'id_user'    => $user['id_user'],
                 'ip_address' => $this->request->getIPAddress(),
-                'user_agent' => $this->request->getUserAgent()->getAgentString()
+                'user_agent' => $this->request->getUserAgent()->getAgentString(),
+                'login_at'   => date('Y-m-d H:i:s')
             ]);
 
             return redirect()->to('admin/dashboard')->with('success_login', true);
         }
+
+        // ==========================================
+        // 🛡️ TAMBAH COUNTER GAGAL LOGIN
+        // ==========================================
+        $gagal++;
+        if ($gagal >= 5) {
+            session()->set($keyGagal, $gagal);
+            session()->set($keyGagal . '_lock', date('Y-m-d H:i:s', strtotime('+15 minutes')));
+            return redirect()->back()->with('error', 'Terlalu banyak percobaan gagal. Akun dibatasi 15 menit.');
+        }
+        session()->set($keyGagal, $gagal);
         return redirect()->back()->with('error', 'Username atau Password salah!');
     }
 

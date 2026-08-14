@@ -37,6 +37,10 @@ class User extends BaseController
 
     public function simpan()
     {
+        if (session()->get('role') !== 'superadmin') {
+            return redirect()->to('admin/dashboard')->with('error', 'Akses ditolak!');
+        }
+
         $userModel = new UserModel();
         $permModel = new UserPermissionModel();
 
@@ -95,6 +99,10 @@ class User extends BaseController
 
     public function update($id)
     {
+        if (session()->get('role') !== 'superadmin') {
+            return redirect()->to('admin/dashboard')->with('error', 'Akses ditolak!');
+        }
+
         $userModel = new UserModel();
         $permModel = new UserPermissionModel();
 
@@ -131,6 +139,10 @@ class User extends BaseController
 
     public function hapus($id)
     {
+        if (session()->get('role') !== 'superadmin') {
+            return redirect()->to('admin/dashboard')->with('error', 'Akses ditolak!');
+        }
+
         // Proteksi agar Superadmin utama (ID 1) tidak bisa dihapus
         if ($id == 1) return redirect()->back()->with('error', 'Admin utama tidak bisa dihapus!');
 

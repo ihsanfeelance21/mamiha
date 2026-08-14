@@ -16,6 +16,7 @@ class Universitas extends BaseController
 
     public function index()
     {
+        $this->cekIzin('alumni');
         $data = [
             'title' => 'Kelola Universitas',
             'universitas' => $this->universitasModel->orderBy('nama_universitas', 'ASC')->findAll()
@@ -25,22 +26,14 @@ class Universitas extends BaseController
 
     public function store()
     {
+        $this->cekIzin('alumni');
         // Handle Logo
         $fileLogo = $this->request->getFile('logo');
-        $namaLogo = null;
-        if ($fileLogo && $fileLogo->isValid() && !$fileLogo->hasMoved()) {
-            $namaLogo = $fileLogo->getRandomName();
-            $fileLogo->move('uploads/universitas', $namaLogo);
-        }
+        $namaLogo = $this->prosesUpload($fileLogo, 'universitas', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif'], 2);
 
         // Handle Gambar Gedung
         $fileGedung = $this->request->getFile('gambar_gedung');
-        $namaGedung = null;
-        if ($fileGedung && $fileGedung->isValid() && !$fileGedung->hasMoved()) {
-            $namaGedung = $fileGedung->getRandomName();
-            // Simpan di folder baru: uploads/gedung
-            $fileGedung->move('uploads/gedung', $namaGedung);
-        }
+        $namaGedung = $this->prosesUpload($fileGedung, 'gedung', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5);
 
         $this->universitasModel->insert([
             'nama_universitas' => $this->request->getPost('nama_universitas'),
@@ -53,6 +46,7 @@ class Universitas extends BaseController
 
     public function edit($id)
     {
+        $this->cekIzin('alumni');
         $data = [
             'title' => 'Edit Universitas',
             'kampus' => $this->universitasModel->find($id)
@@ -67,27 +61,28 @@ class Universitas extends BaseController
 
     public function update($id)
     {
+        $this->cekIzin('alumni');
         $kampusLama = $this->universitasModel->find($id);
 
         // Handle Logo Update
         $fileLogo = $this->request->getFile('logo');
         $namaLogo = $kampusLama['logo'];
-        if ($fileLogo && $fileLogo->isValid() && !$fileLogo->hasMoved()) {
-            $namaLogo = $fileLogo->getRandomName();
-            $fileLogo->move('uploads/universitas', $namaLogo);
-            if ($kampusLama['logo'] && file_exists('uploads/universitas/' . $kampusLama['logo'])) {
-                unlink('uploads/universitas/' . $kampusLama['logo']);
+        $baruLogo = $this->prosesUpload($fileLogo, 'universitas', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif'], 2);
+        if ($baruLogo) {
+            $namaLogo = $baruLogo;
+            if ($kampusLama['logo'] && file_exists(FCPATH . 'uploads/universitas/' . $kampusLama['logo'])) {
+                unlink(FCPATH . 'uploads/universitas/' . $kampusLama['logo']);
             }
         }
 
         // Handle Gambar Gedung Update
         $fileGedung = $this->request->getFile('gambar_gedung');
         $namaGedung = $kampusLama['gambar_gedung'];
-        if ($fileGedung && $fileGedung->isValid() && !$fileGedung->hasMoved()) {
-            $namaGedung = $fileGedung->getRandomName();
-            $fileGedung->move('uploads/gedung', $namaGedung);
-            if ($kampusLama['gambar_gedung'] && file_exists('uploads/gedung/' . $kampusLama['gambar_gedung'])) {
-                unlink('uploads/gedung/' . $kampusLama['gambar_gedung']);
+        $baruGedung = $this->prosesUpload($fileGedung, 'gedung', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5);
+        if ($baruGedung) {
+            $namaGedung = $baruGedung;
+            if ($kampusLama['gambar_gedung'] && file_exists(FCPATH . 'uploads/gedung/' . $kampusLama['gambar_gedung'])) {
+                unlink(FCPATH . 'uploads/gedung/' . $kampusLama['gambar_gedung']);
             }
         }
 
@@ -102,16 +97,17 @@ class Universitas extends BaseController
 
     public function delete($id)
     {
+        $this->cekIzin('alumni');
         $kampus = $this->universitasModel->find($id);
 
         // Hapus logo
-        if ($kampus['logo'] && file_exists('uploads/universitas/' . $kampus['logo'])) {
-            unlink('uploads/universitas/' . $kampus['logo']);
+        if ($kampus['logo'] && file_exists(FCPATH . 'uploads/universitas/' . $kampus['logo'])) {
+            unlink(FCPATH . 'uploads/universitas/' . $kampus['logo']);
         }
 
         // Hapus gambar gedung
-        if ($kampus['gambar_gedung'] && file_exists('uploads/gedung/' . $kampus['gambar_gedung'])) {
-            unlink('uploads/gedung/' . $kampus['gambar_gedung']);
+        if ($kampus['gambar_gedung'] && file_exists(FCPATH . 'uploads/gedung/' . $kampus['gambar_gedung'])) {
+            unlink(FCPATH . 'uploads/gedung/' . $kampus['gambar_gedung']);
         }
 
         $this->universitasModel->delete($id);

@@ -16,6 +16,7 @@ class AdminTestimoniController extends BaseController
 
     public function index()
     {
+        $this->cekIzin('profil');
         // Ambil semua testimoni, urutkan dari yang paling baru
         $data['testimoni'] = $this->testimoniModel->orderBy('created_at', 'DESC')->findAll();
 
@@ -25,18 +26,21 @@ class AdminTestimoniController extends BaseController
 
     public function approve($id)
     {
+        $this->cekIzin('profil');
         $this->testimoniModel->update($id, ['is_approved' => 1]);
         return redirect()->to('/admin/testimoni')->with('pesan', 'Testimoni berhasil di-approve dan akan tampil di halaman depan.');
     }
 
     public function reject($id)
     {
+        $this->cekIzin('profil');
         $this->testimoniModel->update($id, ['is_approved' => 0]);
         return redirect()->to('/admin/testimoni')->with('pesan', 'Testimoni disembunyikan (Not Approved).');
     }
 
     public function delete($id)
     {
+        $this->cekIzin('profil');
         $testimoni = $this->testimoniModel->find($id);
 
         // Hapus foto dari folder jika ada

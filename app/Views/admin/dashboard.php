@@ -34,11 +34,38 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-5 hover:border-[#00A859] transition-all group">
         <div class="w-14 h-14 bg-green-50 rounded-2xl flex items-center justify-center text-[#00A859] group-hover:bg-[#00A859] group-hover:text-white transition-all">
-            <i class="fa-solid fa-user-plus text-xl"></i>
+            <i class="fa-solid fa-newspaper text-xl"></i>
         </div>
         <div>
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">PPDB</p>
-            <p class="text-2xl font-black text-gray-800"><?= $stats['pendaftar'] ?></p>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Berita</p>
+            <p class="text-2xl font-black text-gray-800"><?= $stats['berita'] ?></p>
+        </div>
+    </div>
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-5 hover:border-[#00A859] transition-all group">
+        <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all">
+            <i class="fa-solid fa-envelope-open-text text-xl"></i>
+        </div>
+        <div>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Kotak Masuk</p>
+            <p class="text-2xl font-black text-gray-800"><?= $stats['pesan'] ?></p>
+        </div>
+    </div>
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-5 hover:border-[#00A859] transition-all group">
+        <div class="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-500 group-hover:bg-purple-500 group-hover:text-white transition-all">
+            <i class="fa-solid fa-graduation-cap text-xl"></i>
+        </div>
+        <div>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Alumni</p>
+            <p class="text-2xl font-black text-gray-800"><?= $stats['alumni'] ?></p>
+        </div>
+    </div>
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-5 hover:border-[#00A859] transition-all group">
+        <div class="w-14 h-14 bg-yellow-50 rounded-2xl flex items-center justify-center text-yellow-500 group-hover:bg-yellow-500 group-hover:text-white transition-all">
+            <i class="fa-solid fa-chalkboard-user text-xl"></i>
+        </div>
+        <div>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Guru & Staff</p>
+            <p class="text-2xl font-black text-gray-800"><?= $stats['guru'] ?></p>
         </div>
     </div>
 </div>

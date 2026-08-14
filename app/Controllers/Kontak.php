@@ -19,6 +19,15 @@ class Kontak extends BaseController
     {
         $pesanModel = new \App\Models\PesanKontakModel();
 
+        if (! $this->validate([
+            'nama'  => 'required|min_length[3]|max_length[150]',
+            'email' => 'permit_empty|valid_email|max_length[100]',
+            'no_wa' => 'permit_empty|max_length[30]',
+            'pesan' => 'required|min_length[10]|max_length[2000]',
+        ])) {
+            return redirect()->back()->withInput()->with('error', 'Mohon periksa kembali isian Anda.');
+        }
+
         $pesanModel->save([
             'nama'     => esc($this->request->getPost('nama')),
             'email'    => esc($this->request->getPost('email')),

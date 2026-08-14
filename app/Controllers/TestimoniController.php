@@ -32,14 +32,17 @@ class TestimoniController extends BaseController
 
     public function simpan()
     {
-        $fileFoto = $this->request->getFile('foto');
-        $namaFoto = null;
-
-        // Cek jika ada file foto yang diupload
-        if ($fileFoto && $fileFoto->isValid() && ! $fileFoto->hasMoved()) {
-            $namaFoto = $fileFoto->getRandomName(); // Generate nama acak
-            $fileFoto->move('uploads/testimoni', $namaFoto); // Simpan ke public/uploads/testimoni
+        if (! $this->validate([
+            'nama'          => 'required|min_length[3]|max_length[100]',
+            'status_user'   => 'required|max_length[100]',
+            'rating'        => 'required|in_list[1,2,3,4,5]',
+            'isi_testimoni' => 'required|min_length[10]|max_length[500]',
+        ])) {
+            return redirect()->back()->withInput()->with('error', 'Mohon periksa kembali form testimoni Anda.');
         }
+
+        $fileFoto = $this->request->getFile('foto');
+        $namaFoto = $this->prosesUpload($fileFoto, 'testimoni', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 2);
 
         // Simpan ke database
         $this->testimoniModel->save([

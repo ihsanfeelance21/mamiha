@@ -80,6 +80,8 @@
 
                     <form action="<?= base_url('hubungi-kami/kirim') ?>" method="POST">
                         <?= csrf_field() ?>
+                        <div style="display:none" id="hpc"><label>Fill This Field</label><input type="text" name="honeypot" value="" tabindex="-1" autocomplete="off"></div>
+                        <?= csrf_field() ?>
 
                         <div class="mb-5">
                             <label class="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-2">Nama Lengkap <span class="text-red-500">*</span></label>

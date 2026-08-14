@@ -77,14 +77,16 @@ class AlumniPublic extends BaseController
     {
         $alumniModel = new AlumniModel();
 
+        if (! $this->validate([
+            'nama_alumni'  => 'required|min_length[3]|max_length[200]',
+            'tahun_lulus'  => 'required|regex_match[/^[0-9]{4}$/]',
+        ])) {
+            return redirect()->back()->withInput()->with('error', 'Mohon periksa kembali data alumni Anda (nama & tahun lulus wajib diisi).');
+        }
+
         // Cek apakah ada file foto yang diupload
         $fileFoto = $this->request->getFile('foto');
-        $namaFoto = null;
-
-        if ($fileFoto && $fileFoto->isValid() && !$fileFoto->hasMoved()) {
-            $namaFoto = $fileFoto->getRandomName();
-            $fileFoto->move('uploads/alumni', $namaFoto);
-        }
+        $namaFoto = $this->prosesUpload($fileFoto, 'alumni', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 2);
 
         // Logika untuk Kampus (Apakah milih dari daftar atau ngetik manual)
         $idUniversitas = $this->request->getPost('id_universitas');

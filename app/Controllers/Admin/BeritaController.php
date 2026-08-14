@@ -29,6 +29,7 @@ class BeritaController extends BaseController
 
     public function kategori()
     {
+        $this->cekIzin('kegiatan');
         $data = [
             'title'    => 'Kelola Kategori Berita',
             'kategori' => $this->kategoriModel->findAll()
@@ -38,6 +39,7 @@ class BeritaController extends BaseController
 
     public function simpanKategori()
     {
+        $this->cekIzin('kegiatan');
         $namaKategori = $this->request->getPost('nama_kategori');
         $slug = url_title($namaKategori, '-', true);
 
@@ -55,6 +57,7 @@ class BeritaController extends BaseController
 
     public function hapusKategori($id)
     {
+        $this->cekIzin('kegiatan');
         $cekBerita = $this->beritaModel->where('id_kategori', $id)->first();
         if ($cekBerita) {
             return redirect()->back()->with('error', 'Kategori tidak bisa dihapus karena sedang digunakan oleh berita!');
@@ -71,6 +74,7 @@ class BeritaController extends BaseController
 
     public function index()
     {
+        $this->cekIzin('kegiatan');
         $data = [
             'title'  => 'Manajemen Berita',
             'berita' => $this->beritaModel->getBeritaDenganKategori()
@@ -81,6 +85,7 @@ class BeritaController extends BaseController
     // UPDATE: Fungsi Tambah
     public function tambah()
     {
+        $this->cekIzin('kegiatan');
         $data = [
             'title'    => 'Tulis Berita Baru',
             'kategori' => $this->kategoriModel->findAll(),
@@ -97,6 +102,7 @@ class BeritaController extends BaseController
     // UPDATE: Fungsi Simpan (Menangani Penjadwalan & Multiple Tags)
     public function simpan()
     {
+        $this->cekIzin('kegiatan');
         $statusInput = $this->request->getPost('status');
 
         $rules = [
@@ -130,9 +136,8 @@ class BeritaController extends BaseController
                 ->save(FCPATH . 'uploads/berita/' . $namaGambarFinal, 80);
         }
 
-        // 2. Bersihkan Konten dari XSS
-        $kontenKotor = $this->request->getPost('konten');
-        $kontenBersih = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $kontenKotor);
+        // 2. Bersihkan Konten dari XSS (HTML Purifier)
+        $kontenBersih = $this->bersihkanHtml($this->request->getPost('konten'));
 
         // 3. Tentukan Waktu Tayang (LOGIKA BACKDATE & TERJADWAL)
         $waktuTayangInput = $this->request->getPost('waktu_tayang');
@@ -197,6 +202,7 @@ class BeritaController extends BaseController
 
     public function edit($id)
     {
+        $this->cekIzin('kegiatan');
         $berita = $this->beritaModel->find($id);
 
         if (!$berita) {
@@ -221,6 +227,7 @@ class BeritaController extends BaseController
 
     public function update($id)
     {
+        $this->cekIzin('kegiatan');
         // 1. Cari data lama
         $beritaLama = $this->beritaModel->find($id);
         if (!$beritaLama) {
@@ -266,9 +273,8 @@ class BeritaController extends BaseController
                 ->save(FCPATH . 'uploads/berita/' . $namaGambarFinal, 80);
         }
 
-        // 4. Bersihkan Konten dari XSS
-        $kontenKotor = $this->request->getPost('konten');
-        $kontenBersih = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $kontenKotor);
+        // 4. Bersihkan Konten dari XSS (HTML Purifier)
+        $kontenBersih = $this->bersihkanHtml($this->request->getPost('konten'));
 
         // 5. Tentukan Waktu Tayang (LOGIKA BACKDATE & TERJADWAL UNTUK UPDATE)
         $waktuTayangInput = $this->request->getPost('waktu_tayang');
@@ -328,6 +334,7 @@ class BeritaController extends BaseController
 
     public function hapus($id)
     {
+        $this->cekIzin('kegiatan');
         $berita = $this->beritaModel->find($id);
         if ($berita) {
             // Hapus file gambar thumbnail
@@ -351,16 +358,27 @@ class BeritaController extends BaseController
 
     public function uploadGambarQuill()
     {
+        $this->cekIzin('kegiatan');
         $file = $this->request->getFile('image');
 
-        if ($file && $file->isValid() && !$file->hasMoved()) {
-            $namaAcak = $file->getRandomName();
-            $namaFinal = pathinfo($namaAcak, PATHINFO_FILENAME) . '.webp';
+        $namaFinal = $this->prosesUpload($file, 'berita/konten', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5);
 
-            \Config\Services::image()
-                ->withFile($file->getTempName())
-                ->resize(800, 800, true, 'width')
-                ->save(FCPATH . 'uploads/berita/konten/' . $namaFinal, 80);
+        if ($namaFinal) {
+            $path = FCPATH . 'uploads/berita/konten/' . $namaFinal;
+
+            // Konversi ke WebP jika memungkinkan
+            if (function_exists('imagecreatefromstring')) {
+                $konten = @file_get_contents($path);
+                $im = @imagecreatefromstring($konten);
+                if ($im !== false) {
+                    $namaWebp = pathinfo($namaFinal, PATHINFO_FILENAME) . '.webp';
+                    if (imagewebp($im, FCPATH . 'uploads/berita/konten/' . $namaWebp)) {
+                        @unlink($path);
+                        $namaFinal = $namaWebp;
+                    }
+                    imagedestroy($im);
+                }
+            }
 
             return $this->response->setJSON([
                 'success' => true,
@@ -377,6 +395,7 @@ class BeritaController extends BaseController
 
     public function tags()
     {
+        $this->cekIzin('kegiatan');
         $data = [
             'title' => 'Kelola Tags & Label',
             'tags'  => $this->tagModel->findAll()
@@ -386,6 +405,7 @@ class BeritaController extends BaseController
 
     public function simpanTag()
     {
+        $this->cekIzin('kegiatan');
         $namaTag = $this->request->getPost('nama_tag');
         $linkEksternal = $this->request->getPost('link_eksternal'); // Opsional
         $slug = url_title($namaTag, '-', true);
@@ -406,6 +426,7 @@ class BeritaController extends BaseController
 
     public function hapusTag($id)
     {
+        $this->cekIzin('kegiatan');
         // 1. Bersihkan dulu data tag ini dari tabel pivot (berita_tags)
         // supaya tidak ada sisa data tag "hantu" di berita yang sudah terbit.
         $this->beritaTagModel->where('id_tag', $id)->delete();

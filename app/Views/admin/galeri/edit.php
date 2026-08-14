@@ -17,6 +17,7 @@
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 mb-8">
         <h2 class="text-lg font-bold border-b border-gray-100 pb-3 mb-5 text-[#0B4A2D]">Detail Album</h2>
         <form action="<?= base_url('admin/galeri/update/' . $galeri['id']) ?>" method="post" enctype="multipart/form-data">
+            <?= csrf_field() ?>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div class="mb-6 md:mb-0">

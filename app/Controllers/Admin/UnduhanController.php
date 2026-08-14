@@ -16,6 +16,7 @@ class UnduhanController extends BaseController
 
     public function index()
     {
+        $this->cekIzin('pengaturan');
         $data = [
             'title'   => 'Manajemen Pusat Unduhan',
             'unduhan' => $this->unduhanModel->orderBy('created_at', 'DESC')->findAll()
@@ -26,6 +27,7 @@ class UnduhanController extends BaseController
 
     public function create()
     {
+        $this->cekIzin('pengaturan');
         $data = [
             'title' => 'Tambah File Unduhan'
         ];
@@ -34,16 +36,20 @@ class UnduhanController extends BaseController
 
     public function store()
     {
+        $this->cekIzin('pengaturan');
         // Ambil file yang diupload
         $fileUnduhan = $this->request->getFile('file_unduhan');
         $namaFile = '';
 
         // Cek apakah ada file yang diupload dan valid
         if ($fileUnduhan && $fileUnduhan->isValid() && !$fileUnduhan->hasMoved()) {
-            // Generate nama file acak agar tidak bentrok
-            $namaFile = $fileUnduhan->getRandomName();
-            // Pindahkan file ke folder public/uploads/unduhan
-            $fileUnduhan->move('uploads/unduhan', $namaFile);
+            // Whitelist ekstensi dokumen yang aman
+            $namaFile = $this->prosesUpload($fileUnduhan, 'unduhan',
+                ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'application/zip', 'text/plain', 'image/jpeg', 'image/png', 'image/webp'],
+                ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'zip', 'txt', 'jpg', 'jpeg', 'png', 'webp'], 10);
+            if (! $namaFile) {
+                $namaFile = '';
+            }
         }
 
         $this->unduhanModel->save([
@@ -60,6 +66,7 @@ class UnduhanController extends BaseController
 
     public function edit($id)
     {
+        $this->cekIzin('pengaturan');
         $data = [
             'title'   => 'Edit File Unduhan',
             'unduhan' => $this->unduhanModel->find($id)
@@ -74,6 +81,7 @@ class UnduhanController extends BaseController
 
     public function update($id)
     {
+        $this->cekIzin('pengaturan');
         $unduhanLama = $this->unduhanModel->find($id);
         $fileUnduhan = $this->request->getFile('file_unduhan');
 
@@ -82,14 +90,17 @@ class UnduhanController extends BaseController
 
         // Jika user upload file baru
         if ($fileUnduhan && $fileUnduhan->isValid() && !$fileUnduhan->hasMoved()) {
-            // Hapus file lama jika ada
-            if ($unduhanLama['file_unduhan'] && file_exists('uploads/unduhan/' . $unduhanLama['file_unduhan'])) {
-                unlink('uploads/unduhan/' . $unduhanLama['file_unduhan']);
-            }
+            $baru = $this->prosesUpload($fileUnduhan, 'unduhan',
+                ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'application/zip', 'text/plain', 'image/jpeg', 'image/png', 'image/webp'],
+                ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'zip', 'txt', 'jpg', 'jpeg', 'png', 'webp'], 10);
 
-            // Simpan file baru
-            $namaFile = $fileUnduhan->getRandomName();
-            $fileUnduhan->move('uploads/unduhan', $namaFile);
+            if ($baru) {
+                // Hapus file lama jika ada
+                if ($unduhanLama['file_unduhan'] && file_exists(FCPATH . 'uploads/unduhan/' . $unduhanLama['file_unduhan'])) {
+                    unlink(FCPATH . 'uploads/unduhan/' . $unduhanLama['file_unduhan']);
+                }
+                $namaFile = $baru;
+            }
         }
 
         $this->unduhanModel->update($id, [
@@ -106,6 +117,7 @@ class UnduhanController extends BaseController
 
     public function delete($id)
     {
+        $this->cekIzin('pengaturan');
         $unduhan = $this->unduhanModel->find($id);
 
         // Hapus file fisik dari folder

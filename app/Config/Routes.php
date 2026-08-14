@@ -10,7 +10,9 @@ use CodeIgniter\Router\RouteCollection;
 // 🌍 RUTE PUBLIK (FRONTEND)
 // ==========================================
 $routes->get('/', 'Home::index');
+$routes->get('kegiatan', 'Home::kegiatan');
 $routes->get('kegiatan/(:segment)', 'Home::detail_kegiatan/$1');
+$routes->get('daftar', 'AlumniPublic::daftar');
 
 $routes->group('profil', function ($routes) {
     $routes->get('madrasah', 'Profil::madrasah');
@@ -73,9 +75,9 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
 
     // Akses Cepat & Beranda
     $routes->group('akses-cepat', function ($routes) {
-        $routes->get('/', 'Admin::akses_cepat'); // INI MEMANGGIL FUNGSI YANG TIDAK ADA
-        $routes->post('tambah', 'Admin::akses_cepat_tambah'); // INI JUGA TIDAK ADA
-        $routes->get('hapus/(:num)', 'Admin::akses_cepat_hapus/$1'); // INI JUGA TIDAK ADA
+        $routes->get('/', 'Admin::akses_cepat');
+        $routes->post('tambah', 'Admin::akses_cepat_tambah');
+        $routes->get('hapus/(:num)', 'Admin::akses_cepat_hapus/$1');
     });
 
 
