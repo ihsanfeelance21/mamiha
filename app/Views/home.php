@@ -410,7 +410,7 @@ if ($isBuka) {
                                 <span class="text-gray-400 font-bold text-[10px] uppercase tracking-widest"><?= esc($item['kategori_prestasi']) ?></span>
                             </div>
 
-                            <a href="<?= base_url('prestasi/' . $item['slug']) ?>" class="block">
+                            <a href="<?= base_url('prestasi/detail/' . $item['slug']) ?>" class="block">
                                 <h3 class="text-lg font-extrabold text-gray-800 leading-tight mb-2 line-clamp-2 group-hover:text-[#00A859] transition-colors" title="<?= esc($item['judul']) ?>">
                                     <?= esc($item['judul']) ?>
                                 </h3>

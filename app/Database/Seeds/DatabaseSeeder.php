@@ -13,5 +13,8 @@ class DatabaseSeeder extends Seeder
 
         // Seeder User Admin (username: admin, password: admin123)
         $this->call('UserSeeder');
+
+        // Seeder Data Dummy Lengkap (untuk demo / tampilan sementara)
+        $this->call('DummySeeder');
     }
 }
