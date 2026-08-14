@@ -16,7 +16,7 @@ class PengumumanController extends BaseController
 
     public function index()
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('pengumuman');
         $data = [
             'title'      => 'Manajemen Pengumuman',
             'pengumuman' => $this->pengumumanModel->orderBy('tanggal_publish', 'DESC')->findAll()
@@ -27,7 +27,7 @@ class PengumumanController extends BaseController
 
     public function create()
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('pengumuman');
         $data = [
             'title' => 'Tambah Pengumuman'
         ];
@@ -37,7 +37,7 @@ class PengumumanController extends BaseController
 
     public function store()
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('pengumuman');
         $judul = $this->request->getPost('judul');
         $slug = url_title($judul, '-', true) . '-' . time();
 
@@ -60,7 +60,7 @@ class PengumumanController extends BaseController
 
     public function edit($id)
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('pengumuman');
         $data = [
             'title'      => 'Edit Pengumuman',
             'pengumuman' => $this->pengumumanModel->find($id)
@@ -75,7 +75,7 @@ class PengumumanController extends BaseController
 
     public function update($id)
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('pengumuman');
         $pengumumanLama = $this->pengumumanModel->find($id);
         $fileGambar = $this->request->getFile('gambar');
         $namaGambar = $pengumumanLama['gambar'];
@@ -105,7 +105,7 @@ class PengumumanController extends BaseController
 
     public function delete($id)
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('pengumuman');
         $pengumuman = $this->pengumumanModel->find($id);
 
         // Hapus gambar dari folder jika ada

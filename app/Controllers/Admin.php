@@ -145,7 +145,7 @@ class Admin extends BaseController
 
     public function akses_cepat()
     {
-        $this->cekIzin('beranda'); // Atau ganti 'akses_cepat' jika Mas punya permission khusus
+        $this->cekIzin('akses_cepat'); // Atau ganti 'akses_cepat' jika Mas punya permission khusus
         $data = [
             'title'       => 'Kelola Akses Cepat',
             'akses_cepat' => (new AksesCepatModel())->findAll()
@@ -155,7 +155,7 @@ class Admin extends BaseController
 
     public function akses_cepat_tambah()
     {
-        $this->cekIzin('beranda');
+        $this->cekIzin('akses_cepat');
         $model = new AksesCepatModel();
 
         // 1. Validasi disesuaikan dengan atribut name="..." di View
@@ -179,7 +179,7 @@ class Admin extends BaseController
 
     public function akses_cepat_hapus($id)
     {
-        $this->cekIzin('beranda');
+        $this->cekIzin('akses_cepat');
         $model = new AksesCepatModel();
 
         if ($model->find($id)) {

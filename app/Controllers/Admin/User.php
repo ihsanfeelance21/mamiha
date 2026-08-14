@@ -157,17 +157,31 @@ class User extends BaseController
     private function list_semua_menu()
     {
         return [
+            // Konten Sekolah
+            ['slug' => 'kegiatan',    'nama' => 'Kegiatan'],
+            ['slug' => 'berita',      'nama' => 'Berita (Tulis/Daftar/Kategori/Tags)'],
+            ['slug' => 'prestasi',    'nama' => 'Prestasi'],
+            ['slug' => 'pengumuman',  'nama' => 'Pengumuman'],
+            ['slug' => 'kalender',    'nama' => 'Kalender Akademik'],
+            ['slug' => 'galeri',      'nama' => 'Galeri (Foto & Video)'],
+            ['slug' => 'unduhan',     'nama' => 'Pusat Unduhan'],
+
+            // Profil Sekolah
             ['slug' => 'beranda',     'nama' => 'Slider Beranda'],
             ['slug' => 'profil',      'nama' => 'Profil Madrasah'],
+            ['slug' => 'bakat_minat', 'nama' => 'Bakat Minat'],
+            ['slug' => 'testimoni',   'nama' => 'Testimoni'],
             ['slug' => 'guru',        'nama' => 'Data Guru & Staff'],
-            ['slug' => 'kegiatan',    'nama' => 'Berita & Kegiatan'],
+
+            // PPDB & Alumni
             ['slug' => 'pendaftaran', 'nama' => 'Manajemen PPDB'],
-            ['slug' => 'galeri',      'nama' => 'Kelola Galeri'],
-            ['slug' => 'alumni',      'nama' => 'Manajemen Alumni'],
+            ['slug' => 'alumni',      'nama' => 'Daftar Alumni'],
+            ['slug' => 'universitas', 'nama' => 'Kelola Universitas'],
+
+            // Lainnya
             ['slug' => 'kontak',      'nama' => 'Kotak Masuk'],
-            ['slug' => 'pengaturan',  'nama' => 'Pengaturan Sistem'],
-            // Mas bisa tambah menu baru di sini dengan format yang sama
-            // Contoh: ['slug' => 'keuangan', 'nama' => 'Manajemen SPP'],
+            ['slug' => 'pengaturan',  'nama' => 'Profil Web / Pengaturan'],
+            ['slug' => 'akses_cepat', 'nama' => 'Menu Akses Cepat'],
         ];
     }
 }

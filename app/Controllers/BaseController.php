@@ -44,7 +44,9 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * Fungsi Private untuk mengecek hak akses user secara internal di Controller
+     * Fungsi untuk mengecek hak akses user secara internal di Controller.
+     * Melempar RedirectException agar eksekusi langsung berhenti & diarahkan
+     * ke dashboard jika user tidak punya izin.
      */
     protected function cekIzin($slug)
     {
@@ -59,8 +61,11 @@ abstract class BaseController extends Controller
             ->countAllResults() > 0;
 
         if (! $hasAccess) {
-            return redirect()->to('admin/dashboard')->with('error', 'Anda tidak memiliki akses ke menu tersebut.')
-                ->withInput()->send();
+            $redirect = redirect()->to('admin/dashboard')
+                ->with('error', 'Anda tidak memiliki akses ke menu tersebut.')
+                ->withInput();
+
+            throw new \CodeIgniter\HTTP\Exceptions\RedirectException($redirect);
         }
 
         return true;

@@ -29,7 +29,7 @@ class BeritaController extends BaseController
 
     public function kategori()
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('berita');
         $data = [
             'title'    => 'Kelola Kategori Berita',
             'kategori' => $this->kategoriModel->findAll()
@@ -39,7 +39,7 @@ class BeritaController extends BaseController
 
     public function simpanKategori()
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('berita');
         $namaKategori = $this->request->getPost('nama_kategori');
         $slug = url_title($namaKategori, '-', true);
 
@@ -57,7 +57,7 @@ class BeritaController extends BaseController
 
     public function hapusKategori($id)
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('berita');
         $cekBerita = $this->beritaModel->where('id_kategori', $id)->first();
         if ($cekBerita) {
             return redirect()->back()->with('error', 'Kategori tidak bisa dihapus karena sedang digunakan oleh berita!');
@@ -74,7 +74,7 @@ class BeritaController extends BaseController
 
     public function index()
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('berita');
         $data = [
             'title'  => 'Manajemen Berita',
             'berita' => $this->beritaModel->getBeritaDenganKategori()
@@ -85,7 +85,7 @@ class BeritaController extends BaseController
     // UPDATE: Fungsi Tambah
     public function tambah()
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('berita');
         $data = [
             'title'    => 'Tulis Berita Baru',
             'kategori' => $this->kategoriModel->findAll(),
@@ -102,7 +102,7 @@ class BeritaController extends BaseController
     // UPDATE: Fungsi Simpan (Menangani Penjadwalan & Multiple Tags)
     public function simpan()
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('berita');
         $statusInput = $this->request->getPost('status');
 
         $rules = [
@@ -202,7 +202,7 @@ class BeritaController extends BaseController
 
     public function edit($id)
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('berita');
         $berita = $this->beritaModel->find($id);
 
         if (!$berita) {
@@ -227,7 +227,7 @@ class BeritaController extends BaseController
 
     public function update($id)
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('berita');
         // 1. Cari data lama
         $beritaLama = $this->beritaModel->find($id);
         if (!$beritaLama) {
@@ -334,7 +334,7 @@ class BeritaController extends BaseController
 
     public function hapus($id)
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('berita');
         $berita = $this->beritaModel->find($id);
         if ($berita) {
             // Hapus file gambar thumbnail
@@ -358,7 +358,7 @@ class BeritaController extends BaseController
 
     public function uploadGambarQuill()
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('berita');
         $file = $this->request->getFile('image');
 
         $namaFinal = $this->prosesUpload($file, 'berita/konten', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5);
@@ -395,7 +395,7 @@ class BeritaController extends BaseController
 
     public function tags()
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('berita');
         $data = [
             'title' => 'Kelola Tags & Label',
             'tags'  => $this->tagModel->findAll()
@@ -405,7 +405,7 @@ class BeritaController extends BaseController
 
     public function simpanTag()
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('berita');
         $namaTag = $this->request->getPost('nama_tag');
         $linkEksternal = $this->request->getPost('link_eksternal'); // Opsional
         $slug = url_title($namaTag, '-', true);
@@ -426,7 +426,7 @@ class BeritaController extends BaseController
 
     public function hapusTag($id)
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('berita');
         // 1. Bersihkan dulu data tag ini dari tabel pivot (berita_tags)
         // supaya tidak ada sisa data tag "hantu" di berita yang sudah terbit.
         $this->beritaTagModel->where('id_tag', $id)->delete();

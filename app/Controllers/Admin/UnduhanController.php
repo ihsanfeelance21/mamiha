@@ -16,7 +16,7 @@ class UnduhanController extends BaseController
 
     public function index()
     {
-        $this->cekIzin('pengaturan');
+        $this->cekIzin('unduhan');
         $data = [
             'title'   => 'Manajemen Pusat Unduhan',
             'unduhan' => $this->unduhanModel->orderBy('created_at', 'DESC')->findAll()
@@ -27,7 +27,7 @@ class UnduhanController extends BaseController
 
     public function create()
     {
-        $this->cekIzin('pengaturan');
+        $this->cekIzin('unduhan');
         $data = [
             'title' => 'Tambah File Unduhan'
         ];
@@ -36,7 +36,7 @@ class UnduhanController extends BaseController
 
     public function store()
     {
-        $this->cekIzin('pengaturan');
+        $this->cekIzin('unduhan');
         // Ambil file yang diupload
         $fileUnduhan = $this->request->getFile('file_unduhan');
         $namaFile = '';
@@ -66,7 +66,7 @@ class UnduhanController extends BaseController
 
     public function edit($id)
     {
-        $this->cekIzin('pengaturan');
+        $this->cekIzin('unduhan');
         $data = [
             'title'   => 'Edit File Unduhan',
             'unduhan' => $this->unduhanModel->find($id)
@@ -81,7 +81,7 @@ class UnduhanController extends BaseController
 
     public function update($id)
     {
-        $this->cekIzin('pengaturan');
+        $this->cekIzin('unduhan');
         $unduhanLama = $this->unduhanModel->find($id);
         $fileUnduhan = $this->request->getFile('file_unduhan');
 
@@ -117,7 +117,7 @@ class UnduhanController extends BaseController
 
     public function delete($id)
     {
-        $this->cekIzin('pengaturan');
+        $this->cekIzin('unduhan');
         $unduhan = $this->unduhanModel->find($id);
 
         // Hapus file fisik dari folder

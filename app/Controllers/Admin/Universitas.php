@@ -16,7 +16,7 @@ class Universitas extends BaseController
 
     public function index()
     {
-        $this->cekIzin('alumni');
+        $this->cekIzin('universitas');
         $data = [
             'title' => 'Kelola Universitas',
             'universitas' => $this->universitasModel->orderBy('nama_universitas', 'ASC')->findAll()
@@ -26,7 +26,7 @@ class Universitas extends BaseController
 
     public function store()
     {
-        $this->cekIzin('alumni');
+        $this->cekIzin('universitas');
         // Handle Logo
         $fileLogo = $this->request->getFile('logo');
         $namaLogo = $this->prosesUpload($fileLogo, 'universitas', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif'], 2);
@@ -46,7 +46,7 @@ class Universitas extends BaseController
 
     public function edit($id)
     {
-        $this->cekIzin('alumni');
+        $this->cekIzin('universitas');
         $data = [
             'title' => 'Edit Universitas',
             'kampus' => $this->universitasModel->find($id)
@@ -61,7 +61,7 @@ class Universitas extends BaseController
 
     public function update($id)
     {
-        $this->cekIzin('alumni');
+        $this->cekIzin('universitas');
         $kampusLama = $this->universitasModel->find($id);
 
         // Handle Logo Update
@@ -97,7 +97,7 @@ class Universitas extends BaseController
 
     public function delete($id)
     {
-        $this->cekIzin('alumni');
+        $this->cekIzin('universitas');
         $kampus = $this->universitasModel->find($id);
 
         // Hapus logo

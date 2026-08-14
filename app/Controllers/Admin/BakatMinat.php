@@ -20,7 +20,7 @@ class BakatMinat extends BaseController
     // 1. Menampilkan daftar data (Halaman Index)
     public function index()
     {
-        $this->cekIzin('profil');
+        $this->cekIzin('bakat_minat');
         // Mengambil data bakat minat sekaligus men-join nama guru pembina
         $data_bakat = $this->BakatMinatModel
             ->select('bakat_minat.*, guru_staff.nama') // <-- Diubah menjadi guru_staff.nama
@@ -38,7 +38,7 @@ class BakatMinat extends BaseController
     // 2. Menampilkan Form Tambah Data
     public function create()
     {
-        $this->cekIzin('profil');
+        $this->cekIzin('bakat_minat');
         $data = [
             'title' => 'Tambah Bakat & Minat',
             'data_guru' => $this->GuruStaffModel->findAll() // Mengambil semua guru untuk dropdown
@@ -50,7 +50,7 @@ class BakatMinat extends BaseController
     // 3. Proses Menyimpan Data ke Database
     public function store()
     {
-        $this->cekIzin('profil');
+        $this->cekIzin('bakat_minat');
         // Menangkap pilihan tipe pembina
         $tipe_pembina = $this->request->getPost('tipe_pembina');
 
@@ -80,7 +80,7 @@ class BakatMinat extends BaseController
     // 4. Menampilkan Form Edit
     public function edit($id)
     {
-        $this->cekIzin('profil');
+        $this->cekIzin('bakat_minat');
         $data = [
             'title' => 'Edit Bakat & Minat',
             'bakat' => $this->BakatMinatModel->find($id),
@@ -92,7 +92,7 @@ class BakatMinat extends BaseController
     // 5. Proses Update Data
     public function update($id)
     {
-        $this->cekIzin('profil');
+        $this->cekIzin('bakat_minat');
         $tipe_pembina = $this->request->getPost('tipe_pembina');
         $guru_id = ($tipe_pembina == 'guru') ? $this->request->getPost('guru_id') : null;
         $nama_pembina_manual = ($tipe_pembina == 'manual') ? $this->request->getPost('nama_pembina_manual') : null;
@@ -126,7 +126,7 @@ class BakatMinat extends BaseController
     // 6. Proses Hapus Data
     public function delete($id)
     {
-        $this->cekIzin('profil');
+        $this->cekIzin('bakat_minat');
         $data = $this->BakatMinatModel->find($id);
         // Hapus file gambar fisiknya
         if ($data['gambar'] && file_exists('uploads/bakat/' . $data['gambar'])) {

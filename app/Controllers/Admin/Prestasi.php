@@ -17,7 +17,7 @@ class Prestasi extends BaseController
     // 1. Menampilkan Halaman List Data (Index)
     public function index()
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('prestasi');
         $keyword = $this->request->getVar('cari');
 
         if ($keyword) {
@@ -42,7 +42,7 @@ class Prestasi extends BaseController
     // 2. Menampilkan Form Tambah Data (Create)
     public function create()
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('prestasi');
         $data = [
             'title'      => 'Tambah Prestasi Baru',
             'validation' => \Config\Services::validation()
@@ -53,7 +53,7 @@ class Prestasi extends BaseController
     // 3. Memproses Data yang Dikirim dari Form (Store)
     public function store()
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('prestasi');
         // Aturan Validasi
         $rules = [
             'kategori_prestasi' => 'required',
@@ -99,7 +99,7 @@ class Prestasi extends BaseController
     // 4. Menghapus Data (Delete)
     public function delete($id)
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('prestasi');
         $prestasi = $this->prestasiModel->find($id);
 
         if ($prestasi) {
@@ -118,7 +118,7 @@ class Prestasi extends BaseController
     // 5. Menampilkan Form Edit Data
     public function edit($id)
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('prestasi');
         $prestasi = $this->prestasiModel->find($id);
 
         if (!$prestasi) {
@@ -138,7 +138,7 @@ class Prestasi extends BaseController
     // 6. Memproses Update Data ke Database
     public function update($id)
     {
-        $this->cekIzin('kegiatan');
+        $this->cekIzin('prestasi');
         $prestasiLama = $this->prestasiModel->find($id);
 
         // Aturan Validasi (Gambar opsional saat edit)
