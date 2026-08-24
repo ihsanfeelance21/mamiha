@@ -1,54 +1,77 @@
 <?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
-<div class="max-w-3xl bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-    <div class="mb-6 flex items-center justify-between">
-        <h3 class="text-xl font-bold text-text-main">Edit Kegiatan</h3>
-        <a href="<?= base_url('admin/kegiatan') ?>" class="text-text-muted hover:text-gray-800 transition text-sm flex items-center">
-            &larr; Batal
+<div class="max-w-4xl mx-auto">
+    <div class="flex items-center gap-4 mb-6">
+        <a href="<?= base_url('admin/kegiatan') ?>" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200 transition-colors">
+            <i class="fa-solid fa-arrow-left"></i>
         </a>
+        <div>
+            <h1 class="text-2xl font-bold text-gray-800">Edit Kegiatan</h1>
+            <p class="text-sm text-gray-500">Perbarui detail kegiatan</p>
+        </div>
     </div>
 
     <?php if (session()->getFlashdata('error')) : ?>
-        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded shadow-sm">
-            <?= esc(session()->getFlashdata('error')) ?>
+        <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-xl">
+            <?php $err = session()->getFlashdata('error'); ?>
+            <?php if (is_array($err)) : ?>
+                <ul class="list-disc list-inside text-sm"><?php foreach ($err as $e) : ?><li><?= esc($e) ?></li><?php endforeach; ?></ul>
+            <?php else : ?>
+                <p class="text-sm"><?= esc($err) ?></p>
+            <?php endif; ?>
         </div>
     <?php endif; ?>
 
-    <form action="<?= base_url('admin/kegiatan/update/' . $kegiatan['id']) ?>" method="post" enctype="multipart/form-data">
-        <?= csrf_field() ?>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+        <form action="<?= base_url('admin/kegiatan/update/' . $kegiatan['id']) ?>" method="post" enctype="multipart/form-data">
+            <?= csrf_field() ?>
 
-        <div class="mb-4">
-            <label for="judul" class="block text-sm font-medium text-text-main mb-1">Judul Kegiatan</label>
-            <input type="text" id="judul" name="judul" value="<?= old('judul', $kegiatan['judul']) ?>" required
-                class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition">
-        </div>
+            <div class="mb-6">
+                <label for="judul" class="block text-sm font-bold text-gray-700 mb-2">Judul Kegiatan <span class="text-red-500">*</span></label>
+                <input type="text" id="judul" name="judul" value="<?= old('judul', $kegiatan['judul']) ?>" required
+                    class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] focus:ring-2 focus:ring-[#00A859]/20 transition-all">
+            </div>
 
-        <div class="mb-6">
-            <label for="konten" class="block text-sm font-medium text-text-main mb-1">Isi / Detail Kegiatan</label>
-            <textarea id="konten" name="konten" rows="6" required
-                class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition"><?= old('konten', $kegiatan['konten']) ?></textarea>
-        </div>
+            <div class="mb-6">
+                <label for="konten" class="block text-sm font-bold text-gray-700 mb-2">Isi / Detail Kegiatan <span class="text-red-500">*</span></label>
+                <textarea id="konten" name="konten" rows="6" required
+                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] focus:ring-2 focus:ring-[#00A859]/20 transition-all"><?= old('konten', $kegiatan['konten']) ?></textarea>
+            </div>
 
-        <div class="mb-6">
-            <label class="block text-sm font-medium text-text-main mb-1">Gambar Saat Ini</label>
-            <?php if ($kegiatan['gambar']) : ?>
-                <img src="<?= base_url('uploads/kegiatan/' . $kegiatan['gambar']) ?>" class="w-32 h-32 object-cover rounded mb-2 border border-gray-200">
-            <?php else : ?>
-                <p class="text-sm text-gray-500 mb-2 italic">Belum ada gambar.</p>
-            <?php endif; ?>
+            <div class="mb-6">
+                <label class="block text-sm font-bold text-gray-700 mb-2">Gambar Saat Ini</label>
+                <?php if ($kegiatan['gambar']) : ?>
+                    <img src="<?= base_url('uploads/kegiatan/' . $kegiatan['gambar']) ?>" class="w-full max-h-64 object-cover rounded-xl border border-gray-200 mb-3">
+                <?php else : ?>
+                    <p class="text-sm text-gray-500 mb-3 italic">Belum ada gambar.</p>
+                <?php endif; ?>
 
-            <label for="gambar" class="block text-sm font-medium text-text-main mb-1 mt-4">Ganti Gambar (Opsional)</label>
-            <input type="file" id="gambar" name="gambar" accept="image/png, image/jpeg, image/webp"
-                class="w-full border border-gray-300 rounded px-4 py-2 text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-surface file:text-primary hover:file:bg-gray-100 transition">
-            <p class="text-xs text-gray-400 mt-1">Biarkan kosong jika tidak ingin mengganti gambar.</p>
-        </div>
+                <label for="gambar" class="block text-sm font-bold text-gray-700 mb-2 mt-4">Ganti Gambar (Opsional)</label>
+                <input type="file" id="gambar" name="gambar" accept="image/jpeg,image/png,image/webp"
+                    class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-[#00A859]/10 file:text-[#00A859] hover:file:bg-[#00A859]/20 transition-all">
+                <div id="preview-wrap" class="hidden mt-3">
+                    <img id="preview-img" class="w-full max-h-64 object-cover rounded-xl border">
+                    <button type="button" onclick="document.getElementById('gambar').value=''; document.getElementById('preview-wrap').classList.add('hidden')" class="text-xs text-red-500 mt-2">Hapus preview baru</button>
+                </div>
+                <p class="text-xs text-gray-500 mt-2">Biarkan kosong jika tidak ingin mengganti. Max 5MB.</p>
+            </div>
 
-        <div class="flex justify-end">
-            <button type="submit" class="bg-primary hover:bg-primary-hover text-white px-6 py-2 rounded font-medium transition">
-                Update Kegiatan
-            </button>
-        </div>
-    </form>
+            <div class="flex justify-end pt-4 border-t border-gray-100">
+                <button type="submit" class="bg-[#00A859] hover:bg-[#0B4A2D] text-white px-8 py-2.5 rounded-xl font-bold transition-colors shadow-sm flex items-center gap-2">
+                    <i class="fa-solid fa-floppy-disk"></i> Update Kegiatan
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
+
+<script>
+document.getElementById('gambar').addEventListener('change', function(e){
+    const file=e.target.files[0]; if(!file) return;
+    const reader=new FileReader();
+    reader.onload=ev=>{ document.getElementById('preview-img').src=ev.target.result; document.getElementById('preview-wrap').classList.remove('hidden'); };
+    reader.readAsDataURL(file);
+});
+</script>
 <?= $this->endSection() ?>

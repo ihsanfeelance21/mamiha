@@ -12,28 +12,44 @@
         </div>
     </div>
 
+    <?php if (session()->getFlashdata('error')) : ?>
+        <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-xl">
+            <?php $err = session()->getFlashdata('error'); ?>
+            <?php if (is_array($err)) : ?>
+                <ul class="list-disc list-inside text-sm"><?php foreach ($err as $e) : ?><li><?= esc($e) ?></li><?php endforeach; ?></ul>
+            <?php else : ?>
+                <p class="text-sm"><?= esc($err) ?></p>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
+
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
         <form action="<?= base_url('admin/galeri/store') ?>" method="post" enctype="multipart/form-data">
             <?= csrf_field() ?>
 
             <div class="mb-6">
                 <label for="judul" class="block text-sm font-bold text-gray-700 mb-2">Judul Album <span class="text-red-500">*</span></label>
-                <input type="text" name="judul" id="judul" required placeholder="Contoh: Lomba Kompetensi Siswa (LKS) Kab. Banyuwangi" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] focus:ring-2 focus:ring-[#00A859]/20 transition-all">
+                <input type="text" name="judul" id="judul" value="<?= old('judul') ?>" required placeholder="Contoh: Lomba Kompetensi Siswa (LKS) Kab. Banyuwangi" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] focus:ring-2 focus:ring-[#00A859]/20 transition-all">
             </div>
 
             <div class="mb-6">
                 <label for="tanggal" class="block text-sm font-bold text-gray-700 mb-2">Tanggal Kegiatan <span class="text-red-500">*</span></label>
-                <input type="date" name="tanggal" id="tanggal" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] focus:ring-2 focus:ring-[#00A859]/20 transition-all cursor-pointer">
+                <input type="date" name="tanggal" id="tanggal" value="<?= old('tanggal') ?>" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] focus:ring-2 focus:ring-[#00A859]/20 transition-all cursor-pointer">
             </div>
 
             <div class="mb-6">
                 <label for="sampul" class="block text-sm font-bold text-gray-700 mb-2">Gambar Sampul (Cover Album) <span class="text-red-500">*</span></label>
-                <input type="file" name="sampul" id="sampul" required accept="image/*" class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-[#00A859]/10 file:text-[#00A859] hover:file:bg-[#00A859]/20 transition-all">
+                <input type="file" name="sampul" id="sampul" required accept="image/jpeg,image/png,image/webp" class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-[#00A859]/10 file:text-[#00A859] hover:file:bg-[#00A859]/20 transition-all">
+                <div id="preview-wrap" class="hidden mt-3">
+                    <img id="preview-img" class="w-full max-h-64 object-cover rounded-xl border">
+                    <button type="button" onclick="document.getElementById('sampul').value=''; document.getElementById('preview-wrap').classList.add('hidden')" class="text-xs text-red-500 mt-2">Hapus preview</button>
+                </div>
+                <p class="text-xs text-gray-500 mt-2">Max 5MB, JPG/PNG/WebP, akan dikompres otomatis.</p>
             </div>
 
             <div class="mb-8">
                 <label for="deskripsi" class="block text-sm font-bold text-gray-700 mb-2">Deskripsi Singkat (Opsional)</label>
-                <textarea name="deskripsi" id="deskripsi" rows="3" placeholder="Tuliskan keterangan singkat mengenai album ini..." class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] focus:ring-2 focus:ring-[#00A859]/20 transition-all"></textarea>
+                <textarea name="deskripsi" id="deskripsi" rows="3" placeholder="Tuliskan keterangan singkat mengenai album ini..." class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] focus:ring-2 focus:ring-[#00A859]/20 transition-all"><?= old('deskripsi') ?></textarea>
             </div>
 
             <div class="flex justify-end pt-4 border-t border-gray-100">
@@ -45,5 +61,14 @@
         </form>
     </div>
 </div>
+
+<script>
+document.getElementById('sampul').addEventListener('change', function(e){
+    const file=e.target.files[0]; if(!file) return;
+    const reader=new FileReader();
+    reader.onload=ev=>{ document.getElementById('preview-img').src=ev.target.result; document.getElementById('preview-wrap').classList.remove('hidden'); };
+    reader.readAsDataURL(file);
+});
+</script>
 
 <?= $this->endSection() ?>

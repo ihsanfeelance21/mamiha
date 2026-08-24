@@ -14,6 +14,17 @@
         </div>
     </div>
 
+    <?php if (session()->getFlashdata('error')) : ?>
+        <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-xl">
+            <?php $err = session()->getFlashdata('error'); ?>
+            <?php if (is_array($err)) : ?>
+                <ul class="list-disc list-inside text-sm"><?php foreach ($err as $e) : ?><li><?= esc($e) ?></li><?php endforeach; ?></ul>
+            <?php else : ?>
+                <p class="text-sm"><?= esc($err) ?></p>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
+
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 mb-8">
         <h2 class="text-lg font-bold border-b border-gray-100 pb-3 mb-5 text-[#0B4A2D]">Detail Album</h2>
         <form action="<?= base_url('admin/galeri/update/' . $galeri['id']) ?>" method="post" enctype="multipart/form-data">
@@ -22,25 +33,30 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div class="mb-6 md:mb-0">
                     <label for="judul" class="block text-sm font-bold text-gray-700 mb-2">Judul Album <span class="text-red-500">*</span></label>
-                    <input type="text" name="judul" id="judul" value="<?= esc($galeri['judul']) ?>" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] focus:ring-2 focus:ring-[#00A859]/20 transition-all">
+                    <input type="text" name="judul" id="judul" value="<?= old('judul', $galeri['judul']) ?>" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] focus:ring-2 focus:ring-[#00A859]/20 transition-all">
                 </div>
                 <div>
                     <label for="tanggal" class="block text-sm font-bold text-gray-700 mb-2">Tanggal Kegiatan <span class="text-red-500">*</span></label>
-                    <input type="date" name="tanggal" id="tanggal" value="<?= esc($galeri['tanggal']) ?>" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] focus:ring-2 focus:ring-[#00A859]/20 transition-all cursor-pointer">
+                    <input type="date" name="tanggal" id="tanggal" value="<?= old('tanggal', $galeri['tanggal']) ?>" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] focus:ring-2 focus:ring-[#00A859]/20 transition-all cursor-pointer">
                 </div>
             </div>
 
             <div class="mb-6">
                 <label for="deskripsi" class="block text-sm font-bold text-gray-700 mb-2">Deskripsi Singkat</label>
-                <textarea name="deskripsi" id="deskripsi" rows="2" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] focus:ring-2 focus:ring-[#00A859]/20 transition-all"><?= esc($galeri['deskripsi']) ?></textarea>
+                <textarea name="deskripsi" id="deskripsi" rows="2" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] focus:ring-2 focus:ring-[#00A859]/20 transition-all"><?= old('deskripsi', $galeri['deskripsi']) ?></textarea>
             </div>
 
             <div class="mb-6">
                 <label for="sampul" class="block text-sm font-bold text-gray-700 mb-2">Ubah Sampul (Opsional)</label>
                 <?php if ($galeri['sampul']) : ?>
-                    <img src="<?= base_url('uploads/galeri/' . $galeri['sampul']) ?>" class="w-32 h-24 object-cover rounded-lg mb-3 border border-gray-200 shadow-sm">
+                    <img src="<?= base_url('uploads/galeri/' . $galeri['sampul']) ?>" class="w-32 h-24 object-cover rounded-lg mb-3 border border-gray-200 shadow-sm" alt="Sampul lama">
                 <?php endif; ?>
-                <input type="file" name="sampul" id="sampul" accept="image/*" class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-[#00A859]/10 file:text-[#00A859] hover:file:bg-[#00A859]/20 transition-all">
+                <input type="file" name="sampul" id="sampul" accept="image/jpeg,image/png,image/webp" class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-[#00A859]/10 file:text-[#00A859] hover:file:bg-[#00A859]/20 transition-all">
+                <div id="preview-wrap" class="hidden mt-3">
+                    <img id="preview-img" class="w-full max-h-64 object-cover rounded-xl border">
+                    <button type="button" onclick="document.getElementById('sampul').value=''; document.getElementById('preview-wrap').classList.add('hidden')" class="text-xs text-red-500 mt-2">Hapus preview baru</button>
+                </div>
+                <p class="text-xs text-gray-500 mt-2">Max 5MB, JPG/PNG/WebP.</p>
             </div>
 
             <div class="flex justify-end pt-4 border-t border-gray-100">
@@ -94,6 +110,14 @@
 
 <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
 <script>
+    // Preview sampul baru
+    document.getElementById('sampul')?.addEventListener('change', function(e){
+        const file=e.target.files[0]; if(!file) return;
+        const reader=new FileReader();
+        reader.onload=ev=>{ document.getElementById('preview-img').src=ev.target.result; document.getElementById('preview-wrap').classList.remove('hidden'); };
+        reader.readAsDataURL(file);
+    });
+
     // Konfigurasi Dropzone
     Dropzone.options.myAwesomeDropzone = {
         paramName: "file",
