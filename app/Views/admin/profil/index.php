@@ -71,7 +71,6 @@
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Tipe Video</label>
                                 <select name="tentang_kami_video_tipe" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-[#00A859] focus:ring focus:ring-[#00A859]/20 mb-4">
                                     <option value="link" <?= $profil['tentang_kami_video_tipe'] == 'link' ? 'selected' : '' ?>>Link Youtube</option>
-                                    <option value="upload" <?= $profil['tentang_kami_video_tipe'] == 'upload' ? 'selected' : '' ?>>Upload File (Belum aktif, pakai Link dulu)</option>
                                 </select>
 
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Link Youtube (Embed URL)</label>
@@ -142,7 +141,7 @@
                                                 <i class="fa-solid fa-images mr-1"></i> Galeri
                                             </a>
 
-                                            <button @click="editData = <?= htmlspecialchars(json_encode($f)) ?>; showModalEdit = true" class="inline-flex items-center px-3 py-1 bg-yellow-100 text-yellow-700 rounded-md hover:bg-yellow-200 text-sm font-medium transition-colors">
+                                            <button @click="editData = JSON.parse('<?= addslashes(json_encode($f, JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP)) ?>'); showModalEdit = true" class="inline-flex items-center px-3 py-1 bg-yellow-100 text-yellow-700 rounded-md hover:bg-yellow-200 text-sm font-medium transition-colors">
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                             </button>
 
