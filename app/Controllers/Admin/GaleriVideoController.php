@@ -37,9 +37,22 @@ class GaleriVideoController extends BaseController
     public function store()
     {
         $this->cekIzin('galeri');
+        $rules = [
+            'judul'      => 'required|min_length[5]|max_length[200]',
+            'link_video' => 'required|valid_url_strict',
+            'tanggal'    => 'required|valid_date',
+            'orientasi'  => 'required|in_list[landscape,portrait]'
+        ];
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('error', $this->validator->getErrors());
+        }
+        $link = $this->request->getPost('link_video');
+        if (!filter_var($link, FILTER_VALIDATE_URL) || !preg_match('#^https?://#i', $link)) {
+            return redirect()->back()->withInput()->with('error', ['link_video' => 'Link harus http/https valid']);
+        }
         $this->galeriVideoModel->save([
             'judul'      => $this->request->getPost('judul'),
-            'link_video' => $this->request->getPost('link_video'),
+            'link_video' => $link,
             'tanggal'    => $this->request->getPost('tanggal'),
             'orientasi'  => $this->request->getPost('orientasi'),
         ]);
@@ -66,9 +79,22 @@ class GaleriVideoController extends BaseController
     public function update($id)
     {
         $this->cekIzin('galeri');
+        $rules = [
+            'judul'      => 'required|min_length[5]|max_length[200]',
+            'link_video' => 'required|valid_url_strict',
+            'tanggal'    => 'required|valid_date',
+            'orientasi'  => 'required|in_list[landscape,portrait]'
+        ];
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('error', $this->validator->getErrors());
+        }
+        $link = $this->request->getPost('link_video');
+        if (!filter_var($link, FILTER_VALIDATE_URL) || !preg_match('#^https?://#i', $link)) {
+            return redirect()->back()->withInput()->with('error', ['link_video' => 'Link harus http/https valid']);
+        }
         $this->galeriVideoModel->update($id, [
             'judul'      => $this->request->getPost('judul'),
-            'link_video' => $this->request->getPost('link_video'),
+            'link_video' => $link,
             'tanggal'    => $this->request->getPost('tanggal'),
             'orientasi'  => $this->request->getPost('orientasi'),
         ]);

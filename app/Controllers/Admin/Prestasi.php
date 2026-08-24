@@ -104,8 +104,8 @@ class Prestasi extends BaseController
 
         if ($prestasi) {
             // Hapus file fisik gambar jika ada
-            if ($prestasi['gambar'] && file_exists('uploads/prestasi/' . $prestasi['gambar'])) {
-                unlink('uploads/prestasi/' . $prestasi['gambar']);
+            if ($prestasi['gambar'] && file_exists(FCPATH . 'uploads/prestasi/' . $prestasi['gambar'])) {
+                unlink(FCPATH . 'uploads/prestasi/' . $prestasi['gambar']);
             }
             // Hapus data dari database
             $this->prestasiModel->delete($id);

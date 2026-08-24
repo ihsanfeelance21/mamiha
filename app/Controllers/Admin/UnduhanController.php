@@ -37,13 +37,17 @@ class UnduhanController extends BaseController
     public function store()
     {
         $this->cekIzin('unduhan');
-        // Ambil file yang diupload
+        $linkEksternal = $this->request->getPost('link_eksternal');
+        if (!empty($linkEksternal) && (!filter_var($linkEksternal, FILTER_VALIDATE_URL) || !preg_match('#^https?://#i', $linkEksternal))) {
+            return redirect()->back()->withInput()->with('error', 'Link eksternal harus valid http/https');
+        }
         $fileUnduhan = $this->request->getFile('file_unduhan');
         $namaFile = '';
-
-        // Cek apakah ada file yang diupload dan valid
-        if ($fileUnduhan && $fileUnduhan->isValid() && !$fileUnduhan->hasMoved()) {
-            // Whitelist ekstensi dokumen yang aman
+        $hasFile = $fileUnduhan && $fileUnduhan->isValid() && !$fileUnduhan->hasMoved() && $fileUnduhan->getSize() > 0;
+        if (empty($linkEksternal) && !$hasFile) {
+            return redirect()->back()->withInput()->with('error', 'Harus isi file upload atau link eksternal salah satu.');
+        }
+        if ($hasFile) {
             $namaFile = $this->prosesUpload($fileUnduhan, 'unduhan',
                 ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'application/zip', 'text/plain', 'image/jpeg', 'image/png', 'image/webp'],
                 ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'zip', 'txt', 'jpg', 'jpeg', 'png', 'webp'], 10);
@@ -57,7 +61,7 @@ class UnduhanController extends BaseController
             'kategori'     => $this->request->getPost('kategori'),
             'keterangan'   => $this->request->getPost('keterangan'),
             'file_unduhan' => $namaFile,
-            'link_eksternal' => $this->request->getPost('link_eksternal')
+            'link_eksternal' => $linkEksternal
         ]);
 
         session()->setFlashdata('pesan', 'File berhasil diunggah dan ditambahkan.');
@@ -121,8 +125,8 @@ class UnduhanController extends BaseController
         $unduhan = $this->unduhanModel->find($id);
 
         // Hapus file fisik dari folder
-        if ($unduhan['file_unduhan'] && file_exists('uploads/unduhan/' . $unduhan['file_unduhan'])) {
-            unlink('uploads/unduhan/' . $unduhan['file_unduhan']);
+        if ($unduhan['file_unduhan'] && file_exists(FCPATH . 'uploads/unduhan/' . $unduhan['file_unduhan'])) {
+            unlink(FCPATH . 'uploads/unduhan/' . $unduhan['file_unduhan']);
         }
 
         $this->unduhanModel->delete($id);

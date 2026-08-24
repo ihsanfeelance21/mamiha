@@ -18,26 +18,26 @@
 
             <div class="mb-6">
                 <label for="judul" class="block text-sm font-bold text-gray-700 mb-2">Judul Video <span class="text-red-500">*</span></label>
-                <input type="text" name="judul" id="judul" value="<?= esc($video['judul']) ?>" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] focus:ring-2 focus:ring-[#00A859]/20 transition-all">
+                <input type="text" name="judul" id="judul" value="<?= old('judul', $video['judul']) ?>" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] focus:ring-2 focus:ring-[#00A859]/20 transition-all">
             </div>
 
             <div class="mb-6">
                 <label for="link_video" class="block text-sm font-bold text-gray-700 mb-2">Tautan Video (URL) <span class="text-red-500">*</span></label>
-                <input type="url" name="link_video" id="link_video" value="<?= esc($video['link_video']) ?>" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] focus:ring-2 focus:ring-[#00A859]/20 transition-all">
+                <input type="url" name="link_video" id="link_video" value="<?= old('link_video', $video['link_video']) ?>" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] focus:ring-2 focus:ring-[#00A859]/20 transition-all">
             </div>
 
             <div class="mb-6">
                 <label for="orientasi" class="block text-sm font-bold text-gray-700 mb-2">Format Tampilan Video <span class="text-red-500">*</span></label>
                 <select name="orientasi" id="orientasi" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] focus:ring-2 focus:ring-[#00A859]/20 transition-all">
-                    <option value="landscape">Landscape (Mendatar - 16:9) - Cocok untuk YouTube/FB</option>
-                    <option value="portrait">Portrait (Tegak - 9:16) - Cocok untuk TikTok/IG Reels/Shorts</option>
+                    <option value="landscape" <?= old('orientasi', $video['orientasi']) === 'landscape' ? 'selected' : '' ?>>Landscape (Mendatar - 16:9) - Cocok untuk YouTube/FB</option>
+                    <option value="portrait" <?= old('orientasi', $video['orientasi']) === 'portrait' ? 'selected' : '' ?>>Portrait (Tegak - 9:16) - Cocok untuk TikTok/IG Reels/Shorts</option>
                 </select>
                 <p class="text-xs text-gray-500 mt-2"><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> Pisahkan agar tampilan galeri tidak berantakan.</p>
             </div>
 
             <div class="mb-8">
                 <label for="tanggal" class="block text-sm font-bold text-gray-700 mb-2">Tanggal Kegiatan <span class="text-red-500">*</span></label>
-                <input type="date" name="tanggal" id="tanggal" value="<?= esc($video['tanggal']) ?>" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] focus:ring-2 focus:ring-[#00A859]/20 transition-all cursor-pointer">
+                <input type="date" name="tanggal" id="tanggal" value="<?= old('tanggal', $video['tanggal']) ?>" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] focus:ring-2 focus:ring-[#00A859]/20 transition-all cursor-pointer">
             </div>
 
             <div class="flex justify-end pt-4 border-t border-gray-100">

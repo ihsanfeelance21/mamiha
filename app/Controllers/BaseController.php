@@ -54,6 +54,13 @@ abstract class BaseController extends Controller
             return true;
         }
 
+        // Cek dari session cache dulu (diisi saat login via Auth.php)
+        $perms = session()->get('permissions');
+        if (is_array($perms)) {
+            if (in_array($slug, $perms, true)) return true;
+            // fallback ke DB jika session kosong tapi masih login (misal session lama)
+        }
+
         $db = \Config\Database::connect();
         $hasAccess = $db->table('user_permissions')
             ->where('id_user', session()->get('id_user'))

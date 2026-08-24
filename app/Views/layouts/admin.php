@@ -81,7 +81,15 @@ if (!function_exists('hasAccess')) {
             </button>
         </div>
 
-        <nav class="flex-1 p-4 space-y-1.5 overflow-y-auto sidebar-scroll pb-24 lg:pb-4">
+        <?php
+        // Accordion init: hanya 1 parent terbuka, sesuai URL aktif
+        $activeMenuInit = '';
+        if (url_is('admin/kegiatan*') || url_is('admin/berita*') || url_is('admin/kategori-berita*') || url_is('admin/prestasi*') || url_is('admin/pengumuman*') || url_is('admin/kalender*') || url_is('admin/galeri*') || url_is('admin/unduhan*')) $activeMenuInit = 'konten';
+        elseif (url_is('admin/beranda*') || url_is('admin/profil*') || url_is('admin/bakat-minat*') || url_is('admin/testimoni*') || url_is('admin/guru*')) $activeMenuInit = 'profil';
+        elseif (url_is('admin/pendaftaran*') || url_is('admin/alumni*') || url_is('admin/universitas*')) $activeMenuInit = 'ppdb';
+        elseif (url_is('admin/pengaturan*') || url_is('admin/akses-cepat*') || url_is('admin/users*')) $activeMenuInit = 'pengaturan';
+        ?>
+        <nav class="flex-1 p-4 space-y-1.5 overflow-y-auto sidebar-scroll pb-24 lg:pb-4" x-data="{ activeMenu: '<?= $activeMenuInit ?>' }">
 
             <a href="<?= base_url('admin/dashboard') ?>"
                 class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 <?= (url_is('admin') || url_is('admin/dashboard')) ? 'bg-[#00A859] text-white shadow-md font-semibold' : 'text-green-100 hover:bg-white/10 hover:text-white' ?>">
@@ -100,16 +108,16 @@ if (!function_exists('hasAccess')) {
                 || url_is('admin/galeri*') || url_is('admin/unduhan*');
             ?>
             <?php if ($adaKonten) : ?>
-                <div x-data="{ open: <?= $kontenAktif ? 'true' : 'false' ?> }">
-                    <button @click="open = !open" class="w-full flex justify-between items-center text-green-100 hover:bg-white/10 hover:text-white px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none <?= $kontenAktif ? 'bg-white/5' : '' ?>">
+                <div>
+                    <button @click="activeMenu = activeMenu === 'konten' ? '' : 'konten'" class="w-full flex justify-between items-center text-green-100 hover:bg-white/10 hover:text-white px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none" :class="activeMenu === 'konten' ? 'bg-white/5' : ''">
                         <div class="flex items-center gap-3">
                             <i class="fa-solid fa-newspaper w-5 text-center text-sm"></i>
                             <span class="text-sm font-medium">Konten Sekolah</span>
                         </div>
-                        <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300" :class="open ? 'rotate-180' : ''"></i>
+                        <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300" :class="activeMenu === 'konten' ? 'rotate-180' : ''"></i>
                     </button>
 
-                    <div x-show="open" x-collapse x-cloak class="mt-1 space-y-1">
+                    <div x-show="activeMenu === 'konten'" x-collapse x-cloak class="mt-1 space-y-1">
                         <?php if (hasAccess('kegiatan')): ?>
                             <a href="<?= base_url('admin/kegiatan') ?>" class="flex items-center py-2.5 px-6 text-sm rounded-lg transition-colors <?= url_is('admin/kegiatan*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
                                 <i class="fa-solid fa-chalkboard text-xs w-5 text-center mr-1 opacity-70"></i> Kegiatan
@@ -174,16 +182,16 @@ if (!function_exists('hasAccess')) {
                 || url_is('admin/testimoni*') || url_is('admin/guru*');
             ?>
             <?php if ($adaProfil) : ?>
-                <div x-data="{ open: <?= $profilAktif ? 'true' : 'false' ?> }">
-                    <button @click="open = !open" class="w-full flex justify-between items-center text-green-100 hover:bg-white/10 hover:text-white px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none <?= $profilAktif ? 'bg-white/5' : '' ?>">
+                <div>
+                    <button @click="activeMenu = activeMenu === 'profil' ? '' : 'profil'" class="w-full flex justify-between items-center text-green-100 hover:bg-white/10 hover:text-white px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none" :class="activeMenu === 'profil' ? 'bg-white/5' : ''">
                         <div class="flex items-center gap-3">
                             <i class="fa-solid fa-school w-5 text-center text-sm"></i>
                             <span class="text-sm font-medium">Profil Sekolah</span>
                         </div>
-                        <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300" :class="open ? 'rotate-180' : ''"></i>
+                        <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300" :class="activeMenu === 'profil' ? 'rotate-180' : ''"></i>
                     </button>
 
-                    <div x-show="open" x-collapse x-cloak class="mt-1 space-y-1">
+                    <div x-show="activeMenu === 'profil'" x-collapse x-cloak class="mt-1 space-y-1">
                         <?php if (hasAccess('beranda')): ?>
                             <a href="<?= base_url('admin/beranda') ?>" class="flex items-center py-2.5 px-6 text-sm rounded-lg transition-colors <?= url_is('admin/beranda*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
                                 <i class="fa-solid fa-sliders text-xs w-5 text-center mr-1 opacity-70"></i> Slider Beranda
@@ -225,16 +233,16 @@ if (!function_exists('hasAccess')) {
             $ppdbAktif = url_is('admin/pendaftaran*') || url_is('admin/alumni*') || url_is('admin/universitas*');
             ?>
             <?php if ($adaPpdb) : ?>
-                <div x-data="{ open: <?= $ppdbAktif ? 'true' : 'false' ?> }">
-                    <button @click="open = !open" class="w-full flex justify-between items-center text-green-100 hover:bg-white/10 hover:text-white px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none <?= $ppdbAktif ? 'bg-white/5' : '' ?>">
+                <div>
+                    <button @click="activeMenu = activeMenu === 'ppdb' ? '' : 'ppdb'" class="w-full flex justify-between items-center text-green-100 hover:bg-white/10 hover:text-white px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none" :class="activeMenu === 'ppdb' ? 'bg-white/5' : ''">
                         <div class="flex items-center gap-3">
                             <i class="fa-solid fa-graduation-cap w-5 text-center text-sm"></i>
                             <span class="text-sm font-medium">PPDB &amp; Alumni</span>
                         </div>
-                        <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300" :class="open ? 'rotate-180' : ''"></i>
+                        <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300" :class="activeMenu === 'ppdb' ? 'rotate-180' : ''"></i>
                     </button>
 
-                    <div x-show="open" x-collapse x-cloak class="mt-1 space-y-1">
+                    <div x-show="activeMenu === 'ppdb'" x-collapse x-cloak class="mt-1 space-y-1">
                         <?php if (hasAccess('pendaftaran')): ?>
                             <a href="<?= base_url('admin/pendaftaran') ?>" class="flex items-center py-2.5 px-6 text-sm rounded-lg transition-colors <?= url_is('admin/pendaftaran*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
                                 <i class="fa-solid fa-user-plus text-xs w-5 text-center mr-1 opacity-70"></i> Manajemen PPDB
@@ -273,16 +281,16 @@ if (!function_exists('hasAccess')) {
             $pengaturanAktif = url_is('admin/pengaturan*') || url_is('admin/akses-cepat*') || url_is('admin/users*');
             ?>
             <?php if ($adaPengaturan) : ?>
-                <div x-data="{ open: <?= $pengaturanAktif ? 'true' : 'false' ?> }">
-                    <button @click="open = !open" class="w-full flex justify-between items-center text-green-100 hover:bg-white/10 hover:text-white px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none <?= $pengaturanAktif ? 'bg-white/5' : '' ?>">
+                <div>
+                    <button @click="activeMenu = activeMenu === 'pengaturan' ? '' : 'pengaturan'" class="w-full flex justify-between items-center text-green-100 hover:bg-white/10 hover:text-white px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none" :class="activeMenu === 'pengaturan' ? 'bg-white/5' : ''">
                         <div class="flex items-center gap-3">
                             <i class="fa-solid fa-gear w-5 text-center text-sm"></i>
                             <span class="text-sm font-medium">Pengaturan</span>
                         </div>
-                        <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300" :class="open ? 'rotate-180' : ''"></i>
+                        <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300" :class="activeMenu === 'pengaturan' ? 'rotate-180' : ''"></i>
                     </button>
 
-                    <div x-show="open" x-collapse x-cloak class="mt-1 space-y-1">
+                    <div x-show="activeMenu === 'pengaturan'" x-collapse x-cloak class="mt-1 space-y-1">
                         <?php if (hasAccess('pengaturan')): ?>
                             <a href="<?= base_url('admin/pengaturan') ?>" class="flex items-center py-2.5 px-6 text-sm rounded-lg transition-colors <?= url_is('admin/pengaturan*') ? 'text-white font-bold bg-white/10' : 'text-green-200/80 hover:text-white hover:bg-white/5' ?>">
                                 <i class="fa-solid fa-sliders text-xs w-5 text-center mr-1 opacity-70"></i> Profil Web

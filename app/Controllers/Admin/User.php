@@ -11,13 +11,20 @@ class User extends BaseController
     public function index()
     {
         if (session()->get('role') !== 'superadmin') {
-            return redirect()->to('admin/dashboard')->with('error', 'Akses ditolak!');
+            return redirect()->to('admin/dashboard')->with('error', 'Akses ditolak! Hanya superadmin.');
         }
 
         $model = new UserModel();
+        $keyword = $this->request->getGet('keyword');
+        $query = $model;
+        if (!empty($keyword)) {
+            $query = $query->groupStart()->like('nama_lengkap', $keyword)->orLike('username', $keyword)->groupEnd();
+        }
         $data = [
             'title' => 'Manajemen User',
-            'users' => $model->findAll()
+            'users' => $query->orderBy('created_at', 'DESC')->paginate(12, 'users'),
+            'pager' => $model->pager,
+            'keyword' => $keyword
         ];
         return view('admin/user/index', $data);
     }
@@ -25,12 +32,13 @@ class User extends BaseController
     public function tambah()
     {
         if (session()->get('role') !== 'superadmin') {
-            return redirect()->to('admin/dashboard')->with('error', 'Akses ditolak!');
+            return redirect()->to('admin/dashboard')->with('error', 'Akses ditolak! Hanya superadmin.');
         }
 
         $data = [
             'title' => 'Tambah User Baru',
-            'menus' => $this->list_semua_menu() // Mengambil dari fungsi pusat tadi
+            'menus' => $this->list_semua_menu(),
+            'menus_grouped' => $this->list_menu_grouped()
         ];
         return view('admin/user/tambah', $data);
     }
@@ -38,24 +46,59 @@ class User extends BaseController
     public function simpan()
     {
         if (session()->get('role') !== 'superadmin') {
-            return redirect()->to('admin/dashboard')->with('error', 'Akses ditolak!');
+            return redirect()->to('admin/dashboard')->with('error', 'Akses ditolak! Hanya superadmin.');
+        }
+
+        $rules = [
+            'nama_lengkap' => 'required|min_length[3]|max_length[100]',
+            'username'     => 'required|alpha_numeric|min_length[4]|max_length[30]|is_unique[users.username]',
+            'password'     => 'required|min_length[8]|max_length[72]',
+            'password_confirm' => 'required|matches[password]',
+            'role'         => 'required|in_list[admin,superadmin]',
+            'foto'         => 'permit_empty|max_size[foto,2048]|is_image[foto]|mime_in[foto,image/jpg,image/jpeg,image/png,image/webp]'
+        ];
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('error', $this->validator->getErrors());
+        }
+
+        $allowedSlugs = $this->getMenuSlugs();
+        $selectedMenus = $this->request->getPost('permissions');
+        if (!empty($selectedMenus)) {
+            if (!is_array($selectedMenus)) $selectedMenus = [$selectedMenus];
+            foreach ($selectedMenus as $slug) {
+                if (!in_array($slug, $allowedSlugs, true)) {
+                    return redirect()->back()->withInput()->with('error', 'Hak akses tidak valid: ' . esc($slug));
+                }
+            }
+        }
+        // Superadmin tidak perlu permission granular (bypass), kosongkan
+        if ($this->request->getPost('role') === 'superadmin') {
+            $selectedMenus = [];
         }
 
         $userModel = new UserModel();
         $permModel = new UserPermissionModel();
+        $db = \Config\Database::connect();
+        $db->transStart();
+
+        $fotoName = null;
+        $fotoFile = $this->request->getFile('foto');
+        if ($fotoFile && $fotoFile->isValid() && !$fotoFile->hasMoved()) {
+            $fotoName = $this->prosesUpload($fotoFile, 'users', $this->mimeGambar(), ['jpg','jpeg','png','webp'], 2);
+        }
 
         $userData = [
             'nama_lengkap' => $this->request->getPost('nama_lengkap'),
             'username'     => $this->request->getPost('username'),
             'password'     => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
             'role'         => $this->request->getPost('role'),
+            'foto'         => $fotoName ?? 'default.png',
         ];
 
         $userModel->save($userData);
         $newUserId = $userModel->getInsertID();
 
-        $selectedMenus = $this->request->getPost('permissions');
-        if ($selectedMenus && is_array($selectedMenus)) {
+        if (!empty($selectedMenus)) {
             foreach ($selectedMenus as $slug) {
                 $permModel->insert([
                     'id_user'   => $newUserId,
@@ -64,26 +107,29 @@ class User extends BaseController
             }
         }
 
+        $db->transComplete();
+        if (!$db->transStatus()) {
+            if ($fotoName && file_exists(FCPATH . 'uploads/users/' . $fotoName)) @unlink(FCPATH . 'uploads/users/' . $fotoName);
+            return redirect()->back()->withInput()->with('error', 'Gagal menyimpan user, transaksi dibatalkan.');
+        }
+
         return redirect()->to('admin/users')->with('pesan', 'User berhasil dibuat!');
     }
 
     public function edit($id)
     {
-        // Proteksi Superadmin
         if (session()->get('role') !== 'superadmin') {
-            return redirect()->to('admin/dashboard')->with('error', 'Akses ditolak!');
+            return redirect()->to('admin/dashboard')->with('error', 'Akses ditolak! Hanya superadmin.');
         }
 
         $userModel = new UserModel();
         $permModel = new UserPermissionModel();
 
-        // Cari data user berdasarkan ID
         $user = $userModel->find($id);
         if (!$user) {
             return redirect()->to('admin/users')->with('error', 'User tidak ditemukan!');
         }
 
-        // Ambil data menu yang sudah diizinkan untuk user ini
         $permissions = $permModel->where('id_user', $id)->findAll();
         $userPerms = array_column($permissions, 'menu_slug');
 
@@ -91,7 +137,8 @@ class User extends BaseController
             'title'            => 'Edit User',
             'user'             => $user,
             'user_permissions' => $userPerms,
-            'menus'            => $this->list_semua_menu() // Mengambil dari fungsi pusat tadi
+            'menus'            => $this->list_semua_menu(),
+            'menus_grouped'    => $this->list_menu_grouped()
         ];
 
         return view('admin/user/edit', $data);
@@ -100,11 +147,46 @@ class User extends BaseController
     public function update($id)
     {
         if (session()->get('role') !== 'superadmin') {
-            return redirect()->to('admin/dashboard')->with('error', 'Akses ditolak!');
+            return redirect()->to('admin/dashboard')->with('error', 'Akses ditolak! Hanya superadmin.');
         }
 
         $userModel = new UserModel();
+        $oldUser = $userModel->find($id);
+        if (!$oldUser) return redirect()->to('admin/users')->with('error', 'User tidak ditemukan!');
+
+        $rules = [
+            'nama_lengkap' => 'required|min_length[3]|max_length[100]',
+            'username'     => "required|alpha_numeric|min_length[4]|max_length[30]|is_unique[users.username,id_user,{$id}]",
+            'role'         => 'required|in_list[admin,superadmin]',
+            'foto'         => 'permit_empty|max_size[foto,2048]|is_image[foto]|mime_in[foto,image/jpg,image/jpeg,image/png,image/webp]'
+        ];
+        $password = $this->request->getPost('password');
+        $passwordConfirm = $this->request->getPost('password_confirm');
+        if (!empty($password) || !empty($passwordConfirm)) {
+            $rules['password'] = 'required|min_length[8]|max_length[72]';
+            $rules['password_confirm'] = 'required|matches[password]';
+        }
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('error', $this->validator->getErrors());
+        }
+
+        $allowedSlugs = $this->getMenuSlugs();
+        $selectedMenus = $this->request->getPost('permissions');
+        if (!empty($selectedMenus)) {
+            if (!is_array($selectedMenus)) $selectedMenus = [$selectedMenus];
+            foreach ($selectedMenus as $slug) {
+                if (!in_array($slug, $allowedSlugs, true)) {
+                    return redirect()->back()->withInput()->with('error', 'Hak akses tidak valid: ' . esc($slug));
+                }
+            }
+        }
+        if ($this->request->getPost('role') === 'superadmin') {
+            $selectedMenus = [];
+        }
+
         $permModel = new UserPermissionModel();
+        $db = \Config\Database::connect();
+        $db->transStart();
 
         $userData = [
             'nama_lengkap' => $this->request->getPost('nama_lengkap'),
@@ -112,20 +194,27 @@ class User extends BaseController
             'role'         => $this->request->getPost('role'),
         ];
 
-        // Jika password diisi, berarti mau ganti password. Jika kosong, biarkan yang lama.
-        $password = $this->request->getPost('password');
         if (!empty($password)) {
             $userData['password'] = password_hash($password, PASSWORD_DEFAULT);
         }
 
+        $fotoFile = $this->request->getFile('foto');
+        $fotoName = null;
+        $fotoHapusLama = null;
+        if ($fotoFile && $fotoFile->isValid() && !$fotoFile->hasMoved()) {
+            $fotoName = $this->prosesUpload($fotoFile, 'users', $this->mimeGambar(), ['jpg','jpeg','png','webp'], 2);
+            if ($fotoName) {
+                $userData['foto'] = $fotoName;
+                if (!empty($oldUser['foto']) && $oldUser['foto'] !== 'default.png') {
+                    $fotoHapusLama = $oldUser['foto'];
+                }
+            }
+        }
+
         $userModel->update($id, $userData);
 
-        // Reset permission lama
         $permModel->where('id_user', $id)->delete();
-
-        // Simpan permission baru
-        $selectedMenus = $this->request->getPost('permissions');
-        if ($selectedMenus && is_array($selectedMenus)) {
+        if (!empty($selectedMenus)) {
             foreach ($selectedMenus as $slug) {
                 $permModel->insert([
                     'id_user'   => $id,
@@ -134,24 +223,56 @@ class User extends BaseController
             }
         }
 
+        $db->transComplete();
+        if (!$db->transStatus()) {
+            if ($fotoName && file_exists(FCPATH . 'uploads/users/' . $fotoName)) @unlink(FCPATH . 'uploads/users/' . $fotoName);
+            return redirect()->back()->withInput()->with('error', 'Gagal memperbarui user, transaksi dibatalkan.');
+        }
+        if ($fotoHapusLama && file_exists(FCPATH . 'uploads/users/' . $fotoHapusLama)) @unlink(FCPATH . 'uploads/users/' . $fotoHapusLama);
+
         return redirect()->to('admin/users')->with('pesan', 'Data user berhasil diperbarui!');
     }
 
     public function hapus($id)
     {
         if (session()->get('role') !== 'superadmin') {
-            return redirect()->to('admin/dashboard')->with('error', 'Akses ditolak!');
+            return redirect()->to('admin/dashboard')->with('error', 'Akses ditolak! Hanya superadmin.');
         }
 
-        // Proteksi agar Superadmin utama (ID 1) tidak bisa dihapus
         if ($id == 1) return redirect()->back()->with('error', 'Admin utama tidak bisa dihapus!');
+        if ($id == session()->get('id_user')) return redirect()->back()->with('error', 'Tidak bisa menghapus akun sendiri!');
 
+        $user = (new UserModel())->find($id);
+        if (!$user) return redirect()->back()->with('error', 'User tidak ditemukan!');
+
+        $db = \Config\Database::connect();
+        $db->transStart();
         (new UserModel())->delete($id);
-
-        // Hapus juga permission terkait agar data tidak nyangkut (opsional tapi disarankan)
         (new UserPermissionModel())->where('id_user', $id)->delete();
+        $db->transComplete();
+        if (!$db->transStatus()) {
+            return redirect()->back()->with('error', 'Gagal menghapus user.');
+        }
+        if (!empty($user['foto']) && $user['foto'] !== 'default.png' && file_exists(FCPATH . 'uploads/users/' . $user['foto'])) {
+            @unlink(FCPATH . 'uploads/users/' . $user['foto']);
+        }
 
         return redirect()->to('admin/users')->with('pesan', 'User dihapus.');
+    }
+
+    private function getMenuSlugs(): array
+    {
+        return array_column($this->list_semua_menu(), 'slug');
+    }
+
+    private function list_menu_grouped(): array
+    {
+        return [
+            'Konten Sekolah' => array_slice($this->list_semua_menu(), 0, 7),
+            'Profil Sekolah' => array_slice($this->list_semua_menu(), 7, 5),
+            'PPDB & Alumni'  => array_slice($this->list_semua_menu(), 12, 3),
+            'Lainnya'        => array_slice($this->list_semua_menu(), 15, 3),
+        ];
     }
 
     private function list_semua_menu()

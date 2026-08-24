@@ -3,7 +3,7 @@
 <div class="p-6 bg-gray-50 min-h-screen">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold text-gray-800">Kelola Bakat & Minat</h1>
-        <a href="/admin/bakat-minat/create" class="bg-[#00A859] text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
+        <a href="<?= base_url('admin/bakat-minat/create') ?>" class="bg-[#00A859] text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
             + Tambah Data
         </a>
     </div>
@@ -32,7 +32,7 @@
                     <tr class="border-b hover:bg-gray-50 transition">
                         <td class="p-4"><?= $i++; ?></td>
                         <td class="p-4">
-                            <img src="/uploads/bakat/<?= $row['gambar'] ?? 'default.jpg'; ?>" class="w-16 h-16 object-cover rounded-lg">
+                            <img src="<?= base_url('uploads/bakat/' . ($row['gambar'] ?? 'default.jpg')) ?>" class="w-16 h-16 object-cover rounded-lg" onerror="this.src='<?= base_url('uploads/bakat/default.jpg') ?>'">
                         </td>
                         <td class="p-4 font-semibold"><?= esc($row['judul']); ?></td>
                         <td class="p-4">
@@ -45,10 +45,10 @@
                         <td class="p-4 text-sm text-gray-600"><?= esc($row['jadwal']); ?></td>
                         <td class="p-4 text-center">
                             <div class="flex justify-center items-center gap-2">
-                                <a href="/admin/bakat-minat/edit/<?= $row['id']; ?>" class="bg-blue-100 text-blue-700 px-3 py-1.5 rounded-md text-sm font-medium hover:bg-blue-200 transition">
+                                <a href="<?= base_url('admin/bakat-minat/edit/' . $row['id']) ?>" class="bg-blue-100 text-blue-700 px-3 py-1.5 rounded-md text-sm font-medium hover:bg-blue-200 transition">
                                     Edit
                                 </a>
-                                <form action="/admin/bakat-minat/delete/<?= $row['id']; ?>" method="post" onsubmit="return confirm('Yakin hapus data ini?');" style="display:inline"><?= csrf_field() ?><button type="submit" class="bg-red-100 text-red-700 px-3 py-1.5 rounded-md text-sm font-medium hover:bg-red-200 transition">
+                                <form action="<?= base_url('admin/bakat-minat/delete/' . $row['id']) ?>" method="post" onsubmit="return confirm('Yakin hapus data ini?');" style="display:inline"><?= csrf_field() ?><button type="submit" class="bg-red-100 text-red-700 px-3 py-1.5 rounded-md text-sm font-medium hover:bg-red-200 transition">
                                     Hapus
                                 </button></form>
                             </div>

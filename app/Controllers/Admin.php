@@ -94,8 +94,8 @@ class Admin extends BaseController
         $kegiatan = $kegiatanModel->find($id);
 
         if ($kegiatan) {
-            if ($kegiatan['gambar'] && file_exists('uploads/kegiatan/' . $kegiatan['gambar'])) {
-                unlink('uploads/kegiatan/' . $kegiatan['gambar']);
+            if ($kegiatan['gambar'] && file_exists(FCPATH . 'uploads/kegiatan/' . $kegiatan['gambar'])) {
+                unlink(FCPATH . 'uploads/kegiatan/' . $kegiatan['gambar']);
             }
             $kegiatanModel->delete($id);
             return redirect()->to('admin/kegiatan')->with('pesan', 'Data kegiatan berhasil dihapus.');
@@ -276,18 +276,29 @@ class Admin extends BaseController
         $this->cekIzin('beranda');
         $heroModel = new HeroSliderModel();
         $file = $this->request->getFile('gambar');
+        $fileMobile = $this->request->getFile('gambar_mobile');
 
         $nama = $this->prosesUpload($file, 'hero', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5);
-
-        if ($nama) {
-            $heroModel->save([
-                'gambar' => $nama,
-                'judul'  => $this->request->getPost('judul'),
-                'label'  => $this->request->getPost('label'),
-            ]);
-            return redirect()->to('admin/beranda')->with('pesan', 'Slide ditambahkan!');
+        if (!$nama) {
+            return redirect()->back()->withInput()->with('error', 'Gagal upload gambar desktop. Pastikan file berupa gambar (maks 5MB).');
         }
-        return redirect()->back()->with('error', 'Gagal upload. Pastikan file berupa gambar (maks 5MB).');
+        $namaMobile = null;
+        if ($fileMobile && $fileMobile->isValid() && !$fileMobile->hasMoved()) {
+            $namaMobile = $this->prosesUpload($fileMobile, 'hero', $this->mimeGambar(), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'], 5);
+        }
+
+        $heroModel->save([
+            'gambar'        => $nama,
+            'gambar_mobile' => $namaMobile,
+            'judul'         => $this->request->getPost('judul'),
+            'label'         => $this->request->getPost('label'),
+            'subjudul'      => $this->request->getPost('subjudul'),
+            'btn1_teks'     => $this->request->getPost('btn1_teks'),
+            'btn1_url'      => $this->request->getPost('btn1_url'),
+            'btn2_teks'     => $this->request->getPost('btn2_teks'),
+            'btn2_url'      => $this->request->getPost('btn2_url'),
+        ]);
+        return redirect()->to('admin/beranda')->with('pesan', 'Slide ditambahkan!');
     }
 
     public function beranda_edit($id)
@@ -369,11 +380,12 @@ class Admin extends BaseController
         $slide = $heroModel->find($id);
 
         if ($slide) {
-            // Hapus file fisiknya juga
-            if (!empty($slide['gambar']) && file_exists('uploads/hero/' . $slide['gambar'])) {
-                unlink('uploads/hero/' . $slide['gambar']);
+            if (!empty($slide['gambar']) && file_exists(FCPATH . 'uploads/hero/' . $slide['gambar'])) {
+                unlink(FCPATH . 'uploads/hero/' . $slide['gambar']);
             }
-            // Hapus dari database
+            if (!empty($slide['gambar_mobile']) && file_exists(FCPATH . 'uploads/hero/' . $slide['gambar_mobile'])) {
+                unlink(FCPATH . 'uploads/hero/' . $slide['gambar_mobile']);
+            }
             $heroModel->delete($id);
             return redirect()->to('admin/beranda')->with('pesan', 'Slide berhasil dihapus!');
         }
