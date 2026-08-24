@@ -17,9 +17,16 @@ class UnduhanController extends BaseController
     public function index()
     {
         $this->cekIzin('unduhan');
+        $keyword = $this->request->getGet('keyword');
+        $query = $this->unduhanModel->orderBy('created_at', 'DESC');
+        if (!empty($keyword)) {
+            $query = $query->like('judul', $keyword)->orLike('kategori', $keyword);
+        }
         $data = [
             'title'   => 'Manajemen Pusat Unduhan',
-            'unduhan' => $this->unduhanModel->orderBy('created_at', 'DESC')->findAll()
+            'unduhan' => $query->paginate(15, 'unduhan'),
+            'pager'   => $this->unduhanModel->pager,
+            'keyword' => $keyword
         ];
 
         return view('admin/unduhan/index', $data);

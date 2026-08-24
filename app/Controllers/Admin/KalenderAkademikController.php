@@ -18,10 +18,16 @@ class KalenderAkademikController extends BaseController
     public function index()
     {
         $this->cekIzin('kalender');
+        $keyword = $this->request->getGet('keyword');
+        $query = $this->kalenderModel->orderBy('tanggal_mulai', 'DESC');
+        if (!empty($keyword)) {
+            $query = $query->like('judul', $keyword);
+        }
         $data = [
             'title'    => 'Manajemen Kalender Akademik',
-            // Kita urutkan dari tanggal_mulai yang paling baru/mendatang
-            'kalender' => $this->kalenderModel->orderBy('tanggal_mulai', 'DESC')->findAll()
+            'kalender' => $query->paginate(15, 'kalender'),
+            'pager'    => $this->kalenderModel->pager,
+            'keyword'  => $keyword
         ];
 
         return view('admin/kalender/index', $data);

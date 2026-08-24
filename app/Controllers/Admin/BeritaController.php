@@ -75,9 +75,31 @@ class BeritaController extends BaseController
     public function index()
     {
         $this->cekIzin('berita');
+        $keyword = $this->request->getGet('keyword');
+        $status = $this->request->getGet('status');
+        $kategori = $this->request->getGet('kategori');
+
+        $builder = $this->beritaModel->select('berita.*, kategori_berita.nama_kategori')
+            ->join('kategori_berita', 'kategori_berita.id = berita.id_kategori', 'left');
+
+        if (!empty($keyword)) {
+            $builder->groupStart()->like('berita.judul', $keyword)->orLike('kategori_berita.nama_kategori', $keyword)->groupEnd();
+        }
+        if (!empty($status)) {
+            $builder->where('berita.status', $status);
+        }
+        if (!empty($kategori)) {
+            $builder->where('berita.id_kategori', $kategori);
+        }
+
         $data = [
-            'title'  => 'Manajemen Berita',
-            'berita' => $this->beritaModel->getBeritaDenganKategori()
+            'title'     => 'Manajemen Berita',
+            'berita'    => $builder->orderBy('berita.created_at', 'DESC')->paginate(15, 'berita'),
+            'pager'     => $this->beritaModel->pager,
+            'keyword'   => $keyword,
+            'statusAktif' => $status,
+            'kategoriAktif' => $kategori,
+            'kategoriList' => $this->kategoriModel->findAll()
         ];
         return view('admin/berita/index', $data);
     }

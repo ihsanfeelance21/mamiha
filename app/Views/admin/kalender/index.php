@@ -18,6 +18,19 @@
         </div>
     <?php endif; ?>
 
+    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm mb-4">
+        <form method="get" class="flex gap-2">
+            <div class="relative flex-1">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-magnifying-glass text-sm"></i></span>
+                <input type="text" name="keyword" value="<?= esc($keyword ?? '') ?>" placeholder="Cari judul agenda..." class="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-[#00A859] focus:ring-2 focus:ring-[#00A859]/20 text-sm">
+            </div>
+            <button type="submit" class="bg-gray-800 hover:bg-black text-white px-5 rounded-xl text-sm font-bold">Cari</button>
+            <?php if (!empty($keyword)) : ?>
+                <a href="<?= base_url('admin/kalender') ?>" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-100 px-4 py-2.5 rounded-xl text-sm font-bold flex items-center justify-center"><i class="fa-solid fa-rotate-left"></i></a>
+            <?php endif; ?>
+        </form>
+    </div>
+
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
@@ -79,6 +92,13 @@
                 </tbody>
             </table>
         </div>
+        <?php if (isset($pager)) : ?>
+            <div class="p-4 border-t border-gray-100 flex justify-center">
+                <div class="[&>ul]:flex [&>ul]:gap-2 [&>ul>li>a]:px-3 [&>ul>li>a]:py-1.5 [&>ul>li>a]:bg-white [&>ul>li>a]:border [&>ul>li>a]:rounded-lg [&>ul>li.active>a]:bg-[#00A859] [&>ul>li.active>a]:text-white">
+                    <?= $pager->links('kalender') ?>
+                </div>
+            </div>
+        <?php endif; ?>
     </div>
 </div>
 

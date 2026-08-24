@@ -47,9 +47,16 @@ class Admin extends BaseController
     {
         $this->cekIzin('kegiatan');
         $kegiatanModel = new KegiatanModel();
+        $keyword = $this->request->getGet('keyword');
+        $query = $kegiatanModel->orderBy('created_at', 'DESC');
+        if (!empty($keyword)) {
+            $query = $query->like('judul', $keyword);
+        }
         $data = [
             'title'    => 'Kegiatan Sekolah',
-            'kegiatan' => $kegiatanModel->orderBy('created_at', 'DESC')->findAll()
+            'kegiatan' => $query->paginate(15, 'kegiatan'),
+            'pager'    => $kegiatanModel->pager,
+            'keyword'  => $keyword
         ];
         return view('admin/kegiatan', $data);
     }
