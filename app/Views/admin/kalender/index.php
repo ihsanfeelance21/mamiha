@@ -14,7 +14,7 @@
     <?php if (session()->getFlashdata('pesan')) : ?>
         <div class="bg-green-50 border-l-4 border-[#00A859] p-4 mb-6 rounded-r-xl flex items-center shadow-sm">
             <i class="fa-solid fa-circle-check text-[#00A859] text-xl mr-3"></i>
-            <p class="text-green-700 font-medium"><?= session()->getFlashdata('pesan') ?></p>
+            <p class="text-green-700 font-medium"><?= esc(session()->getFlashdata('pesan')) ?></p>
         </div>
     <?php endif; ?>
 
@@ -61,9 +61,9 @@
                                         <a href="<?= base_url('admin/kalender/edit/' . $item['id']) ?>" class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-colors" title="Edit">
                                             <i class="fa-solid fa-pen-to-square text-sm"></i>
                                         </a>
-                                        <a href="<?= base_url('admin/kalender/delete/' . $item['id']) ?>" onclick="return confirm('Yakin ingin menghapus agenda ini?')" class="w-8 h-8 rounded-lg bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-600 hover:text-white transition-colors" title="Hapus">
+                                        <form action="<?= base_url('admin/kalender/delete/' . $item['id']) ?>" method="post" onsubmit="return confirm('Yakin ingin menghapus agenda ini?')" style="display:inline"><?= csrf_field() ?><button type="submit" class="w-8 h-8 rounded-lg bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-600 hover:text-white transition-colors">
                                             <i class="fa-solid fa-trash-can text-sm"></i>
-                                        </a>
+                                        </button></form>
                                     </div>
                                 </td>
                             </tr>

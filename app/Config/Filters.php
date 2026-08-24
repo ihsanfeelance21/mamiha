@@ -33,7 +33,7 @@ class Filters extends BaseFilters
 
     public array $globals = [
         'before' => ['csrf', 'honeypot'],
-        'after'  => [],
+        'after'  => ['secureheaders'],
     ];
 
     public array $methods = [];

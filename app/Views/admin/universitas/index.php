@@ -8,7 +8,7 @@
 
     <?php if (session()->getFlashdata('pesan')) : ?>
         <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded shadow-sm" role="alert">
-            <p><?= session()->getFlashdata('pesan'); ?></p>
+            <p><?= esc(session()->getFlashdata('pesan')) ?></p>
         </div>
     <?php endif; ?>
 
@@ -70,8 +70,8 @@
                             </td>
                             <td class="py-3 px-4 font-medium text-gray-700"><?= esc($u['nama_universitas']); ?></td>
                             <td class="py-3 px-4 text-center">
-                                <a href="<?= base_url('admin/universitas/edit/' . $u['id_universitas']); ?>" class="bg-yellow-100 text-yellow-600 hover:bg-yellow-500 hover:text-white py-1 px-3 rounded text-xs transition duration-150 mr-1">Edit</a>
-                                <a href="<?= base_url('admin/universitas/hapus/' . $u['id_universitas']); ?>" class="bg-red-100 text-red-600 hover:bg-red-500 hover:text-white py-1 px-3 rounded text-xs transition duration-150" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
+                                <a href="<?= base_url('admin/universitas/edit/' . $u['id_universitas']) ?>" class="bg-yellow-100 text-yellow-600 hover:bg-yellow-500 hover:text-white py-1 px-3 rounded text-xs transition duration-150 mr-1">Edit</a>
+                                <form action="<?= base_url('admin/universitas/hapus/' . $u['id_universitas']) ?>" method="post" onsubmit="return confirm('Yakin ingin menghapus?');" style="display:inline"><?= csrf_field() ?><button type="submit" class="bg-red-100 text-red-600 hover:bg-red-500 hover:text-white py-1 px-3 rounded text-xs transition duration-150">Hapus</button></form>
                             </td>
                         </tr>
                     <?php endforeach; ?>

@@ -15,7 +15,7 @@
 
     <?php if (session()->getFlashdata('pesan')) : ?>
         <div class="p-4 mb-6 text-sm text-green-800 rounded-lg bg-green-50 border border-green-200" role="alert">
-            <span class="font-medium">Berhasil!</span> <?= session()->getFlashdata('pesan'); ?>
+            <span class="font-medium">Berhasil!</span> <?= esc(session()->getFlashdata('pesan')) ?>
         </div>
     <?php endif; ?>
 
@@ -74,9 +74,9 @@
                                     <a href="<?= base_url('admin/guru/edit/' . $g['id']) ?>" class="inline-flex items-center justify-center w-8 h-8 rounded-md bg-amber-50 text-amber-600 hover:bg-amber-500 hover:text-white transition-colors tooltip" title="Edit Data">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a href="<?= base_url('admin/guru/hapus/' . $g['id']) ?>" class="inline-flex items-center justify-center w-8 h-8 rounded-md bg-red-50 text-red-600 hover:bg-red-500 hover:text-white transition-colors tooltip" title="Hapus Data" onclick="return confirm('Yakin ingin menghapus data Bapak/Ibu <?= esc($g['nama']) ?>?')">
+                                    <form action="<?= base_url('admin/guru/hapus/' . $g['id']) ?>" method="post" onsubmit="return confirm('Yakin ingin menghapus data Bapak/Ibu <?= esc($g['nama']) ?>?')" style="display:inline"><?= csrf_field() ?><button type="submit" class="inline-flex items-center justify-center w-8 h-8 rounded-md bg-red-50 text-red-600 hover:bg-red-500 hover:text-white transition-colors tooltip">?')">
                                         <i class="fas fa-trash"></i>
-                                    </a>
+                                    </button></form>
                                 </div>
                             </td>
                         </tr>

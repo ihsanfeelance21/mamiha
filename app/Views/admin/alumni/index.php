@@ -11,12 +11,12 @@
 
     <?php if (session()->getFlashdata('pesan')) : ?>
         <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded shadow-sm">
-            <p><?= session()->getFlashdata('pesan'); ?></p>
+            <p><?= esc(session()->getFlashdata('pesan')) ?></p>
         </div>
     <?php endif; ?>
     <?php if (session()->getFlashdata('error')) : ?>
         <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded shadow-sm">
-            <p><?= session()->getFlashdata('error'); ?></p>
+            <p><?= esc(session()->getFlashdata('error')) ?></p>
         </div>
     <?php endif; ?>
 
@@ -90,19 +90,15 @@
                                 <?php endif; ?>
                             </td>
                             <td class="py-3 px-4 text-center">
-                                <a href="<?= base_url('admin/alumni/toggle-featured/' . $a['id_alumni']); ?>"
-                                    class="inline-block py-1 px-3 rounded-full text-xs font-bold transition duration-150 border <?= $a['is_featured'] == 1 ? 'bg-indigo-600 text-white border-indigo-700 hover:bg-indigo-700 shadow-sm' : 'bg-white hover:bg-gray-100' ?>"
-                                    title="Klik untuk ubah status slider">
-                                    <?= $a['is_featured'] == 1 ? '★ Tampil di Slider' : 'Sembunyikan' ?>
-                                </a>
+                                <form action="<?= base_url('admin/alumni/toggle-featured/' . $a['id_alumni']) ?>" method="post" style="display:inline"><?= csrf_field() ?><button type="submit" class="inline-block py-1 px-3 rounded-full text-xs font-bold transition duration-150 border <?= $a['is_featured'] == 1 ? 'bg-indigo-600 text-white border-indigo-700 hover:bg-indigo-700 shadow-sm' : 'bg-white hover:bg-gray-100' ?>" title="Klik untuk ubah status slider"><?= $a['is_featured'] == 1 ? '★ Tampil di Slider' : 'Sembunyikan' ?></button></form>
                             </td>
                             <td class="py-3 px-4 text-center space-x-1">
                                 <?php if ($a['status'] == 'pending') : ?>
-                                    <a href="<?= base_url('admin/alumni/approve/' . $a['id_alumni']); ?>" class="bg-green-500 text-white py-1 px-2 rounded hover:bg-green-600 text-xs font-semibold transition" title="Setujui">Approve</a>
-                                    <a href="<?= base_url('admin/alumni/reject/' . $a['id_alumni']); ?>" class="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600 text-xs font-semibold transition" title="Tolak">Reject</a>
+                                    <form action="<?= base_url('admin/alumni/approve/' . $a['id_alumni']) ?>" method="post" style="display:inline"><?= csrf_field() ?><button type="submit" class="bg-green-500 text-white py-1 px-2 rounded hover:bg-green-600 text-xs font-semibold transition" title="Setujui">Approve</button></form>
+                                    <form action="<?= base_url('admin/alumni/reject/' . $a['id_alumni']) ?>" method="post" style="display:inline"><?= csrf_field() ?><button type="submit" class="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600 text-xs font-semibold transition" title="Tolak">Reject</button></form>
                                 <?php endif; ?>
                                 <a href="<?= base_url('admin/alumni/edit/' . $a['id_alumni']); ?>" class="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600 text-xs font-semibold transition inline-block mt-1" title="Edit Data">Edit</a>
-                                <a href="<?= base_url('admin/alumni/hapus/' . $a['id_alumni']); ?>" class="bg-gray-500 text-white py-1 px-3 rounded hover:bg-gray-600 text-xs font-semibold transition inline-block mt-1" onclick="return confirm('Yakin ingin menghapus data alumni ini?');" title="Hapus">Delete</a>
+                                <form action="<?= base_url('admin/alumni/hapus/' . $a['id_alumni']) ?>" method="post" onsubmit="return confirm('Yakin ingin menghapus data alumni ini?');" style="display:inline"><?= csrf_field() ?><button type="submit" class="bg-gray-500 text-white py-1 px-3 rounded hover:bg-gray-600 text-xs font-semibold transition inline-block mt-1" title="Hapus">Delete</button></form>
                             </td>
                         </tr>
                     <?php endforeach; ?>

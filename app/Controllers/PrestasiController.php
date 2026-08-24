@@ -14,13 +14,42 @@ class PrestasiController extends BaseController
         $this->prestasiModel = new PrestasiModel();
     }
 
-    // Menampilkan daftar semua prestasi
+    // Menampilkan daftar semua prestasi dengan filter & pagination
     public function index()
     {
+        $cari = $this->request->getGet('cari');
+        $kategori = $this->request->getGet('kategori');
+        $tahun = $this->request->getGet('tahun');
+        $urutan = $this->request->getGet('urutan') ?? 'terbaru';
+
+        $query = $this->prestasiModel;
+
+        if (!empty($cari)) {
+            $query = $query->groupStart()->like('judul', $cari)->orLike('nama_lomba', $cari)->orLike('nama_pemenang', $cari)->orLike('nama_guru', $cari)->groupEnd();
+        }
+        if (!empty($kategori)) {
+            // Map form values Prestasi Siswa/Guru/Madrasah to DB values Siswa/Guru/Madrasah
+            $map = ['Prestasi Siswa' => 'Siswa', 'Prestasi Guru' => 'Guru', 'Prestasi Madrasah' => 'Madrasah', 'Siswa' => 'Siswa', 'Guru' => 'Guru', 'Madrasah' => 'Madrasah'];
+            $kat = $map[$kategori] ?? $kategori;
+            $query = $query->where('kategori_prestasi', $kat);
+        }
+        if (!empty($tahun)) {
+            $query = $query->where('tahun_perolehan', $tahun);
+        }
+        if ($urutan === 'terlama') {
+            $query = $query->orderBy('tahun_perolehan', 'ASC')->orderBy('id', 'ASC');
+        } else {
+            $query = $query->orderBy('tahun_perolehan', 'DESC')->orderBy('id', 'DESC');
+        }
+
         $data = [
             'title'    => 'Daftar Prestasi',
-            // Urutkan dari tahun perolehan terbaru, lalu id terbaru
-            'prestasi' => $this->prestasiModel->orderBy('tahun_perolehan', 'DESC')->orderBy('id', 'DESC')->findAll()
+            'prestasi' => $query->paginate(9, 'prestasi'),
+            'pager'    => $this->prestasiModel->pager,
+            'keyword'  => $cari,
+            'kategoriAktif' => $kategori,
+            'tahunAktif' => $tahun,
+            'urutanAktif' => $urutan,
         ];
 
         return view('prestasi_index', $data);

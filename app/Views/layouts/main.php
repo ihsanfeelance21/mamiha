@@ -1,11 +1,21 @@
 <?php
-// Mengambil data pengaturan dari database untuk Header & Footer
-$pengaturan = (new \App\Models\PengaturanModel())->first();
-$ppdbModel = new \App\Models\PendaftaranModel();
-$ppdb = $ppdbModel->first();
-// Ambil data Akses Cepat
-$aksesCepatModel = new \App\Models\AksesCepatModel();
-$listAksesCepat = $aksesCepatModel->findAll();
+// Mengambil data pengaturan dari database untuk Header & Footer (dengan cache 1 jam untuk perf)
+$cache = cache();
+$pengaturan = $cache->get('pengaturan') ?? (function() use ($cache) {
+    $data = (new \App\Models\PengaturanModel())->first() ?? [];
+    $cache->save('pengaturan', $data, 3600);
+    return $data;
+})();
+$ppdb = $cache->get('pendaftaran') ?? (function() use ($cache) {
+    $data = (new \App\Models\PendaftaranModel())->first();
+    $cache->save('pendaftaran', $data, 600);
+    return $data;
+})();
+$listAksesCepat = $cache->get('akses_cepat') ?? (function() use ($cache) {
+    $data = (new \App\Models\AksesCepatModel())->findAll();
+    $cache->save('akses_cepat', $data, 3600);
+    return $data;
+})();
 
 // --- LOGIKA STATUS TOMBOL PENDAFTARAN ---
 $isBuka = ($ppdb && $ppdb['status_ppdb'] == 'buka');
@@ -26,7 +36,11 @@ if ($isBuka) {
 $currentUri = uri_string(); // Mengambil url saat ini (misal: 'profil/madrasah')
 $isBeranda = ($currentUri == '' || $currentUri == '/');
 $isProfil  = (strpos($currentUri, 'profil') === 0);
-$isBerita  = (strpos($currentUri, 'kegiatan') === 0);
+$isBerita  = (strpos($currentUri, 'kegiatan') === 0 || strpos($currentUri, 'berita') === 0 || strpos($currentUri, 'prestasi') === 0 || strpos($currentUri, 'pengumuman') === 0);
+$isGaleri  = (strpos($currentUri, 'galeri') === 0);
+$isKalender = (strpos($currentUri, 'kalender') === 0);
+$isUnduhan = (strpos($currentUri, 'pusat-unduhan') === 0);
+$isKontak  = (strpos($currentUri, 'hubungi-kami') === 0);
 
 // ==============================================================
 // ðŸš€ LOGIKA SETUP META SEO & SHARE SOSMED
@@ -41,9 +55,9 @@ $currentUrl = current_url();
 if (isset($meta_image)) {
     // 1. Jika dikirim dari Controller (misal halaman detail berita), pakai gambar berita
     $ogImage = base_url($meta_image);
-} elseif (!empty($pengaturan['logo'])) {
+} elseif (!empty($pengaturan['logo'] ?? null)) {
     // 2. Jika tidak ada gambar khusus, pakai Logo dari tabel pengaturan
-    $ogImage = base_url('uploads/pengaturan/' . $pengaturan['logo']);
+    $ogImage = base_url('uploads/pengaturan/' . ($pengaturan['logo'] ?? ''));
 } else {
     // 3. Fallback terakhir jika semua kosong
     $ogImage = base_url('uploads/default-share.jpg');
@@ -77,11 +91,19 @@ if (isset($meta_image)) {
     <meta name="twitter:description" content="<?= esc($metaDesc) ?>">
     <meta name="twitter:image" content="<?= esc($ogImage) ?>">
 
-    <?php if (!empty($pengaturan['favicon'])) : ?>
-        <link rel="icon" type="image/png" href="<?= base_url('uploads/pengaturan/' . $pengaturan['favicon']) ?>">
+    <?php if (!empty($pengaturan['favicon'] ?? null)) : ?>
+        <link rel="icon" type="image/png" href="<?= base_url('uploads/pengaturan/' . ($pengaturan['favicon'] ?? '')) ?>">
     <?php endif; ?>
 
-    <link rel="stylesheet" href="<?= base_url('css/app.css') ?>">
+    <?php
+    $manifestPath = FCPATH . '.vite/manifest.json';
+    $cssFile = 'css/app.css';
+    if (is_file($manifestPath)) {
+        $manifest = json_decode(file_get_contents($manifestPath), true);
+        $cssFile = $manifest['src/css/app.css']['file'] ?? $cssFile;
+    }
+    ?>
+    <link rel="stylesheet" href="<?= base_url($cssFile) ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
@@ -99,28 +121,28 @@ if (isset($meta_image)) {
             <div class="flex items-center gap-2 truncate pr-4">
                 <i class="fa-solid fa-location-dot text-green-400"></i>
                 <a href="<?= $pengaturan['link_maps'] ?? '#' ?>" target="_blank" class="hover:text-white transition truncate">
-                    <?= esc($pengaturan['alamat']) ?>
+                    <?= esc($pengaturan['alamat'] ?? '') ?>
                 </a>
             </div>
             <div class="flex items-center gap-6 shrink-0">
                 <div class="flex items-center gap-2">
                     <i class="fa-solid fa-phone text-green-400"></i>
                     <a href="<?= $pengaturan['link_whatsapp'] ?? '#' ?>" target="_blank" class="hover:text-white transition font-medium">
-                        <?= esc($pengaturan['telepon']) ?>
+                        <?= esc($pengaturan['telepon'] ?? '') ?>
                     </a>
                 </div>
                 <div class="flex items-center gap-3 border-l border-green-700 pl-4">
-                    <?php if ($pengaturan['youtube']): ?>
-                        <a href="<?= esc($pengaturan['youtube']) ?>" target="_blank" class="hover:text-white transition"><i class="fa-brands fa-youtube text-sm"></i></a>
+                    <?php if (!empty($pengaturan['youtube'] ?? null)): ?>
+                        <a href="<?= esc($pengaturan['youtube'] ?? '') ?>" target="_blank" class="hover:text-white transition"><i class="fa-brands fa-youtube text-sm"></i></a>
                     <?php endif; ?>
-                    <?php if ($pengaturan['facebook']): ?>
-                        <a href="<?= esc($pengaturan['facebook']) ?>" target="_blank" class="hover:text-white transition"><i class="fa-brands fa-facebook-f text-sm"></i></a>
+                    <?php if (!empty($pengaturan['facebook'] ?? null)): ?>
+                        <a href="<?= esc($pengaturan['facebook'] ?? '') ?>" target="_blank" class="hover:text-white transition"><i class="fa-brands fa-facebook-f text-sm"></i></a>
                     <?php endif; ?>
-                    <?php if ($pengaturan['instagram']): ?>
-                        <a href="<?= esc($pengaturan['instagram']) ?>" target="_blank" class="hover:text-white transition"><i class="fa-brands fa-instagram text-sm"></i></a>
+                    <?php if (!empty($pengaturan['instagram'] ?? null)): ?>
+                        <a href="<?= esc($pengaturan['instagram'] ?? '') ?>" target="_blank" class="hover:text-white transition"><i class="fa-brands fa-instagram text-sm"></i></a>
                     <?php endif; ?>
-                    <?php if ($pengaturan['tiktok']): ?>
-                        <a href="<?= esc($pengaturan['tiktok']) ?>" target="_blank" class="hover:text-white transition"><i class="fa-brands fa-tiktok text-sm"></i></a>
+                    <?php if (!empty($pengaturan['tiktok'] ?? null)): ?>
+                        <a href="<?= esc($pengaturan['tiktok'] ?? '') ?>" target="_blank" class="hover:text-white transition"><i class="fa-brands fa-tiktok text-sm"></i></a>
                     <?php endif; ?>
                 </div>
             </div>
@@ -132,26 +154,26 @@ if (isset($meta_image)) {
             <div class="flex justify-between items-center h-20 md:h-24">
 
                 <a href="<?= base_url() ?>" class="flex items-center gap-2 md:gap-4 hover:opacity-90 transition w-[70%] md:w-auto">
-                    <?php if (!empty($pengaturan['logo'])) : ?>
-                        <img src="<?= base_url('uploads/pengaturan/' . $pengaturan['logo']) ?>" alt="Logo <?= esc($pengaturan['nama_sekolah']) ?>" class="w-12 h-12 md:w-15 md:h-15 object-contain shrink-0">
+                    <?php if (!empty($pengaturan['logo'] ?? null)) : ?>
+                        <img src="<?= base_url('uploads/pengaturan/' . ($pengaturan['logo'] ?? '')) ?>" alt="Logo <?= esc($pengaturan['nama_sekolah'] ?? '') ?>" class="w-12 h-12 md:w-15 md:h-15 object-contain shrink-0">
                     <?php else : ?>
                         <div class="w-10 h-10 md:w-14 md:h-14 bg-[#0B4A2D] text-white rounded-full flex items-center justify-center font-bold text-lg md:text-2xl shrink-0">
-                            <?= substr($pengaturan['nama_sekolah'], 0, 1) ?>
+                            <?= substr($pengaturan['nama_sekolah'] ?? 'M', 0, 1) ?>
                         </div>
                     <?php endif; ?>
 
                     <div class="flex flex-col justify-center overflow-hidden">
                         <h1 class="font-extrabold text-lg md:text-lg lg:text-xl text-[#0B4A2D] leading-tight md:leading-none tracking-tight uppercase truncate">
-                            <?= esc($pengaturan['nama_sekolah']) ?>
+                            <?= esc($pengaturan['nama_sekolah'] ?? '') ?>
                         </h1>
-                        <?php if (!empty($pengaturan['slogan'])): ?>
+                        <?php if (!empty($pengaturan['slogan'] ?? null)): ?>
                             <p class="text-sm md:text-base text-[#00A859] font-medium leading-tight mt-0.5 truncate sm:block">
-                                <?= esc($pengaturan['slogan']) ?>
+                                <?= esc($pengaturan['slogan'] ?? '') ?>
                             </p>
                         <?php endif; ?>
-                        <?php if (!empty($pengaturan['alamat_singkat'])): ?>
+                        <?php if (!empty($pengaturan['alamat_singkat'] ?? null)): ?>
                             <p class="text-[0.70rem] md:text-xs text-gray-600 font-medium leading-tight mt-0.5 truncate sm:block">
-                                <?= esc($pengaturan['alamat_singkat']) ?></p>
+                                <?= esc($pengaturan['alamat_singkat'] ?? '') ?></p>
                         <?php endif; ?>
                     </div>
                 </a>
@@ -209,7 +231,19 @@ if (isset($meta_image)) {
 
                     <a href="<?= base_url('kalender') ?>" class="text-sm lg:text-[15px] font-medium transition-colors <?= isset($isKalender) && $isKalender ? 'text-[#0B4A2D] border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">Agenda Madrasah</a>
 
-                    <a href="<?= base_url('galeri') ?>" class="text-sm lg:text-[15px] font-medium transition-colors <?= isset($isGaleri) && $isGaleri ? 'text-[#0B4A2D] border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">Galeri</a>
+                    <div class="relative group">
+                        <button class="flex items-center gap-1.5 text-sm lg:text-[15px] font-medium transition-colors py-2 <?= isset($isGaleri) && $isGaleri ? 'text-[#0B4A2D] border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">
+                            Galeri <i class="fa-solid fa-chevron-down text-[10px] mt-0.5 group-hover:rotate-180 transition-transform duration-300"></i>
+                        </button>
+                        <div class="absolute left-0 mt-2 w-56 bg-white border border-gray-100 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-left scale-95 group-hover:scale-100 z-50 overflow-hidden">
+                            <a href="<?= base_url('galeri') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] border-b border-gray-50 transition-colors">
+                                <i class="fa-solid fa-images w-5 text-center mr-1.5 text-gray-400"></i> Galeri Foto
+                            </a>
+                            <a href="<?= base_url('galeri-video') ?>" class="block px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#00A859] transition-colors">
+                                <i class="fa-solid fa-video w-5 text-center mr-1.5 text-gray-400"></i> Galeri Video
+                            </a>
+                        </div>
+                    </div>
 
                     <a href="<?= base_url('pusat-unduhan') ?>" class="text-sm lg:text-[15px] font-medium transition-colors <?= isset($isUnduhan) && $isUnduhan ? 'text-[#0B4A2D] border-b-2 border-[#00A859] pb-1' : 'text-gray-600 hover:text-[#00A859]' ?>">Unduhan</a>
 
@@ -258,7 +292,16 @@ if (isset($meta_image)) {
 
                 <a href="<?= base_url('kalender') ?>" class="block px-3 py-3 rounded-md text-base transition-colors <?= isset($isKalender) && $isKalender ? 'font-bold text-[#0B4A2D] bg-green-50' : 'font-semibold hover:bg-gray-50 hover:text-[#00A859]' ?>">Kalender Akademik</a>
 
-                <a href="<?= base_url('galeri') ?>" class="block px-3 py-3 rounded-md text-base transition-colors <?= isset($isGaleri) && $isGaleri ? 'font-bold text-[#0B4A2D] bg-green-50' : 'font-semibold hover:bg-gray-50 hover:text-[#00A859]' ?>">Galeri</a>
+                <div x-data="{ openGaleri: <?= (isset($isGaleri) && $isGaleri) ? 'true' : 'false' ?> }">
+                    <button @click="openGaleri = !openGaleri" class="w-full flex justify-between items-center px-3 py-3 rounded-md text-base transition-colors <?= isset($isGaleri) && $isGaleri ? 'font-bold text-[#0B4A2D] bg-green-50' : 'font-semibold hover:bg-gray-50 hover:text-[#00A859]' ?>">
+                        Galeri
+                        <i class="fa-solid fa-chevron-down text-sm transition-transform duration-300" :class="openGaleri ? 'rotate-180' : ''"></i>
+                    </button>
+                    <div x-show="openGaleri" x-collapse class="pl-4 pr-2 py-2 space-y-1 bg-gray-50/50 rounded-b-md border-l-2 border-green-200 ml-2">
+                        <a href="<?= base_url('galeri') ?>" class="block px-3 py-2.5 text-sm font-medium text-gray-600 hover:text-[#00A859]">Galeri Foto</a>
+                        <a href="<?= base_url('galeri-video') ?>" class="block px-3 py-2.5 text-sm font-medium text-gray-600 hover:text-[#00A859]">Galeri Video</a>
+                    </div>
+                </div>
 
                 <a href="<?= base_url('pusat-unduhan') ?>" class="block px-3 py-3 rounded-md text-base transition-colors <?= isset($isUnduhan) && $isUnduhan ? 'font-bold text-[#0B4A2D] bg-green-50' : 'font-semibold hover:bg-gray-50 hover:text-[#00A859]' ?>">Unduhan</a>
 
@@ -315,50 +358,50 @@ if (isset($meta_image)) {
 
                 <div>
                     <a href="<?= base_url() ?>" class="flex items-center gap-3 mb-6 hover:opacity-90 transition">
-                        <?php if (!empty($pengaturan['logo'])) : ?>
-                            <img src="<?= base_url('uploads/pengaturan/' . $pengaturan['logo']) ?>" alt="Logo <?= esc($pengaturan['nama_sekolah']) ?>" class="w-20 h-20 object-contain">
-                        <?php else : ?>
-                            <div class="w-14 h-14 bg-white text-[#0B4A2D] rounded-full flex items-center justify-center font-bold text-2xl">
-                                <?= substr($pengaturan['nama_sekolah'], 0, 1) ?>
-                            </div>
-                        <?php endif; ?>
+                         <?php if (!empty($pengaturan['logo'] ?? null)) : ?>
+                             <img src="<?= base_url('uploads/pengaturan/' . ($pengaturan['logo'] ?? '')) ?>" alt="Logo <?= esc($pengaturan['nama_sekolah'] ?? 'MA') ?>" class="w-20 h-20 object-contain">
+                         <?php else : ?>
+                             <div class="w-14 h-14 bg-white text-[#0B4A2D] rounded-full flex items-center justify-center font-bold text-2xl">
+                                 <?= substr($pengaturan['nama_sekolah'] ?? 'M', 0, 1) ?>
+                             </div>
+                         <?php endif; ?>
 
                         <div class="flex flex-col justify-center gap-1">
                             <h2 class="font-extrabold text-xl md:text-lg leading-none uppercase text-white mb-1 tracking-tight">
-                                <?= esc($pengaturan['nama_sekolah']) ?>
+                                <?= esc($pengaturan['nama_sekolah'] ?? '') ?>
                             </h2>
-                            <?php if (!empty($pengaturan['slogan'])): ?>
-                                <p class="text-base md:text-sm text-green-400 font-medium leading-none mb-1"><?= esc($pengaturan['slogan']) ?></p>
+                            <?php if (!empty($pengaturan['slogan'] ?? null)): ?>
+                                <p class="text-base md:text-sm text-green-400 font-medium leading-none mb-1"><?= esc($pengaturan['slogan'] ?? '') ?></p>
                             <?php endif; ?>
 
-                            <?php if (!empty($pengaturan['alamat_singkat'])): ?>
-                                <p class="text-xs md:text-[0.70rem] text-green-100 font-medium opacity-80 leading-none"><?= esc($pengaturan['alamat_singkat']) ?></p>
+                            <?php if (!empty($pengaturan['alamat_singkat'] ?? null)): ?>
+                                <p class="text-xs md:text-[0.70rem] text-green-100 font-medium opacity-80 leading-none"><?= esc($pengaturan['alamat_singkat'] ?? '') ?></p>
                             <?php endif; ?>
                         </div>
                     </a>
 
                     <p class="text-green-50/90 text-sm leading-relaxed mb-6">
-                        <?= esc($pengaturan['deskripsi_footer']) ?>
+                        <?= esc($pengaturan['deskripsi_footer'] ?? '') ?>
                     </p>
 
                     <div class="flex items-center gap-3">
                         <?php if (!empty($pengaturan['facebook'] ?? '')): ?>
-                            <a href="<?= esc($pengaturan['facebook']) ?>" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#00A859] hover:-translate-y-1 transition-all duration-300 border border-white/20">
+                            <a href="<?= esc($pengaturan['facebook'] ?? '') ?>" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#00A859] hover:-translate-y-1 transition-all duration-300 border border-white/20">
                                 <i class="fa-brands fa-facebook-f text-white text-sm"></i>
                             </a>
                         <?php endif; ?>
                         <?php if (!empty($pengaturan['instagram'] ?? '')): ?>
-                            <a href="<?= esc($pengaturan['instagram']) ?>" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#00A859] hover:-translate-y-1 transition-all duration-300 border border-white/20">
+                            <a href="<?= esc($pengaturan['instagram'] ?? '') ?>" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#00A859] hover:-translate-y-1 transition-all duration-300 border border-white/20">
                                 <i class="fa-brands fa-instagram text-white text-sm"></i>
                             </a>
                         <?php endif; ?>
                         <?php if (!empty($pengaturan['youtube'] ?? '')): ?>
-                            <a href="<?= esc($pengaturan['youtube']) ?>" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#00A859] hover:-translate-y-1 transition-all duration-300 border border-white/20">
+                            <a href="<?= esc($pengaturan['youtube'] ?? '') ?>" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#00A859] hover:-translate-y-1 transition-all duration-300 border border-white/20">
                                 <i class="fa-brands fa-youtube text-white text-sm"></i>
                             </a>
                         <?php endif; ?>
                         <?php if (!empty($pengaturan['tiktok'] ?? '')): ?>
-                            <a href="<?= esc($pengaturan['tiktok']) ?>" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#00A859] hover:-translate-y-1 transition-all duration-300 border border-white/20">
+                            <a href="<?= esc($pengaturan['tiktok'] ?? '') ?>" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#00A859] hover:-translate-y-1 transition-all duration-300 border border-white/20">
                                 <i class="fa-brands fa-tiktok text-white text-sm"></i>
                             </a>
                         <?php endif; ?>
@@ -389,19 +432,19 @@ if (isset($meta_image)) {
                         <li class="flex items-start gap-3">
                             <i class="fa-solid fa-location-dot mt-1 text-[#00A859] text-base w-4 text-center shrink-0"></i>
                             <a href="<?= $pengaturan['link_maps'] ?? '#' ?>" target="_blank" class="hover:text-white transition leading-relaxed">
-                                <?= esc($pengaturan['alamat']) ?>
+                                <?= esc($pengaturan['alamat'] ?? '') ?>
                             </a>
                         </li>
                         <li class="flex items-center gap-3">
                             <i class="fa-solid fa-phone text-[#00A859] text-base w-4 text-center shrink-0"></i>
                             <a href="<?= $pengaturan['link_whatsapp'] ?? '#' ?>" target="_blank" class="hover:text-white transition">
-                                <?= esc($pengaturan['telepon']) ?>
+                                <?= esc($pengaturan['telepon'] ?? '') ?>
                             </a>
                         </li>
                         <li class="flex items-center gap-3">
                             <i class="fa-solid fa-envelope text-[#00A859] text-base w-4 text-center shrink-0"></i>
-                            <a href="mailto:<?= esc($pengaturan['email']) ?>" class="hover:text-white transition break-all">
-                                <?= esc($pengaturan['email']) ?>
+                            <a href="mailto:<?= esc($pengaturan['email'] ?? '') ?>" class="hover:text-white transition break-all">
+                                <?= esc($pengaturan['email'] ?? '') ?>
                             </a>
                         </li>
                     </ul>
@@ -437,7 +480,7 @@ if (isset($meta_image)) {
             </div>
 
             <div class="border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-green-200">
-                <p>&copy; <?= date('Y') ?> <?= esc($pengaturan['nama_sekolah']) ?>. Hak Cipta Dilindungi.</p>
+                <p>&copy; <?= date('Y') ?> <?= esc($pengaturan['nama_sekolah'] ?? '') ?>. Hak Cipta Dilindungi.</p>
                 <p>Website dikembangkan dengan <i class="fa-solid fa-heart text-red-500 mx-1"></i></p>
             </div>
         </div>

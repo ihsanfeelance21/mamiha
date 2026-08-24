@@ -140,6 +140,7 @@ class Admin extends BaseController
         }
 
         $model->update(1, $data);
+        cache()->delete('pengaturan');
         return redirect()->to('admin/pengaturan')->with('pesan', 'Pengaturan diperbarui!');
     }
 
@@ -161,19 +162,28 @@ class Admin extends BaseController
         // 1. Validasi disesuaikan dengan atribut name="..." di View
         $rules = [
             'nama_link' => 'required',
-            'url_link'  => 'required'
+            'url_link'  => 'required|valid_url_strict'
         ];
 
         if (!$this->validate($rules)) {
-            return redirect()->back()->withInput()->with('error', 'Semua kolom wajib diisi.');
+            return redirect()->back()->withInput()->with('error', 'Semua kolom wajib diisi dan URL harus valid (http/https).');
+        }
+
+        $urlLink = $this->request->getPost('url_link');
+        if (!empty($urlLink) && !filter_var($urlLink, FILTER_VALIDATE_URL)) {
+            return redirect()->back()->withInput()->with('error', 'URL tidak valid.');
+        }
+        if (!empty($urlLink) && !preg_match('#^https?://#i', $urlLink)) {
+            return redirect()->back()->withInput()->with('error', 'URL harus diawali http:// atau https://');
         }
 
         // 2. Disimpan dengan nama kolom yang sesuai di Model
         $model->save([
             'nama_link' => $this->request->getPost('nama_link'),
-            'url_link'  => $this->request->getPost('url_link')
+            'url_link'  => $urlLink
         ]);
 
+        cache()->delete('akses_cepat');
         return redirect()->to('admin/akses-cepat')->with('pesan', 'Menu Akses Cepat berhasil ditambahkan!');
     }
 
@@ -184,6 +194,7 @@ class Admin extends BaseController
 
         if ($model->find($id)) {
             $model->delete($id);
+            cache()->delete('akses_cepat');
             return redirect()->to('admin/akses-cepat')->with('pesan', 'Menu Akses Cepat berhasil dihapus!');
         }
 
@@ -206,11 +217,20 @@ class Admin extends BaseController
         $this->cekIzin('pendaftaran');
         $model = new PendaftaranModel();
         $lama = $model->first();
+        $linkDaftar = $this->request->getPost('link_daftar');
+        $linkAdmin = $this->request->getPost('link_admin_ppdb');
+        foreach (['link_daftar' => $linkDaftar, 'link_admin_ppdb' => $linkAdmin] as $field => $url) {
+            if (!empty($url)) {
+                if (!filter_var($url, FILTER_VALIDATE_URL) || !preg_match('#^https?://#i', $url)) {
+                    return redirect()->back()->withInput()->with('error', 'URL ' . $field . ' harus valid dan diawali http:// atau https://');
+                }
+            }
+        }
         $data = [
             'status_ppdb' => $this->request->getPost('status_ppdb'),
-            'link_daftar' => $this->request->getPost('link_daftar'),
+            'link_daftar' => $linkDaftar,
             'pesan_tutup' => $this->request->getPost('pesan_tutup'),
-            'link_admin_ppdb' => $this->request->getPost('link_admin_ppdb'),
+            'link_admin_ppdb' => $linkAdmin,
             'tipe_daftar' => $this->request->getPost('tipe_daftar'),
             'updated_at'  => date('Y-m-d H:i:s')
         ];
@@ -236,6 +256,7 @@ class Admin extends BaseController
         }
 
         $model->update(1, $data);
+        cache()->delete('pendaftaran');
         return redirect()->back()->with('pesan', 'Data PPDB berhasil diperbarui!');
     }
 

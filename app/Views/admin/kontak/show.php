@@ -10,9 +10,9 @@
             </a>
             <h1 class="text-2xl font-bold text-gray-800">Detail Pesan</h1>
         </div>
-        <a href="<?= base_url('admin/kontak/delete/' . $pesan['id']) ?>" onclick="return confirm('Yakin ingin menghapus pesan ini?')" class="px-4 py-2 rounded-lg text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 transition-colors flex items-center gap-2">
+        <form action="<?= base_url('admin/kontak/delete/' . $pesan['id']) ?>" method="post" onsubmit="return confirm('Yakin ingin menghapus pesan ini?')" style="display:inline"><?= csrf_field() ?><button type="submit" class="px-4 py-2 rounded-lg text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 transition-colors flex items-center gap-2">
             <i class="fa-solid fa-trash-can"></i> Hapus Pesan
-        </a>
+        </button></form>
     </div>
 
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">

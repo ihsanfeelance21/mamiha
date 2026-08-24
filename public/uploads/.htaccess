@@ -22,6 +22,21 @@
 <IfModule mod_php.c>
     php_flag engine off
 </IfModule>
+<IfModule mod_php7.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php8.c>
+    php_flag engine off
+</IfModule>
+
+# Alternatif untuk php-fpm: SetHandler
+<FilesMatch "\.(?i:php|phtml|php3|php4|php5|php7|phps|pht|phar)$">
+    SetHandler default-handler
+</FilesMatch>
+
+# Nginx: tambahkan di server block -> location ~* /uploads/.*\.(php|phtml|phar)$ { deny all; }
 
 # Cegah listing direktori
 Options -Indexes
+# Nonaktifkan FollowSymLinks untuk cegah traversal
+Options -FollowSymLinks

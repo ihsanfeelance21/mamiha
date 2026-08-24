@@ -16,7 +16,7 @@
 
     <?php if (session()->getFlashdata('pesan')) : ?>
         <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6" role="alert">
-            <p><?= session()->getFlashdata('pesan') ?></p>
+            <p><?= esc(session()->getFlashdata('pesan')) ?></p>
         </div>
     <?php endif; ?>
 
@@ -57,9 +57,9 @@
                                 <img src="<?= base_url('uploads/fasilitas/galeri/' . $g['foto']) ?>" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" alt="Galeri">
 
                                 <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                    <a href="<?= base_url('admin/profil/fasilitas/galeri/hapus/' . $g['id']) ?>" onclick="return confirm('Hapus foto ini dari galeri?')" class="w-10 h-10 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors transform hover:scale-110" title="Hapus Foto">
+                                    <form action="<?= base_url('admin/profil/fasilitas/galeri/hapus/' . $g['id']) ?>" method="post" onsubmit="return confirm('Hapus foto ini dari galeri?')" style="display:inline"><?= csrf_field() ?><button type="submit" class="w-10 h-10 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors transform hover:scale-110">
                                         <i class="fa-solid fa-trash"></i>
-                                    </a>
+                                    </button></form>
                                 </div>
                             </div>
                         <?php endforeach; ?>

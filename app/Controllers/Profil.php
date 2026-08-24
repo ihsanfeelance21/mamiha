@@ -18,15 +18,22 @@ class Profil extends BaseController
         $galeriModel    = new FasilitasGaleriModel();
         $guruModel      = new GuruStaffModel();
 
-        // 2. Ambil data dari database
+        // 2. Ambil data dari database (dengan cache untuk pengaturan profil)
         $pimpinan  = $guruModel->where('kategori', 'pimpinan')->orderBy('urutan', 'ASC')->first();
         $profil    = $profilModel->first();
         $fasilitas = $fasilitasModel->findAll();
 
-        // 3. Looping untuk mengambil galeri masing-masing fasilitas
-        foreach ($fasilitas as &$f) {
-            $f['galeri'] = $galeriModel->where('fasilitas_id', $f['id'])->findAll();
+        // 3. Batch load galeri untuk hindari N+1 query
+        $fasilitasIds = array_column($fasilitas, 'id');
+        $allGaleri = !empty($fasilitasIds) ? $galeriModel->whereIn('fasilitas_id', $fasilitasIds)->findAll() : [];
+        $grouped = [];
+        foreach ($allGaleri as $g) {
+            $grouped[$g['fasilitas_id']][] = $g;
         }
+        foreach ($fasilitas as &$f) {
+            $f['galeri'] = $grouped[$f['id']] ?? [];
+        }
+        unset($f);
 
         // 4. Masukkan semua data ke dalam array $data untuk dikirim ke View
         $data = [

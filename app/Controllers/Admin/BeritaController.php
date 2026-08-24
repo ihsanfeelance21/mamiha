@@ -410,6 +410,12 @@ class BeritaController extends BaseController
         $linkEksternal = $this->request->getPost('link_eksternal'); // Opsional
         $slug = url_title($namaTag, '-', true);
 
+        if (!empty($linkEksternal)) {
+            if (!filter_var($linkEksternal, FILTER_VALIDATE_URL) || !preg_match('#^https?://#i', $linkEksternal)) {
+                return redirect()->back()->withInput()->with('error', 'Link eksternal harus valid dan diawali http:// atau https://');
+            }
+        }
+
         // Cek apakah tag sudah ada di database biar tidak double
         if ($this->tagModel->where('slug_tag', $slug)->first()) {
             return redirect()->back()->withInput()->with('error', 'Tag tersebut sudah ada! Silakan buat yang lain.');

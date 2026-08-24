@@ -43,9 +43,9 @@
                                 <i class="fa-solid fa-pen-to-square text-xs"></i>
                             </a>
                             <?php if ($u['id_user'] != 1) : ?>
-                                <a href="<?= base_url('admin/users/hapus/' . $u['id_user']) ?>" onclick="return confirm('Hapus user ini?')" class="w-8 h-8 flex items-center justify-center bg-red-50 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-all">
+                                <form action="<?= base_url('admin/users/hapus/' . $u['id_user']) ?>" method="post" onsubmit="return confirm('Hapus user ini?')" style="display:inline"><?= csrf_field() ?><button type="submit" class="w-8 h-8 flex items-center justify-center bg-red-50 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-all">
                                     <i class="fa-solid fa-trash-can text-xs"></i>
-                                </a>
+                                </button></form>
                             <?php endif; ?>
                         </div>
                     </td>

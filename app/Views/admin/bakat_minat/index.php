@@ -10,7 +10,7 @@
 
     <?php if (session()->getFlashdata('pesan')) : ?>
         <div class="bg-green-100 border-l-4 border-[#00A859] text-green-700 p-4 mb-6 rounded">
-            <?= session()->getFlashdata('pesan'); ?>
+            <?= esc(session()->getFlashdata('pesan')) ?>
         </div>
     <?php endif; ?>
 
@@ -48,9 +48,9 @@
                                 <a href="/admin/bakat-minat/edit/<?= $row['id']; ?>" class="bg-blue-100 text-blue-700 px-3 py-1.5 rounded-md text-sm font-medium hover:bg-blue-200 transition">
                                     Edit
                                 </a>
-                                <a href="/admin/bakat-minat/delete/<?= $row['id']; ?>" onclick="return confirm('Yakin hapus data ini?');" class="bg-red-100 text-red-700 px-3 py-1.5 rounded-md text-sm font-medium hover:bg-red-200 transition">
+                                <form action="/admin/bakat-minat/delete/<?= $row['id']; ?>" method="post" onsubmit="return confirm('Yakin hapus data ini?');" style="display:inline"><?= csrf_field() ?><button type="submit" class="bg-red-100 text-red-700 px-3 py-1.5 rounded-md text-sm font-medium hover:bg-red-200 transition">
                                     Hapus
-                                </a>
+                                </button></form>
                             </div>
                         </td>
                     </tr>

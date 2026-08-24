@@ -7,7 +7,7 @@
 
     <?php if (session()->getFlashdata('pesan')) : ?>
         <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6" role="alert">
-            <p><?= session()->getFlashdata('pesan') ?></p>
+            <p><?= esc(session()->getFlashdata('pesan')) ?></p>
         </div>
     <?php endif; ?>
 
@@ -146,9 +146,9 @@
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                             </button>
 
-                                            <a href="<?= base_url('admin/profil/fasilitas/hapus/' . $f['id']) ?>" onclick="return confirm('Yakin ingin menghapus fasilitas ini? Semua foto galeri di dalamnya akan ikut terhapus!')" class="inline-flex items-center px-3 py-1 bg-red-100 text-red-700 rounded-md hover:bg-red-200 text-sm font-medium transition-colors">
+                                            <form action="<?= base_url('admin/profil/fasilitas/hapus/' . $f['id']) ?>" method="post" onsubmit="return confirm('Yakin ingin menghapus fasilitas ini? Semua foto galeri di dalamnya akan ikut terhapus!')" style="display:inline"><?= csrf_field() ?><button type="submit" class="inline-flex items-center px-3 py-1 bg-red-100 text-red-700 rounded-md hover:bg-red-200 text-sm font-medium transition-colors">
                                                 <i class="fa-solid fa-trash"></i>
-                                            </a>
+                                            </button></form>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

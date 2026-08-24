@@ -7,7 +7,7 @@
 
     <?php if (session()->getFlashdata('pesan')) : ?>
         <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-r-lg shadow-sm">
-            <p class="font-medium"><?= session()->getFlashdata('pesan') ?></p>
+            <p class="font-medium"><?= esc(session()->getFlashdata('pesan')) ?></p>
         </div>
     <?php endif; ?>
 
@@ -72,18 +72,18 @@
                                 <td class="p-4 text-center">
                                     <div class="flex items-center justify-center gap-2">
                                         <?php if ($t['is_approved'] == 0) : ?>
-                                            <a href="<?= base_url('admin/testimoni/approve/' . $t['id']) ?>" class="p-2 text-white bg-[#00A859] hover:bg-green-600 rounded-lg shadow-sm transition-colors" title="Approve">
+                                            <form action="<?= base_url('admin/testimoni/approve/' . $t['id']) ?>" method="post" style="display:inline"><?= csrf_field() ?><button type="submit" class="p-2 text-white bg-[#00A859] hover:bg-green-600 rounded-lg shadow-sm transition-colors">
                                                 <i class="fa-solid fa-check"></i>
-                                            </a>
+                                            </button></form>
                                         <?php else : ?>
-                                            <a href="<?= base_url('admin/testimoni/reject/' . $t['id']) ?>" class="p-2 text-white bg-yellow-500 hover:bg-yellow-600 rounded-lg shadow-sm transition-colors" title="Sembunyikan">
+                                            <form action="<?= base_url('admin/testimoni/reject/' . $t['id']) ?>" method="post" style="display:inline"><?= csrf_field() ?><button type="submit" class="p-2 text-white bg-yellow-500 hover:bg-yellow-600 rounded-lg shadow-sm transition-colors">
                                                 <i class="fa-solid fa-xmark"></i>
-                                            </a>
+                                            </button></form>
                                         <?php endif; ?>
 
-                                        <a href="<?= base_url('admin/testimoni/delete/' . $t['id']) ?>" onclick="return confirm('Yakin ingin menghapus testimoni ini secara permanen?')" class="p-2 text-white bg-red-500 hover:bg-red-600 rounded-lg shadow-sm transition-colors" title="Hapus">
+                                        <form action="<?= base_url('admin/testimoni/delete/' . $t['id']) ?>" method="post" onsubmit="return confirm('Yakin ingin menghapus testimoni ini secara permanen?')" style="display:inline"><?= csrf_field() ?><button type="submit" class="p-2 text-white bg-red-500 hover:bg-red-600 rounded-lg shadow-sm transition-colors">
                                             <i class="fa-solid fa-trash"></i>
-                                        </a>
+                                        </button></form>
                                     </div>
                                 </td>
                             </tr>

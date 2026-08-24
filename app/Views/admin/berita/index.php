@@ -3,13 +3,13 @@
 <?= $this->section('content') ?>
 <?php if (session()->getFlashdata('pesan')) : ?>
     <div class="bg-green-100 border-l-4 border-primary text-green-700 p-4 mb-4 rounded shadow-sm">
-        <?= session()->getFlashdata('pesan') ?>
+        <?= esc(session()->getFlashdata('pesan')) ?>
     </div>
 <?php endif; ?>
 
 <?php if (session()->getFlashdata('error')) : ?>
     <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded shadow-sm">
-        <?= session()->getFlashdata('error') ?>
+        <?= esc(session()->getFlashdata('error')) ?>
     </div>
 <?php endif; ?>
 
@@ -94,7 +94,7 @@
                                 <div class="flex items-center justify-center gap-3">
                                     <a href="<?= base_url('admin/berita/edit/' . $b['id']) ?>" class="text-blue-500 hover:text-blue-700 text-sm font-medium transition">Edit</a>
                                     <span class="text-gray-300">|</span>
-                                    <a href="<?= base_url('admin/berita/hapus/' . $b['id']) ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus berita ini secara permanen?')" class="text-red-500 hover:text-red-700 text-sm font-medium transition">Hapus</a>
+                                    <form action="<?= base_url('admin/berita/hapus/' . $b['id']) ?>" method="post" onsubmit="return confirm('Apakah Anda yakin ingin menghapus berita ini secara permanen?')" style="display:inline"><?= csrf_field() ?><button type="submit" class="text-red-500 hover:text-red-700 text-sm font-medium transition">Hapus</button></form>
                                 </div>
                             </td>
                         </tr>

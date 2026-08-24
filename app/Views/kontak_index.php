@@ -8,7 +8,7 @@
         <?php if (session()->getFlashdata('pesan_sukses')) : ?>
             <div class="mb-8 p-4 bg-green-50 border border-green-200 text-green-800 rounded-xl flex items-center gap-3 shadow-sm">
                 <i class="fa-solid fa-circle-check text-xl"></i>
-                <p class="font-medium"><?= session()->getFlashdata('pesan_sukses') ?></p>
+                <p class="font-medium"><?= esc(session()->getFlashdata('pesan_sukses')) ?></p>
             </div>
         <?php endif; ?>
 

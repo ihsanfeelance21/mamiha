@@ -8,13 +8,13 @@
 
 <?php if (session()->getFlashdata('pesan')) : ?>
     <div class="bg-green-100 border-l-4 border-primary text-green-700 p-4 mb-6 rounded shadow-sm">
-        <?= session()->getFlashdata('pesan') ?>
+        <?= esc(session()->getFlashdata('pesan')) ?>
     </div>
 <?php endif; ?>
 
 <?php if (session()->getFlashdata('error')) : ?>
     <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded shadow-sm">
-        <?= session()->getFlashdata('error') ?>
+        <?= esc(session()->getFlashdata('error')) ?>
     </div>
 <?php endif; ?>
 
@@ -59,7 +59,7 @@
                                 <td class="p-3 font-medium text-text-main"><?= $k['nama_kategori'] ?></td>
                                 <td class="p-3 text-sm text-gray-500"><?= $k['slug_kategori'] ?></td>
                                 <td class="p-3 text-right">
-                                    <a href="<?= base_url('admin/kategori-berita/hapus/' . $k['id']) ?>" onclick="return confirm('Yakin ingin menghapus kategori ini? Pastikan tidak ada berita yang menggunakan kategori ini.')" class="text-red-500 hover:text-red-700 text-sm font-medium transition">Hapus</a>
+                                    <form action="<?= base_url('admin/kategori-berita/hapus/' . $k['id']) ?>" method="post" onsubmit="return confirm('Yakin ingin menghapus kategori ini? Pastikan tidak ada berita yang menggunakan kategori ini.')" style="display:inline"><?= csrf_field() ?><button type="submit" class="text-red-500 hover:text-red-700 text-sm font-medium transition">Hapus</button></form>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

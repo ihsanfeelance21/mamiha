@@ -66,7 +66,7 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
         $routes->post('simpan', 'Admin\User::simpan');
         $routes->get('edit/(:num)', 'Admin\User::edit/$1');
         $routes->post('update/(:num)', 'Admin\User::update/$1');
-        $routes->get('hapus/(:num)', 'Admin\User::hapus/$1');
+        $routes->post('hapus/(:num)', 'Admin\User::hapus/$1');
     });
 
     // Pengaturan
@@ -77,14 +77,14 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     $routes->group('akses-cepat', function ($routes) {
         $routes->get('/', 'Admin::akses_cepat');
         $routes->post('tambah', 'Admin::akses_cepat_tambah');
-        $routes->get('hapus/(:num)', 'Admin::akses_cepat_hapus/$1');
+        $routes->post('hapus/(:num)', 'Admin::akses_cepat_hapus/$1');
     });
 
 
     $routes->group('beranda', function ($routes) {
         $routes->get('/', 'Admin::beranda');
         $routes->post('tambah', 'Admin::beranda_tambah');
-        $routes->get('hapus/(:num)', 'Admin::beranda_hapus/$1');
+        $routes->post('hapus/(:num)', 'Admin::beranda_hapus/$1');
         $routes->get('edit/(:num)', 'Admin::beranda_edit/$1');
         $routes->post('update/(:num)', 'Admin::beranda_update/$1');
     });
@@ -98,15 +98,15 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
         $routes->post('simpan', 'Admin::simpan_kegiatan');
         $routes->get('edit/(:num)', 'Admin::edit_kegiatan/$1');
         $routes->post('update/(:num)', 'Admin::update_kegiatan/$1');
-        $routes->get('hapus/(:num)', 'Admin::hapus_kegiatan/$1');
+        $routes->post('hapus/(:num)', 'Admin::hapus_kegiatan/$1');
     });
 
     // Testimoni & Profil
     $routes->group('testimoni', function ($routes) {
         $routes->get('/', 'AdminTestimoniController::index');
-        $routes->get('approve/(:num)', 'AdminTestimoniController::approve/$1');
-        $routes->get('reject/(:num)', 'AdminTestimoniController::reject/$1');
-        $routes->get('delete/(:num)', 'AdminTestimoniController::delete/$1');
+        $routes->post('approve/(:num)', 'AdminTestimoniController::approve/$1');
+        $routes->post('reject/(:num)', 'AdminTestimoniController::reject/$1');
+        $routes->post('delete/(:num)', 'AdminTestimoniController::delete/$1');
     });
 
     $routes->group('profil', function ($routes) {
@@ -114,10 +114,10 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
         $routes->post('update-umum', 'Admin\ProfilController::updateUmum');
         $routes->post('fasilitas/simpan', 'Admin\ProfilController::simpanFasilitas');
         $routes->post('fasilitas/update/(:num)', 'Admin\ProfilController::updateFasilitas/$1');
-        $routes->get('fasilitas/hapus/(:num)', 'Admin\ProfilController::hapusFasilitas/$1');
+        $routes->post('fasilitas/hapus/(:num)', 'Admin\ProfilController::hapusFasilitas/$1');
         $routes->get('fasilitas/galeri/(:num)', 'Admin\ProfilController::galeriFasilitas/$1');
         $routes->post('fasilitas/galeri/simpan', 'Admin\ProfilController::simpanGaleri');
-        $routes->get('fasilitas/galeri/hapus/(:num)', 'Admin\ProfilController::hapusGaleri/$1');
+        $routes->post('fasilitas/galeri/hapus/(:num)', 'Admin\ProfilController::hapusGaleri/$1');
     });
 
     // Modul Lainnya
@@ -127,13 +127,13 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
         $routes->post('store', 'Admin\BakatMinat::store');
         $routes->get('edit/(:num)', 'Admin\BakatMinat::edit/$1');
         $routes->post('update/(:num)', 'Admin\BakatMinat::update/$1');
-        $routes->get('delete/(:num)', 'Admin\BakatMinat::delete/$1');
+        $routes->post('delete/(:num)', 'Admin\BakatMinat::delete/$1');
     });
 
     $routes->group('kategori-berita', function ($routes) {
         $routes->get('/', 'Admin\BeritaController::kategori');
         $routes->post('simpan', 'Admin\BeritaController::simpanKategori');
-        $routes->get('hapus/(:num)', 'Admin\BeritaController::hapusKategori/$1');
+        $routes->post('hapus/(:num)', 'Admin\BeritaController::hapusKategori/$1');
     });
 
     $routes->group('berita', function ($routes) {
@@ -142,10 +142,10 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
         $routes->post('simpan', 'Admin\BeritaController::simpan');
         $routes->get('edit/(:num)', 'Admin\BeritaController::edit/$1');
         $routes->post('update/(:num)', 'Admin\BeritaController::update/$1');
-        $routes->get('hapus/(:num)', 'Admin\BeritaController::hapus/$1');
+        $routes->post('hapus/(:num)', 'Admin\BeritaController::hapus/$1');
         $routes->get('tags', 'Admin\BeritaController::tags');
         $routes->post('simpanTag', 'Admin\BeritaController::simpanTag');
-        $routes->get('hapusTag/(:num)', 'Admin\BeritaController::hapusTag/$1');
+        $routes->post('hapusTag/(:num)', 'Admin\BeritaController::hapusTag/$1');
         $routes->post('upload-gambar-quill', 'Admin\BeritaController::uploadGambarQuill');
     });
 
@@ -164,7 +164,7 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
         $routes->post('store', 'Admin\KalenderAkademikController::store');
         $routes->get('edit/(:num)', 'Admin\KalenderAkademikController::edit/$1');
         $routes->post('update/(:num)', 'Admin\KalenderAkademikController::update/$1');
-        $routes->get('delete/(:num)', 'Admin\KalenderAkademikController::delete/$1');
+        $routes->post('delete/(:num)', 'Admin\KalenderAkademikController::delete/$1');
     });
 
     $routes->group('pengumuman', function ($routes) {
@@ -173,7 +173,7 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
         $routes->post('store', 'Admin\PengumumanController::store');
         $routes->get('edit/(:num)', 'Admin\PengumumanController::edit/$1');
         $routes->post('update/(:num)', 'Admin\PengumumanController::update/$1');
-        $routes->get('delete/(:num)', 'Admin\PengumumanController::delete/$1');
+        $routes->post('delete/(:num)', 'Admin\PengumumanController::delete/$1');
     });
 
     $routes->group('galeri', function ($routes) {
@@ -182,7 +182,7 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
         $routes->post('store', 'Admin\GaleriController::store');
         $routes->get('edit/(:num)', 'Admin\GaleriController::edit/$1');
         $routes->post('update/(:num)', 'Admin\GaleriController::update/$1');
-        $routes->get('delete/(:num)', 'Admin\GaleriController::delete/$1');
+        $routes->post('delete/(:num)', 'Admin\GaleriController::delete/$1');
         $routes->post('uploadPhotos/(:num)', 'Admin\GaleriController::uploadPhotos/$1');
         $routes->post('deletePhoto/(:num)', 'Admin\GaleriController::deletePhoto/$1');
     });
@@ -193,7 +193,7 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
         $routes->post('store', 'Admin\GaleriVideoController::store');
         $routes->get('edit/(:num)', 'Admin\GaleriVideoController::edit/$1');
         $routes->post('update/(:num)', 'Admin\GaleriVideoController::update/$1');
-        $routes->get('delete/(:num)', 'Admin\GaleriVideoController::delete/$1');
+        $routes->post('delete/(:num)', 'Admin\GaleriVideoController::delete/$1');
     });
 
     $routes->group('unduhan', function ($routes) {
@@ -202,13 +202,13 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
         $routes->post('store', 'Admin\UnduhanController::store');
         $routes->get('edit/(:num)', 'Admin\UnduhanController::edit/$1');
         $routes->post('update/(:num)', 'Admin\UnduhanController::update/$1');
-        $routes->get('delete/(:num)', 'Admin\UnduhanController::delete/$1');
+        $routes->post('delete/(:num)', 'Admin\UnduhanController::delete/$1');
     });
 
     $routes->group('kontak', function ($routes) {
         $routes->get('/', 'Admin\KontakController::index');
         $routes->get('show/(:num)', 'Admin\KontakController::show/$1');
-        $routes->get('delete/(:num)', 'Admin\KontakController::delete/$1');
+        $routes->post('delete/(:num)', 'Admin\KontakController::delete/$1');
     });
 
     $routes->group('universitas', function ($routes) {
@@ -216,7 +216,7 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
         $routes->post('simpan', 'Admin\Universitas::store');
         $routes->post('update/(:num)', 'Admin\Universitas::update/$1');
         $routes->get('edit/(:num)', 'Admin\Universitas::edit/$1');
-        $routes->get('hapus/(:num)', 'Admin\Universitas::delete/$1');
+        $routes->post('hapus/(:num)', 'Admin\Universitas::delete/$1');
     });
 
     $routes->group('alumni', function ($routes) {
@@ -225,10 +225,10 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
         $routes->post('simpan', 'Admin\Alumni::store');
         $routes->get('edit/(:num)', 'Admin\Alumni::edit/$1');
         $routes->post('update/(:num)', 'Admin\Alumni::update/$1');
-        $routes->get('hapus/(:num)', 'Admin\Alumni::delete/$1');
-        $routes->get('approve/(:num)', 'Admin\Alumni::approve/$1');
-        $routes->get('reject/(:num)', 'Admin\Alumni::reject/$1');
-        $routes->get('toggle-featured/(:num)', 'Admin\Alumni::toggleFeatured/$1');
+        $routes->post('hapus/(:num)', 'Admin\Alumni::delete/$1');
+        $routes->post('approve/(:num)', 'Admin\Alumni::approve/$1');
+        $routes->post('reject/(:num)', 'Admin\Alumni::reject/$1');
+        $routes->post('toggle-featured/(:num)', 'Admin\Alumni::toggleFeatured/$1');
     });
 
     $routes->group('guru', function ($routes) {
@@ -237,6 +237,6 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
         $routes->post('simpan', 'AdminGuru::simpan');
         $routes->get('edit/(:num)', 'AdminGuru::edit/$1');
         $routes->post('update/(:num)', 'AdminGuru::update/$1');
-        $routes->get('hapus/(:num)', 'AdminGuru::hapus/$1');
+        $routes->post('hapus/(:num)', 'AdminGuru::hapus/$1');
     });
 });

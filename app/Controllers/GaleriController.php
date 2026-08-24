@@ -19,8 +19,8 @@ class GaleriController extends BaseController
 
     public function index()
     {
-        // Ambil semua data album galeri
-        $galeri = $this->galeriModel->orderBy('tanggal', 'DESC')->findAll();
+        // Ambil data album galeri dengan pagination
+        $galeri = $this->galeriModel->orderBy('tanggal', 'DESC')->paginate(12, 'galeri');
 
         // Hitung jumlah foto untuk masing-masing album dalam SATU query (hindari N+1)
         $ids = array_column($galeri, 'id');
@@ -41,7 +41,8 @@ class GaleriController extends BaseController
 
         $data = [
             'title'  => 'Galeri Kegiatan',
-            'galeri' => $galeri
+            'galeri' => $galeri,
+            'pager'  => $this->galeriModel->pager
         ];
 
         return view('galeri_index', $data);
@@ -68,17 +69,17 @@ class GaleriController extends BaseController
     public function video()
     {
         $videoModel = new GaleriVideoModel();
+        $all = $videoModel->orderBy('tanggal', 'DESC')->findAll();
+        $landscape = array_filter($all, fn($v) => $v['orientasi'] === 'landscape');
+        $portrait = array_filter($all, fn($v) => $v['orientasi'] === 'portrait');
 
         $data = [
-            'title'  => 'Galeri Video | Madrasah', // Bebas disesuaikan
-            'videos' => $videoModel->orderBy('tanggal', 'DESC')->findAll(),
-            'landscape' => $videoModel->where('orientasi', 'landscape')->orderBy('tanggal', 'DESC')->findAll(),
-            // Ambil khusus portrait
-            'portrait'  => $videoModel->where('orientasi', 'portrait')->orderBy('tanggal', 'DESC')->findAll()
+            'title'  => 'Galeri Video | Madrasah',
+            'videos' => $all,
+            'landscape' => $landscape,
+            'portrait'  => $portrait
         ];
 
-
-        // Memanggil file view yang baru saja kita buat tadi
         return view('galeri_video', $data);
     }
 }

@@ -3,7 +3,7 @@
 <?= $this->section('content') ?>
 <?php if (session()->getFlashdata('pesan')) : ?>
     <div class="bg-green-100 border-l-4 border-primary text-green-700 p-4 mb-4 rounded shadow-sm">
-        <?= session()->getFlashdata('pesan') ?>
+        <?= esc(session()->getFlashdata('pesan')) ?>
     </div>
 <?php endif; ?>
 
@@ -49,7 +49,7 @@
                             <td class="p-3 text-sm text-gray-500"><?= date('d M Y', strtotime($k['created_at'])) ?></td>
                             <td class="p-3">
                                 <a href="<?= base_url('admin/kegiatan/edit/' . $k['id']) ?>" class="text-blue-500 hover:text-blue-700 mr-3 text-sm font-medium transition">Edit</a>
-                                <a href="<?= base_url('admin/kegiatan/hapus/' . $k['id']) ?>" onclick="return confirm('Yakin ingin menghapus kegiatan ini?')" class="text-red-500 hover:text-red-700 text-sm font-medium transition">Hapus</a>
+                                <form action="<?= base_url('admin/kegiatan/hapus/' . $k['id']) ?>" method="post" onsubmit="return confirm('Yakin ingin menghapus kegiatan ini?')" style="display:inline"><?= csrf_field() ?><button type="submit" class="text-red-500 hover:text-red-700 text-sm font-medium transition">Hapus</button></form>
                             </td>
                         </tr>
                     <?php endforeach; ?>

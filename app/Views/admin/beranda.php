@@ -5,7 +5,7 @@
 
     <?php if (session()->getFlashdata('pesan')) : ?>
         <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 shadow-sm">
-            <?= session()->getFlashdata('pesan') ?>
+            <?= esc(session()->getFlashdata('pesan')) ?>
         </div>
     <?php endif; ?>
 
@@ -124,9 +124,9 @@
                                     <a href="<?= base_url('admin/beranda/edit/' . $slide['id']) ?>" class="text-blue-500 hover:text-blue-700 font-semibold px-3 py-1 bg-blue-50 hover:bg-blue-100 rounded transition flex items-center gap-1">
                                         <i class="fa-solid fa-pen-to-square"></i> Edit
                                     </a>
-                                    <a href="<?= base_url('admin/beranda/hapus/' . $slide['id']) ?>" onclick="return confirm('Hapus slide ini?')" class="text-red-500 hover:text-red-700 font-semibold px-3 py-1 bg-red-50 hover:bg-red-100 rounded transition flex items-center gap-1">
+                                    <form action="<?= base_url('admin/beranda/hapus/' . $slide['id']) ?>" method="post" onsubmit="return confirm('Hapus slide ini?')" style="display:inline"><?= csrf_field() ?><button type="submit" class="text-red-500 hover:text-red-700 font-semibold px-3 py-1 bg-red-50 hover:bg-red-100 rounded transition flex items-center gap-1">
                                         <i class="fa-solid fa-trash"></i> Hapus
-                                    </a>
+                                    </button></form>
                                 </div>
                             </td>
                         </tr>

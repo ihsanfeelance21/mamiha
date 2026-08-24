@@ -17,16 +17,14 @@ class PengumumanController extends BaseController
     {
         // Menangkap filter kategori dari URL (jika ada)
         $kategori = $this->request->getGet('kategori');
-
+        $query = $this->pengumumanModel->orderBy('tanggal_publish', 'DESC');
         if ($kategori) {
-            $pengumuman = $this->pengumumanModel->where('kategori', $kategori)->orderBy('tanggal_publish', 'DESC')->findAll();
-        } else {
-            $pengumuman = $this->pengumumanModel->orderBy('tanggal_publish', 'DESC')->findAll();
+            $query = $query->where('kategori', $kategori);
         }
-
         $data = [
             'title'          => 'Pengumuman Madrasah',
-            'pengumuman'     => $pengumuman,
+            'pengumuman'     => $query->paginate(10, 'pengumuman'),
+            'pager'          => $this->pengumumanModel->pager,
             'kategori_aktif' => $kategori
         ];
 

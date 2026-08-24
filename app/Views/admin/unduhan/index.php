@@ -14,7 +14,7 @@
 
     <?php if (session()->getFlashdata('pesan')) : ?>
         <div class="p-4 mb-6 text-sm text-green-800 rounded-lg bg-green-50 border border-green-200" role="alert">
-            <i class="fa-solid fa-circle-check mr-2"></i> <?= session()->getFlashdata('pesan') ?>
+            <i class="fa-solid fa-circle-check mr-2"></i> <?= esc(session()->getFlashdata('pesan')) ?>
         </div>
     <?php endif; ?>
 
@@ -54,9 +54,9 @@
                                     <a href="<?= base_url('admin/unduhan/edit/' . $item['id']) ?>" class="w-8 h-8 rounded-lg bg-yellow-50 text-yellow-600 flex items-center justify-center hover:bg-yellow-100 transition-colors" title="Edit">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
-                                    <a href="<?= base_url('admin/unduhan/delete/' . $item['id']) ?>" onclick="return confirm('Yakin ingin menghapus file ini? File asli juga akan terhapus.')" class="w-8 h-8 rounded-lg bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-100 transition-colors" title="Hapus">
+                                    <form action="<?= base_url('admin/unduhan/delete/' . $item['id']) ?>" method="post" onsubmit="return confirm('Yakin ingin menghapus file ini? File asli juga akan terhapus.')" style="display:inline"><?= csrf_field() ?><button type="submit" class="w-8 h-8 rounded-lg bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-100 transition-colors">
                                         <i class="fa-solid fa-trash-can"></i>
-                                    </a>
+                                    </button></form>
                                 </div>
                             </td>
                         </tr>

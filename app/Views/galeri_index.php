@@ -12,6 +12,17 @@
 <section class="py-16 bg-gray-50 min-h-screen">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
+        <div class="flex justify-center mb-12">
+            <div class="inline-flex bg-white p-1.5 rounded-xl border border-gray-200 shadow-sm">
+                <span class="px-5 py-2.5 rounded-lg text-sm font-bold bg-green-50 text-green-700 shadow-sm pointer-events-none">
+                    <i class="fa-regular fa-image mr-1"></i> Album Foto
+                </span>
+                <a href="<?= base_url('galeri-video') ?>" class="px-5 py-2.5 rounded-lg text-sm font-semibold text-gray-500 hover:text-[#00A859] transition-colors">
+                    <i class="fa-solid fa-play mr-1"></i> Video
+                </a>
+            </div>
+        </div>
+
         <?php if (!empty($galeri)) : ?>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 <?php foreach ($galeri as $item) : ?>
@@ -48,6 +59,13 @@
                     </a>
                 <?php endforeach; ?>
             </div>
+            <?php if (isset($pager)) : ?>
+                <div class="flex justify-center mt-12">
+                    <div class="[&>ul]:flex [&>ul]:gap-2 [&>ul>li>a]:px-4 [&>ul>li>a]:py-2 [&>ul>li>a]:bg-white [&>ul>li>a]:border [&>ul>li>a]:border-gray-200 [&>ul>li>a]:rounded-lg [&>ul>li>a:hover]:bg-gray-50 [&>ul>li.active>a]:bg-[#00A859] [&>ul>li.active>a]:text-white [&>ul>li.active>a]:border-[#00A859]">
+                        <?= $pager->links('galeri') ?>
+                    </div>
+                </div>
+            <?php endif; ?>
         <?php else : ?>
             <div class="bg-white rounded-3xl p-12 text-center border border-gray-100 shadow-sm max-w-2xl mx-auto">
                 <i class="fa-regular fa-folder-open text-6xl text-gray-300 mb-4 block"></i>

@@ -23,8 +23,8 @@ class Auth extends BaseController
         // 🛡️ PROTEKSI BRUTE FORCE (Rate Limiting)
         // ==========================================
         $keyGagal = 'login_failed_' . md5($this->request->getIPAddress());
-        $gagal = (int) (session()->get($keyGagal) ?? 0);
-        $terkunci = session()->get($keyGagal . '_lock');
+        $gagal = (int) (cache()->get($keyGagal) ?? session()->get($keyGagal) ?? 0);
+        $terkunci = cache()->get($keyGagal . '_lock') ?? session()->get($keyGagal . '_lock');
 
         if ($terkunci && strtotime($terkunci) > time()) {
             $sisa = ceil((strtotime($terkunci) - time()) / 60);
@@ -35,28 +35,22 @@ class Auth extends BaseController
         $password = $this->request->getPost('password');
         $user = $userModel->where('username', $username)->first();
 
-        // ==========================================
-        // 🛑 KODE RESET PASSWORD SEMENTARA
-        // ==========================================
-        // if ($username === 'admin') {
-        //     $userModel->update($user['id_user'], [
-        //         'password' => password_hash('admin123', PASSWORD_DEFAULT)
-        //     ]);
-        //     die('✅ BERHASIL! Password admin telah direset menjadi: admin123. Silakan hapus/comment kode ini dan ulangi login.');
-        // }
-        // ==========================================
-
         if ($user && password_verify($password, $user['password'])) {
 
             // Reset counter percobaan gagal setelah berhasil login
             session()->remove($keyGagal);
             session()->remove($keyGagal . '_lock');
+            cache()->delete($keyGagal);
+            cache()->delete($keyGagal . '_lock');
 
             // --- TAMBAHAN 2: Ambil Permission User dari Database ---
             $permModel = new UserPermissionModel();
             $permissions = $permModel->where('id_user', $user['id_user'])->findAll();
             $userPerms = array_column($permissions, 'menu_slug');
             // -------------------------------------------------------
+
+            // Regenerate session ID untuk cegah fixation (best practice)
+            session()->regenerate(true);
 
             // Set Session
             session()->set([
@@ -85,10 +79,13 @@ class Auth extends BaseController
         // ==========================================
         $gagal++;
         if ($gagal >= 5) {
+            cache()->save($keyGagal, $gagal, 900);
+            cache()->save($keyGagal . '_lock', date('Y-m-d H:i:s', strtotime('+15 minutes')), 900);
             session()->set($keyGagal, $gagal);
             session()->set($keyGagal . '_lock', date('Y-m-d H:i:s', strtotime('+15 minutes')));
             return redirect()->back()->with('error', 'Terlalu banyak percobaan gagal. Akun dibatasi 15 menit.');
         }
+        cache()->save($keyGagal, $gagal, 900);
         session()->set($keyGagal, $gagal);
         return redirect()->back()->with('error', 'Username atau Password salah!');
     }

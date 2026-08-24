@@ -13,7 +13,7 @@
         <?php if (session()->getFlashdata('pesan')) : ?>
             <div class="bg-green-100 border border-[#00A859] text-[#0B4A2D] px-4 py-3 rounded-xl mb-8 flex items-center gap-3">
                 <i class="fa-solid fa-circle-check text-xl"></i>
-                <p><?= session()->getFlashdata('pesan') ?></p>
+                <p><?= esc(session()->getFlashdata('pesan')) ?></p>
             </div>
         <?php endif; ?>
 

@@ -6,7 +6,7 @@
 
     <?php if (session()->getFlashdata('pesan')) : ?>
         <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 shadow-sm">
-            <?= session()->getFlashdata('pesan') ?>
+            <?= esc(session()->getFlashdata('pesan')) ?>
         </div>
     <?php endif; ?>
 
@@ -48,9 +48,9 @@
                                 <a href="<?= esc($link['url_link']) ?>" target="_blank" class="text-blue-500 hover:underline"><?= esc($link['url_link']) ?></a>
                             </td>
                             <td class="py-3 px-6 text-center">
-                                <a href="<?= base_url('admin/akses-cepat/hapus/' . $link['id']) ?>" onclick="return confirm('Hapus link ini?')" class="text-red-500 hover:text-red-700 font-semibold px-3 py-1 bg-red-50 hover:bg-red-100 rounded transition">
+                                <form action="<?= base_url('admin/akses-cepat/hapus/' . $link['id']) ?>" method="post" onsubmit="return confirm('Hapus link ini?')" style="display:inline"><?= csrf_field() ?><button type="submit" class="text-red-500 hover:text-red-700 font-semibold px-3 py-1 bg-red-50 hover:bg-red-100 rounded transition">
                                     <i class="fa-solid fa-trash"></i> Hapus
-                                </a>
+                                </button></form>
                             </td>
                         </tr>
                     <?php endforeach; ?>

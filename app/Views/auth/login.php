@@ -38,7 +38,7 @@
             <?php if (session()->getFlashdata('error')) : ?>
                 <div class="relative z-10 bg-red-500/10 text-red-400 p-4 rounded-xl text-xs mb-6 border border-red-500/20 flex items-center gap-3">
                     <i class="fa-solid fa-circle-exclamation text-base"></i>
-                    <?= session()->getFlashdata('error') ?>
+                    <?= esc(session()->getFlashdata('error')) ?>
                 </div>
             <?php endif; ?>
             <form action="<?= base_url('login/process') ?>" method="POST" class="space-y-5 relative z-10">

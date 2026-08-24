@@ -10,11 +10,11 @@ export default defineConfig({
     // Output hasil build ke folder public CI4
     outDir: 'public',
     emptyOutDir: false,
-
+    manifest: true,
     rollupOptions: {
       input: 'src/css/app.css',
       output: {
-        assetFileNames: 'css/[name].css' // File akan disimpan di public/css/app.css
+        assetFileNames: 'css/[name]-[hash].css' // cache busting via hash
       }
     }
   }
