@@ -27,7 +27,7 @@
             <div class="p-6 space-y-4">
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1">Nama Madrasah / Sekolah</label>
-                    <input type="text" name="nama_sekolah" value="<?= esc($pengaturan['nama_sekolah']) ?>" required
+                    <input type="text" name="nama_sekolah" value="<?= old('nama_sekolah', esc($pengaturan['nama_sekolah'] ?? '')) ?>" required
                         class="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-green-500/10 focus:border-[#00A859] transition-all outline-none bg-white">
                 </div>
 
@@ -48,8 +48,7 @@
 
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1">Deskripsi Singkat (Footer)</label>
-                    <textarea name="deskripsi_footer" rows="3"
-                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-green-500/10 focus:border-[#00A859] transition-all outline-none bg-white"><?= $pengaturan['deskripsi_footer'] ?></textarea>
+                    <textarea name="deskripsi_footer" rows="3" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-green-500/10 focus:border-[#00A859] transition-all outline-none bg-white"><?= old('deskripsi_footer', $pengaturan['deskripsi_footer'] ?? '') ?></textarea>
                 </div>
             </div>
         </div>
@@ -63,7 +62,7 @@
                 <div class="p-6 space-y-4">
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-1">Nomor Telepon</label>
-                        <input type="text" name="telepon" value="<?= esc($pengaturan['telepon']) ?>"
+                        <input type="text" name="telepon" value="<?= old('telepon', esc($pengaturan['telepon'] ?? '')) ?>"
                             class="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-green-500/10 focus:border-[#00A859] transition-all outline-none bg-white">
                     </div>
                     <div>
@@ -77,7 +76,7 @@
                         <label class="block text-sm font-semibold text-gray-700 mb-1 items-center gap-2">
                             <i class="fa-solid fa-envelope"></i> Email Resmi
                         </label>
-                        <input type="email" name="email" value="<?= $pengaturan['email'] ?>"
+                        <input type="email" name="email" value="<?= old('email', $pengaturan['email'] ?? '') ?>"
                             class="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-green-500/10 focus:border-[#00A859] transition-all outline-none bg-white">
                     </div>
                 </div>
@@ -91,7 +90,7 @@
                 <div class="p-6 space-y-4">
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-1">Alamat Lengkap</label>
-                        <textarea name="alamat" rows="2" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-green-500/10 focus:border-[#00A859] outline-none bg-white"><?= esc($pengaturan['alamat']) ?></textarea>
+                        <textarea name="alamat" rows="2" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-green-500/10 focus:border-[#00A859] outline-none bg-white"><?= old('alamat', esc($pengaturan['alamat'] ?? '')) ?></textarea>
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-1">Link Google Maps (URL Share)</label>
@@ -114,7 +113,7 @@
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                                 <i class="fa-brands fa-facebook"></i>
                             </span>
-                            <input type="text" name="facebook" value="<?= $pengaturan['facebook'] ?>" class="w-full border border-gray-200 rounded-lg pl-10 pr-4 py-2 text-sm outline-none focus:border-blue-500 bg-white">
+                            <input type="text" name="facebook" value="<?= old('facebook', $pengaturan['facebook'] ?? '') ?>" class="w-full border border-gray-200 rounded-lg pl-10 pr-4 py-2 text-sm outline-none focus:border-blue-500 bg-white">
                         </div>
                     </div>
                     <div>
@@ -123,7 +122,7 @@
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                                 <i class="fa-brands fa-instagram"></i>
                             </span>
-                            <input type="text" name="instagram" value="<?= $pengaturan['instagram'] ?>" class="w-full border border-gray-200 rounded-lg pl-10 pr-4 py-2 text-sm outline-none focus:border-pink-500 bg-white">
+                            <input type="text" name="instagram" value="<?= old('instagram', $pengaturan['instagram'] ?? '') ?>" class="w-full border border-gray-200 rounded-lg pl-10 pr-4 py-2 text-sm outline-none focus:border-pink-500 bg-white">
                         </div>
                     </div>
                     <div>
@@ -132,7 +131,7 @@
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                                 <i class="fa-brands fa-youtube"></i>
                             </span>
-                            <input type="text" name="youtube" value="<?= $pengaturan['youtube'] ?>" class="w-full border border-gray-200 rounded-lg pl-10 pr-4 py-2 text-sm outline-none focus:border-red-500 bg-white">
+                            <input type="text" name="youtube" value="<?= old('youtube', $pengaturan['youtube'] ?? '') ?>" class="w-full border border-gray-200 rounded-lg pl-10 pr-4 py-2 text-sm outline-none focus:border-red-500 bg-white">
                         </div>
                     </div>
                     <div>
@@ -141,7 +140,7 @@
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                                 <i class="fa-brands fa-tiktok"></i>
                             </span>
-                            <input type="text" name="tiktok" value="<?= $pengaturan['tiktok'] ?>" class="w-full border border-gray-200 rounded-lg pl-10 pr-4 py-2 text-sm outline-none focus:border-gray-800 bg-white">
+                            <input type="text" name="tiktok" value="<?= old('tiktok', $pengaturan['tiktok'] ?? '') ?>" class="w-full border border-gray-200 rounded-lg pl-10 pr-4 py-2 text-sm outline-none focus:border-gray-800 bg-white">
                         </div>
                     </div>
                 </div>
