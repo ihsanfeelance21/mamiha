@@ -25,7 +25,7 @@
 
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="logo">Logo Universitas</label>
-                    <input type="file" name="logo" id="logo" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                    <input type="file" name="logo" id="logo" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
                     <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG. Rasio 1:1.</p>
                 </div>
 
@@ -35,7 +35,7 @@
                     <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG. Rekomendasi lanskap.</p>
                 </div>
 
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-150">
+                <button type="submit" class="w-full bg-[#00A859] hover:bg-[#0B4A2D] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-150">
                     Simpan Data
                 </button>
             </form>

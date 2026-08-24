@@ -17,10 +17,21 @@ class KontakController extends BaseController
     public function index()
     {
         $this->cekIzin('kontak');
+        $keyword = $this->request->getGet('keyword');
+        $status = $this->request->getGet('status');
+        $query = $this->pesanModel->orderBy('created_at', 'DESC');
+        if (!empty($keyword)) {
+            $query = $query->groupStart()->like('nama', $keyword)->orLike('pesan', $keyword)->orLike('kategori', $keyword)->groupEnd();
+        }
+        if (!empty($status)) {
+            $query = $query->where('status', $status);
+        }
         $data = [
             'title' => 'Kotak Masuk Pesan | Admin',
-            // Ambil semua pesan, urutkan dari yang terbaru
-            'pesan' => $this->pesanModel->orderBy('created_at', 'DESC')->findAll()
+            'pesan' => $query->paginate(15, 'pesan'),
+            'pager' => $this->pesanModel->pager,
+            'keyword' => $keyword,
+            'statusAktif' => $status
         ];
 
         return view('admin/kontak/index', $data);

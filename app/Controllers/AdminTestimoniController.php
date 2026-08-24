@@ -17,10 +17,24 @@ class AdminTestimoniController extends BaseController
     public function index()
     {
         $this->cekIzin('testimoni');
-        // Ambil semua testimoni, urutkan dari yang paling baru
-        $data['testimoni'] = $this->testimoniModel->orderBy('created_at', 'DESC')->findAll();
+        $keyword = $this->request->getGet('keyword');
+        $status = $this->request->getGet('status');
+        $query = $this->testimoniModel->orderBy('created_at', 'DESC');
+        if (!empty($keyword)) {
+            $query = $query->groupStart()->like('nama', $keyword)->orLike('isi_testimoni', $keyword)->groupEnd();
+        }
+        if ($status === 'approved') {
+            $query = $query->where('is_approved', 1);
+        } elseif ($status === 'pending') {
+            $query = $query->where('is_approved', 0);
+        }
+        $data = [
+            'testimoni' => $query->paginate(15, 'testimoni'),
+            'pager' => $this->testimoniModel->pager,
+            'keyword' => $keyword,
+            'statusAktif' => $status
+        ];
 
-        // Asumsi Anda punya layout admin, kita arahkan ke view admin
         return view('admin/testimoni/index', $data);
     }
 
@@ -44,8 +58,8 @@ class AdminTestimoniController extends BaseController
         $testimoni = $this->testimoniModel->find($id);
 
         // Hapus foto dari folder jika ada
-        if ($testimoni['foto'] && file_exists('uploads/testimoni/' . $testimoni['foto'])) {
-            unlink('uploads/testimoni/' . $testimoni['foto']);
+        if ($testimoni['foto'] && file_exists(FCPATH . 'uploads/testimoni/' . $testimoni['foto'])) {
+            unlink(FCPATH . 'uploads/testimoni/' . $testimoni['foto']);
         }
 
         $this->testimoniModel->delete($id);

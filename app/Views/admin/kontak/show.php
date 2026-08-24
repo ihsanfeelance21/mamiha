@@ -40,6 +40,13 @@
                     <span class="inline-flex px-3 py-1 rounded-lg text-xs font-bold bg-blue-50 text-blue-600 border border-blue-100 mb-2">
                         Kategori: <?= esc($pesan['kategori']) ?>
                     </span>
+                    <div class="mb-2">
+                        <?php if ($pesan['status'] == 'belum dibaca') : ?>
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-red-50 text-red-600 border border-red-100"><span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span> Baru</span>
+                        <?php else : ?>
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-green-50 text-green-600 border border-green-100"><i class="fa-solid fa-check-double"></i> Dibaca</span>
+                        <?php endif; ?>
+                    </div>
                     <p class="text-xs text-gray-400 font-medium whitespace-nowrap">
                         <i class="fa-regular fa-calendar mr-1"></i> <?= date('d F Y - H:i', strtotime($pesan['created_at'])) ?>
                     </p>
@@ -57,12 +64,11 @@
         <?php if (!empty($pesan['no_wa'])): ?>
             <div class="p-6 bg-gray-50 border-t border-gray-100">
                 <?php
-                // Format nomor WA (ganti 0 di depan jadi 62 jika ada)
-                $no_wa = preg_replace('/^0/', '62', $pesan['no_wa']);
-                // Buat teks balasan default
-                $teks_balasan = "Halo kak " . esc($pesan['nama']) . ", kami dari Admin SMP Plus Cordova membalas pesan Anda mengenai *" . esc($pesan['kategori']) . "*...\n\n";
+                $raw = preg_replace('/[^0-9]/', '', $pesan['no_wa']);
+                $no_wa = preg_match('/^0/', $raw) ? preg_replace('/^0/', '62', $raw) : (preg_match('/^62/', $raw) ? $raw : '62' . $raw);
+                $teks_balasan = "Halo kak " . $pesan['nama'] . ", kami dari Admin MA Mabadi'ul Ihsan membalas pesan Anda mengenai *" . $pesan['kategori'] . "*...\n\n";
                 ?>
-                <a href="https://wa.me/<?= $no_wa ?>?text=<?= urlencode($teks_balasan) ?>" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-bold text-white bg-green-500 hover:bg-green-600 transition-colors shadow-sm">
+                <a href="https://wa.me/<?= esc($no_wa, 'attr') ?>?text=<?= urlencode($teks_balasan) ?>" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-bold text-white bg-green-500 hover:bg-green-600 transition-colors shadow-sm">
                     <i class="fa-brands fa-whatsapp text-lg"></i> Balas via WhatsApp
                 </a>
             </div>
